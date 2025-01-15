@@ -5,7 +5,6 @@ app_description = "Backend Development System"
 app_email = "jharaunak58@gmail.com"
 app_license = "mit"
 
-fixtures = ["Custom Field", "Property Setter", "Client Script", "DocType"]
 
 # Apps
 # ------------------
@@ -245,4 +244,4 @@ fixtures = ["Custom Field", "Property Setter", "Client Script", "DocType"]
 # }
 
 
-website_route_rules = [{'from_route': '/xfer/<path:app_path>', 'to_route': 'xfer'},]
+website_route_rules = [{'from_route': '/<path:app_path>', 'to_route': 'xfer'},]

@@ -5,11 +5,14 @@
     <link rel="icon" type="image/svg+xml" href="/assets/xfer_backend/xfer/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React</title>
-    <script type="module" crossorigin src="/assets/xfer_backend/xfer/assets/index-DbFFu3J4.js"></script>
+    <script type="module" crossorigin src="/assets/xfer_backend/xfer/assets/index-BQ155tgL.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/xfer_backend/xfer/assets/index-BJ-5Q1bp.css">
   </head>
   <body>
     <div id="root"></div>
-		<script>window.csrf_token = '{{ frappe.session.csrf_token }}';</script>
+    <script>window.csrf_token = '{{ frappe.session.csrf_token }}';
+      if (!window.frappe) window.frappe = {};
+      frappe.boot = JSON.parse({{ boot }});
+    </script>
   </body>
 </html>
