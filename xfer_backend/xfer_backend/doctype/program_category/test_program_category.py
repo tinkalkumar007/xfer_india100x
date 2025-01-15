@@ -5,5 +5,5 @@
 from frappe.tests.utils import FrappeTestCase
 
 
-class TestNewton(FrappeTestCase):
+class TestProgramCategory(FrappeTestCase):
 	pass
