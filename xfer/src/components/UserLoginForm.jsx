@@ -54,7 +54,7 @@ export default function UserLoginForm({ setScreen }) {
       .then((response) => {
         console.log(response);
         if (response.message === "Logged In") {
-          navigate("xfer/business-dashboard");
+          navigate("/xfer/business-dashboard");
         }
       })
       .catch((err) => {

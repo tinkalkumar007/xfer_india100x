@@ -51,66 +51,66 @@ function App() {
       <Toaster />
       <Routes>
         {/* Public Routes */}
-        <Route path={`xfer/`} element={<Login />} />
+        <Route path={`/xfer`} element={<Login />} />
 
         {/* Protected Routes */}
 
         <Route element={<Layout />}>
           <Route
-            path="xfer/business-dashboard"
+            path="/xfer/business-dashboard"
             element={<BusinessDashboard />}
           />
-          <Route path="xfer/system-dashboard" element={<SystemDashboard />} />
-          <Route path="xfer/programs" element={<Programs />} />
+          <Route path="/xfer/system-dashboard" element={<SystemDashboard />} />
+          <Route path="/xfer/programs" element={<Programs />} />
           <Route
-            path="xfer/programs/program/:id"
+            path="/xfer/programs/program/:id"
             element={<ProgramDetails />}
           />
           <Route
-            path="xfer/programs/create-program"
+            path="/xfer/programs/create-program"
             element={<CreateProgram />}
           />
-          <Route path="xfer/program-managers" element={<ProgramManagers />} />
+          <Route path="/xfer/program-managers" element={<ProgramManagers />} />
 
           <Route
-            path="xfer/program-managers/manager/:id"
+            path="/xfer/program-managers/manager/:id"
             element={<ProgramManagerDetails />}
           />
-          <Route path="xfer/inventory" element={<Inventory />} />
+          <Route path="/xfer/inventory" element={<Inventory />} />
           <Route
-            path="xfer/inventory/order-details/:id"
+            path="/xfer/inventory/order-details/:id"
             element={<OrderDetails />}
           />
-          <Route path="xfer/issued-cards" element={<IssuedCards />} />
-          <Route path="xfer/all-customers" element={<AllCustomers />} />
+          <Route path="/xfer/issued-cards" element={<IssuedCards />} />
+          <Route path="/xfer/all-customers" element={<AllCustomers />} />
           <Route
-            path="xfer/all-customers/customer/:id"
+            path="/xfer/all-customers/customer/:id"
             element={<CustomerDetails />}
           />
           <Route
-            path="xfer/flagged-customers/customer/:id"
+            path="/xfer/flagged-customers/customer/:id"
             element={<CustomerDetails />}
           />
           <Route
-            path="xfer/pending-for-kyc/customer/:id"
+            path="/xfer/pending-for-kyc/customer/:id"
             element={<CustomerDetails />}
           />
-          <Route path="xfer/flagged-customers" element={<FlaggedCustomers />} />
-          <Route path="xfer/pending-for-kyc" element={<PendingKyc />} />
-          <Route path="xfer/pool-accounts" element={<PoolAccounts />} />
+          <Route path="/xfer/flagged-customers" element={<FlaggedCustomers />} />
+          <Route path="/xfer/pending-for-kyc" element={<PendingKyc />} />
+          <Route path="/xfer/pool-accounts" element={<PoolAccounts />} />
           <Route
-            path="xfer/funding-transactions"
+            path="/xfer/funding-transactions"
             element={<FundingTransactions />}
           />
-          <Route path="xfer/system-users" element={<SystemUsers />} />
+          <Route path="/xfer/system-users" element={<SystemUsers />} />
           <Route
-            path="xfer/user-activity-logs"
+            path="/xfer/user-activity-logs"
             element={<UserActivityLogs />}
           />
           {/* Nested Routes */}
           <Route element={<UserProfileLayout />}>
             {/* Account Routes */}
-            <Route path="xfer/account">
+            <Route path="/xfer/account">
               <Route index element={<Navigate to="profile" />} />{" "}
               {/* Default redirect */}
               <Route path="profile" element={<Profile />} />
@@ -120,7 +120,7 @@ function App() {
             </Route>
 
             {/* Developer Routes */}
-            <Route path="xfer/developer">
+            <Route path="/xfer/developer">
               <Route index element={<Navigate to="api-keys" />} />{" "}
               {/* Default redirect */}
               <Route path="api-keys" element={<ApiKeys />} />
@@ -131,7 +131,7 @@ function App() {
 
             {/* Team Routes */}
 
-            <Route path="xfer/team">
+            <Route path="/xfer/team">
               <Route index element={<Navigate to="users" />} />{" "}
               {/* Default redirect */}
               <Route path="users" element={<Users />} />
