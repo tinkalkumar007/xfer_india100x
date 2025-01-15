@@ -4,9 +4,6 @@ app_publisher = "xfer"
 app_description = "Backend Development System"
 app_email = "jharaunak58@gmail.com"
 app_license = "mit"
-
-fixtures = ["Custom Field", "Property Setter", "Client Script", "DocType"]
-
 # Apps
 # ------------------
 
