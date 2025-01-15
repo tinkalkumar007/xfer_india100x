@@ -1,0 +1,13 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Customers",
+  "enabled": 1,
+  "modified": "2025-01-15 15:54:33.449658",
+  "module": "Xfer Backend",
+  "name": "Test",
+  "script": "frappe.ui.form.on('Customers', {\n\trefresh(frm) {\n\t\t// your code here\n\t}\n})",
+  "view": "Form"
+ }
+]

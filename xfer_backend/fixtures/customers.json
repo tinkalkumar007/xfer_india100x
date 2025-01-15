@@ -1,0 +1,30 @@
+[
+ {
+  "channel": "Web",
+  "device_id": "123.34.43.34",
+  "docstatus": 0,
+  "doctype": "Customers",
+  "email": "tinkal@gmail.com",
+  "first_name": "Tinkal",
+  "last_name": "Kumar",
+  "lat_long": "24.23, 34.45",
+  "mobile_no": "3121232",
+  "modified": "2025-01-15 12:36:57.767038",
+  "name": "5jee4k95pi",
+  "status": "Active"
+ },
+ {
+  "channel": "Web",
+  "device_id": "123.34.43.34",
+  "docstatus": 0,
+  "doctype": "Customers",
+  "email": "dummy@gmail.com",
+  "first_name": "Dummy",
+  "last_name": "Data",
+  "lat_long": "24.23, 34.45",
+  "mobile_no": "9876543212",
+  "modified": "2025-01-15 12:42:48.614551",
+  "name": "XFRCSMR000001",
+  "status": "Inactive"
+ }
+]
