@@ -162,7 +162,7 @@ export function ProgramTable() {
       cell: ({ row }) => {
         const firstName= row.original.firstName
         return (
-          <Link to={`/xfer/program-managers/manager/${firstName}`}>
+          <Link to={`/program-managers/manager/${firstName}`}>
             <div className="capitalize text-center hover:underline">
               {row.getValue('firstName')}
             </div>

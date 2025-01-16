@@ -69,77 +69,77 @@ const sidebarData = {
   overview: [
     {
       title: "Business Dashboard",
-      url: "/xfer/business-dashboard",
+      url: "/business-dashboard",
       icon: LayoutDashboard, // Dashboard layout icon for business overview
     },
     {
       title: "System Dashboard",
-      url: "/xfer/system-dashboard",
+      url: "/system-dashboard",
       icon: Monitor, // Monitor icon for system overview
     },
   ],
   program_management: [
     {
       title: "Programs",
-      url: "/xfer/programs",
+      url: "/programs",
       icon: ClipboardList, // Represents a list of programs
     },
     {
       title: "Program Managers",
-      url: "/xfer/program-managers",
+      url: "/program-managers",
       icon: Users, // Group icon for managers
     },
   ],
   card_management: [
     {
       title: "Inventory",
-      url: "/xfer/inventory",
+      url: "/inventory",
       icon: Box, // Box icon for inventory
     },
     {
       title: "Issued Cards",
-      url: "/xfer/issued-cards",
+      url: "/issued-cards",
       icon: CreditCard, // Card icon for issued cards
     },
   ],
   customers: [
     {
       title: "All Customers",
-      url: "/xfer/all-customers",
+      url: "/all-customers",
       icon: UserCheck, // User check icon for all verified customers
     },
     {
       title: "Flagged Customers",
-      url: "/xfer/flagged-customers",
+      url: "/flagged-customers",
       icon: Flag, // Flag icon for flagged customers
     },
     {
       title: "Pending for KYC",
-      url: "/xfer/pending-for-kyc",
+      url: "/pending-for-kyc",
       icon: FileText, // Document icon for pending KYC
     },
   ],
   fund_management: [
     {
       title: "Pool Accounts",
-      url: "/xfer/pool-accounts",
+      url: "/pool-accounts",
       icon: Landmark, // Landmark icon for pool accounts
     },
     {
       title: "Funding Transactions",
-      url: "/xfer/funding-transactions",
+      url: "/funding-transactions",
       icon: DollarSign, // Dollar icon for funding transactions
     },
   ],
   user_management: [
     {
       title: "System Users",
-      url: "/xfer/system-users",
+      url: "/system-users",
       icon: UserCog, // User settings icon for system users
     },
     {
       title: "User Activity Logs",
-      url: "/xfer/user-activity-logs",
+      url: "/user-activity-logs",
       icon: Activity, // Activity icon for logs
     },
   ],
@@ -178,7 +178,7 @@ export function AppSidebar({ ...props }) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild onClick={handleItemClick}>
-              <Link to="xfer/business-dashboard">
+              <Link to="/business-dashboard">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <Layers className="size-4" />
                 </div>
