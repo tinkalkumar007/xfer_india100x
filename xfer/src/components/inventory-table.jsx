@@ -248,7 +248,7 @@ export function InventoryTable() {
       cell: ({ row }) => {
         const id = row.original.product_id
         return (
-          <Link to={`/xfer/inventory/order-details/${id}`}>
+          <Link to={`/inventory/order-details/${id}`}>
             <div className="capitalize text-center cursor-pointer hover:underline">
               {row.getValue('product_name')}
             </div>

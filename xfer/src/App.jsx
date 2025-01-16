@@ -46,91 +46,77 @@ import { Toaster } from "@/components/ui/toaster";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 function App() {
-  const getSiteName = () => {
-    // @ts-ignore
-    if (
-      window.frappe?.boot?.versions?.frappe &&
-      (window.frappe.boot.versions.frappe.startsWith("15") ||
-        window.frappe.boot.versions.frappe.startsWith("16"))
-    ) {
-      // @ts-ignore
-      return window.frappe?.boot?.sitename ?? import.meta.env.VITE_SITE_NAME;
-    }
-    return import.meta.env.VITE_SITE_NAME;
-  };
+  
   return (
     <ThemeProvider storageKey="vite-ui-theme">
       <Toaster />
       <Routes>
-        {/* Public Routes */}
-        <Route path={`/xfer`} element={<Login />} />
-
-        {/* Protected Routes */}
+        <Route path={`/`} element={<Login />} />
 
         <Route element={<Layout />}>
           <Route
-            path="/xfer/business-dashboard"
+            path="/business-dashboard"
             element={<BusinessDashboard />}
           />
-          <Route path="/xfer/system-dashboard" element={<SystemDashboard />} />
-          <Route path="/xfer/programs" element={<Programs />} />
+          <Route path="/system-dashboard" element={<SystemDashboard />} />
+          <Route path="/programs" element={<Programs />} />
           <Route
-            path="/xfer/programs/program/:id"
+            path="/programs/program/:id"
             element={<ProgramDetails />}
           />
           <Route
-            path="/xfer/programs/create-program"
+            path="/programs/create-program"
             element={<CreateProgram />}
           />
-          <Route path="/xfer/program-managers" element={<ProgramManagers />} />
+          <Route path="/program-managers" element={<ProgramManagers />} />
 
           <Route
-            path="/xfer/program-managers/manager/:id"
+            path="/program-managers/manager/:id"
             element={<ProgramManagerDetails />}
           />
-          <Route path="/xfer/inventory" element={<Inventory />} />
+          <Route path="/inventory" element={<Inventory />} />
           <Route
-            path="/xfer/inventory/order-details/:id"
+            path="/inventory/order-details/:id"
             element={<OrderDetails />}
           />
-          <Route path="/xfer/issued-cards" element={<IssuedCards />} />
+          <Route path="/issued-cards" element={<IssuedCards />} />
           <Route
-            path="xfer/issued-cards/issuedcards-details/:id"
+            path="/issued-cards/issuedcards-details/:id"
             element={<IssuedCardsDetails />}
           />
 
-          <Route path="/xfer/all-customers" element={<AllCustomers />} />
+          <Route path="/all-customers" element={<AllCustomers />} />
           <Route
-            path="/xfer/all-customers/customer/:id"
+            path="/all-customers/customer/:id"
             element={<CustomerDetails />}
           />
           <Route
-            path="/xfer/flagged-customers/customer/:id"
+            path="/flagged-customers/customer/:id"
             element={<CustomerDetails />}
           />
           <Route
-            path="/xfer/pending-for-kyc/customer/:id"
+            path="/pending-for-kyc/customer/:id"
             element={<CustomerDetails />}
           />
           <Route
-            path="/xfer/flagged-customers"
+            path="/flagged-customers"
             element={<FlaggedCustomers />}
           />
-          <Route path="/xfer/pending-for-kyc" element={<PendingKyc />} />
-          <Route path="/xfer/pool-accounts" element={<PoolAccounts />} />
+          <Route path="/pending-for-kyc" element={<PendingKyc />} />
+          <Route path="/pool-accounts" element={<PoolAccounts />} />
           <Route
-            path="/xfer/funding-transactions"
+            path="/funding-transactions"
             element={<FundingTransactions />}
           />
-          <Route path="/xfer/system-users" element={<SystemUsers />} />
+          <Route path="/system-users" element={<SystemUsers />} />
           <Route
-            path="/xfer/user-activity-logs"
+            path="/user-activity-logs"
             element={<UserActivityLogs />}
           />
           {/* Nested Routes */}
           <Route element={<UserProfileLayout />}>
             {/* Account Routes */}
-            <Route path="/xfer/account">
+            <Route path="/account">
               <Route index element={<Navigate to="profile" />} />{" "}
               {/* Default redirect */}
               <Route path="profile" element={<Profile />} />
@@ -140,7 +126,7 @@ function App() {
             </Route>
 
             {/* Developer Routes */}
-            <Route path="/xfer/developer">
+            <Route path="/developer">
               <Route index element={<Navigate to="api-keys" />} />{" "}
               {/* Default redirect */}
               <Route path="api-keys" element={<ApiKeys />} />
@@ -151,7 +137,7 @@ function App() {
 
             {/* Team Routes */}
 
-            <Route path="/xfer/team">
+            <Route path="/team">
               <Route index element={<Navigate to="users" />} />{" "}
               {/* Default redirect */}
               <Route path="users" element={<Users />} />

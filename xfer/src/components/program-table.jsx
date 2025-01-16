@@ -286,7 +286,7 @@ export function ProgramTableDemo() {
       cell: ({ row }) => {
         const id = row.original.product_id;
         return (
-          <Link to={`/xfer/programs/program/${id}`}>
+          <Link to={`/programs/program/${id}`}>
             <div className="capitalize text-center cursor-pointer hover:underline">
               {row.getValue("productName")}
             </div>

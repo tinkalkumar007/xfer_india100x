@@ -275,7 +275,7 @@ export function PendingKycTable() {
       accessorKey: "customerId",
       header: "Customer Id",
       cell: ({ row }) => (
-        <Link to={`/xfer/pending-for-kyc/customer/${row.original.id}`}>
+        <Link to={`/pending-for-kyc/customer/${row.original.id}`}>
           <div className="capitalize text-center hover:underline">
             {row.getValue("customerId")}
           </div>

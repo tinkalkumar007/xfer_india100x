@@ -91,7 +91,7 @@ export function NavUser({ user }) {
             <DropdownMenuSeparator />
 
             <Link
-              to="xfer/account"
+              to="/account"
               onClick={() => {
                 closeSidebar();
               }}
@@ -103,7 +103,7 @@ export function NavUser({ user }) {
             </Link>
 
             <Link
-              to="xfer/developer"
+              to="/developer"
               onClick={() => {
                 closeSidebar();
               }}
@@ -115,7 +115,7 @@ export function NavUser({ user }) {
             </Link>
 
             <Link
-              to="xfer/team"
+              to="/team"
               onClick={() => {
                 closeSidebar();
               }}

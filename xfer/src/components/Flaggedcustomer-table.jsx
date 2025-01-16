@@ -173,7 +173,7 @@ export function FlaggedCustomerTable() {
       header: "Customer Id",
       cell: ({ row }) => (
         <Link
-          to={`/xfer/flagged-customers/customer/:${row.original.customerId}`}
+          to={`/flagged-customers/customer/:${row.original.customerId}`}
         >
           <div className="capitalize text-center hover:underline">
             {row.getValue("customerId")}

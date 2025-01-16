@@ -244,4 +244,4 @@ app_license = "mit"
 # }
 
 
-website_route_rules = [{'from_route': '/<path:app_path>', 'to_route': 'xfer'},]
+website_route_rules = [{'from_route': '/xfer/<path:app_path>', 'to_route': 'xfer'},]
