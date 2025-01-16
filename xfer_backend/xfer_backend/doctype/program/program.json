@@ -1,0 +1,83 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-01-15 18:20:22.195594",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "program_details_section",
+  "program_name",
+  "description",
+  "column_break_uwui",
+  "category",
+  "terms_conditions",
+  "column_break_trnb",
+  "status"
+ ],
+ "fields": [
+  {
+   "fieldname": "program_details_section",
+   "fieldtype": "Section Break",
+   "label": "Program Details"
+  },
+  {
+   "fieldname": "program_name",
+   "fieldtype": "Data",
+   "label": "Program Name"
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Link",
+   "label": "Category",
+   "options": "Program Category"
+  },
+  {
+   "fieldname": "column_break_uwui",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Autocomplete",
+   "label": "Status",
+   "options": "Draft\nSubmitted\nPending for approval\nProcessed\nActive\nTerminated\nInactive"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "column_break_trnb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "terms_conditions",
+   "fieldtype": "Attach",
+   "label": "T&C Document"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-01-15 18:39:43.695781",
+ "modified_by": "Administrator",
+ "module": "Xfer Backend",
+ "name": "Program",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
