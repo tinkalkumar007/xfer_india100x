@@ -160,9 +160,9 @@ export function ProgramTable() {
       accessorKey: 'firstName',
       header: 'Manager Name',
       cell: ({ row }) => {
-        const id = row.original.product_id
+        const firstName= row.original.firstName
         return (
-          <Link to={`/program-managers/manager/${id}`}>
+          <Link to={`/xfer/program-managers/manager/${firstName}`}>
             <div className="capitalize text-center hover:underline">
               {row.getValue('firstName')}
             </div>

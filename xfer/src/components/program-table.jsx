@@ -1,6 +1,6 @@
-import * as React from 'react'
-import { Link } from 'react-router-dom'
-import axios from '@/api/axios'
+import * as React from "react";
+import { Link } from "react-router-dom";
+import axios from "@/api/axios";
 import {
   flexRender,
   getCoreRowModel,
@@ -10,11 +10,11 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from '@tanstack/react-table'
-import { CalendarDateRangePicker } from './CalendarDateRangePicker'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import DataTableToolbar from '@/components/DataTableToolbar'
+} from "@tanstack/react-table";
+import { CalendarDateRangePicker } from "./CalendarDateRangePicker";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import DataTableToolbar from "@/components/DataTableToolbar";
 import {
   Form,
   FormControl,
@@ -23,7 +23,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
+} from "@/components/ui/form";
 import {
   ArrowUpDown,
   ChevronDown,
@@ -40,9 +40,9 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-} from 'lucide-react'
-import { saveAs } from 'file-saver'
-import * as Papa from 'papaparse'
+} from "lucide-react";
+import { saveAs } from "file-saver";
+import * as Papa from "papaparse";
 import {
   AlertDialog,
   AlertDialogTitle,
@@ -51,18 +51,18 @@ import {
   AlertDialogHeader,
   AlertDialogFooter,
   AlertDialogDescription,
-} from '@/components/ui/alert-dialog'
+} from "@/components/ui/alert-dialog";
 
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from '@/components/ui/card'
-import { DataTablePagination } from '@/components/DataTablePagination'
+} from "@/components/ui/card";
+import { DataTablePagination } from "@/components/DataTablePagination";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -71,7 +71,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from "@/components/ui/dropdown-menu";
 import {
   Sheet,
   SheetClose,
@@ -81,7 +81,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet'
+} from "@/components/ui/sheet";
 import {
   Select,
   SelectContent,
@@ -90,8 +90,8 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -99,20 +99,20 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
-import DataTableViewOptions from './DataTableViewOptions'
-import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import DataTableViewOptions from "./DataTableViewOptions";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const fieldIconMap = {
   kycRequired: {
     icon: (
       <Badge className="bg-[#e4f5e9] text-[#16794c] cursor-pointer">KYC</Badge>
     ),
-    label: 'KYC Required',
+    label: "KYC Required",
   },
   contactlessAllowed: {
     icon: (
@@ -120,7 +120,7 @@ const fieldIconMap = {
         Contactless
       </Badge>
     ),
-    label: 'Contactless Allowed',
+    label: "Contactless Allowed",
   },
   isPhysical: {
     icon: (
@@ -128,7 +128,7 @@ const fieldIconMap = {
         Physical
       </Badge>
     ),
-    label: 'Physical Not Allowed',
+    label: "Physical Not Allowed",
   },
   isRewardsApplicable: {
     icon: (
@@ -136,135 +136,134 @@ const fieldIconMap = {
         Reward
       </Badge>
     ),
-    label: 'Rewards Applicable',
+    label: "Rewards Applicable",
   },
-}
+};
 
-// const data = [
-//   {
-//     productName: 'Travel Card',
-//     productCategory: 'Business',
-//     minLoadAmount: '1000.00',
-//     maxLoadAmount: '500000.00',
-//     updatedAt: '2024-12-17T04:15:22.000Z',
-//     kycRequired: '1',
-//     isPhysical: true,
-//     contactlessAllowed: false,
-//     isRewardsApplicable: true,
-//     user: {
-//       firstName: 'ONO',
-//       lastName: 'dev',
-//       username: 'ONO90',
-//     },
-//   },
-//   {
-//     productName: 'Shopping Card',
-//     productCategory: 'Business',
-//     minLoadAmount: '1000.00',
-//     maxLoadAmount: '50000.00',
-//     updatedAt: '2024-12-17T05:24:40.000Z',
-//     kycRequired: '1',
-//     isPhysical: false,
-//     contactlessAllowed: true,
-//     isRewardsApplicable: true,
-//     user: {
-//       firstName: 'Privacy',
-//       lastName: 'Card',
-//       username: 'PC9090',
-//     },
-//   },
-//   {
-//     productName: 'Expense Card',
-//     productCategory: 'Business',
-//     minLoadAmount: '1000.00',
-//     maxLoadAmount: '50000.00',
-//     updatedAt: '2024-12-17T05:28:19.000Z',
-//     kycRequired: '1',
-//     isPhysical: true,
-//     contactlessAllowed: true,
-//     isRewardsApplicable: true,
-//     user: {
-//       firstName: 'Privacy',
-//       lastName: 'Card',
-//       username: 'PC9090',
-//     },
-//   },
-// ]
+const data = [
+  {
+    productName: "Travel Card",
+    productCategory: "Business",
+    minLoadAmount: "1000.00",
+    maxLoadAmount: "500000.00",
+    updatedAt: "2024-12-17T04:15:22.000Z",
+    kycRequired: "1",
+    isPhysical: true,
+    contactlessAllowed: false,
+    isRewardsApplicable: true,
+    user: {
+      firstName: "ONO",
+      lastName: "dev",
+      username: "ONO90",
+    },
+  },
+  {
+    productName: "Shopping Card",
+    productCategory: "Business",
+    minLoadAmount: "1000.00",
+    maxLoadAmount: "50000.00",
+    updatedAt: "2024-12-17T05:24:40.000Z",
+    kycRequired: "1",
+    isPhysical: false,
+    contactlessAllowed: true,
+    isRewardsApplicable: true,
+    user: {
+      firstName: "Privacy",
+      lastName: "Card",
+      username: "PC9090",
+    },
+  },
+  {
+    productName: "Expense Card",
+    productCategory: "Business",
+    minLoadAmount: "1000.00",
+    maxLoadAmount: "50000.00",
+    updatedAt: "2024-12-17T05:28:19.000Z",
+    kycRequired: "1",
+    isPhysical: true,
+    contactlessAllowed: true,
+    isRewardsApplicable: true,
+    user: {
+      firstName: "Privacy",
+      lastName: "Card",
+      username: "PC9090",
+    },
+  },
+];
 
 const filters = [
-  'Today',
-  'Last 7 days',
-  'Last 30 days',
-  'Last 3 months',
-  'Last 6 months',
-]
+  "Today",
+  "Last 7 days",
+  "Last 30 days",
+  "Last 3 months",
+  "Last 6 months",
+];
 
 const productSchema = z.object({
-  product_name: z.string().min(1, 'Program name is required'),
+  product_name: z.string().min(1, "Program name is required"),
   description: z.string().optional(),
   product_category: z.string().optional(),
   terms_conditions: z.string().optional(),
-})
+});
 
 export function ProgramTableDemo() {
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false)
-
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
   const onSubmit = (data) => {
-    console.log(data)
-  }
+    console.log(data);
+  };
 
   const form = useForm({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      product_name: '',
-      description: '',
-      product_category: '',
-      terms_conditions: '',
+      product_name: "",
+      description: "",
+      product_category: "",
+      terms_conditions: "",
     },
-  })
+  });
 
-  const [sorting, setSorting] = React.useState([])
-  const [columnFilters, setColumnFilters] = React.useState([])
-  const [columnVisibility, setColumnVisibility] = React.useState({})
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [selectedFilter, setSelectedFilter] = React.useState('Today')
+  const [sorting, setSorting] = React.useState([]);
+  const [columnFilters, setColumnFilters] = React.useState([]);
+  const [columnVisibility, setColumnVisibility] = React.useState({});
+  const [rowSelection, setRowSelection] = React.useState({});
+  const [selectedFilter, setSelectedFilter] = React.useState("Today");
 
-  const [data, setData] = React.useState([])
-  const [loading, setLoading] = React.useState(true) // State for loading
-  const [error, setError] = React.useState(null) // State for error handling
+  // const [data, setData] = React.useState([])
+  const [loading, setLoading] = React.useState(true); // State for loading
+  const [error, setError] = React.useState(null); // State for error handling
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true)
-        //const token=Cookies.get("auth_token");
-        //console.log(token);
-        //axios.default.withCredentials=true;
-        const response = await axios.get('/cms/fetchall_product', {
-          withCredentials: true,
-        }) // Replace with your API endpoint
-        //setData(response.data.data); // Assuming the response is an array of pool accounts
-        console.log(response.data.data)
-        setData(response.data.data)
-      } catch (err) {
-        console.error('Error fetching data:', err)
-        setError('Failed to fetch data. Please try again later.')
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData()
-  }, [])
+  // React.useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true)
+  //       //const token=Cookies.get("auth_token");
+  //       //console.log(token);
+  //       //axios.default.withCredentials=true;
+  //       const response = await axios.get('/cms/fetchall_product', {
+  //         withCredentials: true,
+  //       }) // Replace with your API endpoint
+  //       //setData(response.data.data); // Assuming the response is an array of pool accounts
+  //       console.log(response.data.data)
+  //       setData(response.data.data)
+  //     } catch (err) {
+  //       console.error('Error fetching data:', err)
+  //       setError('Failed to fetch data. Please try again later.')
+  //     } finally {
+  //       setLoading(false)
+  //     }
+  //   }
+  //   fetchData()
+  // }, [])
 
   const allColumns = [
     {
-      id: 'select',
+      id: "select",
       header: ({ table }) => (
         <Checkbox
           checked={
             table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && 'indeterminate')
+            (table.getIsSomePageRowsSelected() && "indeterminate")
           }
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
@@ -282,99 +281,99 @@ export function ProgramTableDemo() {
       enableHiding: false,
     },
     {
-      accessorKey: 'productName',
-      header: 'Name',
+      accessorKey: "productName",
+      header: "Name",
       cell: ({ row }) => {
-        const id = row.original.product_id
+        const id = row.original.product_id;
         return (
-          <Link to={`/programs/program/${id}`}>
+          <Link to={`/xfer/programs/program/${id}`}>
             <div className="capitalize text-center cursor-pointer hover:underline">
-              {row.getValue('productName')}
+              {row.getValue("productName")}
             </div>
           </Link>
-        )
+        );
       },
     },
     {
-      accessorKey: 'productCategory',
-      header: 'Category',
+      accessorKey: "productCategory",
+      header: "Category",
       cell: ({ row }) => (
         <div className="capitalize text-center">
-          {row.getValue('productCategory')}
+          {row.getValue("productCategory")}
         </div>
       ),
     },
     {
-      accessorKey: 'programManager',
-      header: 'Program Manager',
+      accessorKey: "programManager",
+      header: "Program Manager",
       cell: ({ row }) => {
-        const user = row.original.user // Access the 'user' field from the data
+        const user = row.original.user; // Access the 'user' field from the data
         return (
           <div className="text-center cursor-pointer hover:underline">
             {user
-              ? `${user.firstName || ''} ${user.lastName || ''}`.trim() // Combine firstName and lastName
-              : 'N/A'}
+              ? `${user.firstName || ""} ${user.lastName || ""}`.trim() // Combine firstName and lastName
+              : "N/A"}
           </div>
-        )
+        );
       },
     },
 
     {
-      accessorKey: 'maxLoadAmount',
+      accessorKey: "maxLoadAmount",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Maximum Limit
             <ArrowUpDown />
           </Button>
-        )
+        );
       },
       cell: ({ row }) => {
         // const minAmount = Number(row.original.minLoadAmount) // Access the raw data directly
 
-        const maxAmount = Number(row.original.maxLoadAmount)
-        const [whole2, decimal2] = maxAmount.toFixed(2).split('.')
+        const maxAmount = Number(row.original.maxLoadAmount);
+        const [whole2, decimal2] = maxAmount.toFixed(2).split(".");
         return (
           <div className="text-center flex items-center justify-center">
             <span>₹{whole2}</span>
             <span className="text-gray-500">.{decimal2}</span>
           </div>
-        )
+        );
       },
     },
 
     {
-      accessorKey: 'createdOn',
+      accessorKey: "createdOn",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Created On
             <ArrowUpDown />
           </Button>
-        )
+        );
       },
       cell: ({ row }) => {
-        const date = row.original.updatedAt.split('T')[0]
-        const time1 = row.original.updatedAt.split('T')[1]
-        const time2 = time1.split('.')[0]
+        const date = row.original.updatedAt.split("T")[0];
+        const time1 = row.original.updatedAt.split("T")[1];
+        const time2 = time1.split(".")[0];
 
         return (
           <div className="flex flex-col items-center text-center">
             <span>{date}</span>
             <span className="text-slate-400">{time2}</span>
           </div>
-        )
+        );
       },
     },
     {
-      accessorKey: 'tags',
-      header: 'Tags',
+      accessorKey: "tags",
+      header: "Tags",
       cell: ({ row }) => (
         <div className="flex items-center justify-left gap-2">
           {Object.keys(fieldIconMap).map((field) => {
@@ -387,18 +386,18 @@ export function ProgramTableDemo() {
                 >
                   {fieldIconMap[field].icon}
                 </span>
-              )
+              );
             }
-            return null
+            return null;
           })}
         </div>
       ),
     },
     {
-      accessorKey: 'actions',
-      header: '',
+      accessorKey: "actions",
+      header: "",
       cell: ({ row }) => {
-        const rowData = row.original // Get the entire row's data for actions
+        const rowData = row.original; // Get the entire row's data for actions
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -422,7 +421,7 @@ export function ProgramTableDemo() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        )
+        );
       },
     },
     // {
@@ -454,11 +453,11 @@ export function ProgramTableDemo() {
     //     );
     //   },
     // },
-  ]
-  const hasUserData = data.some((item) => item.user) // Check if any row has the 'user' field
+  ];
+  const hasUserData = data.some((item) => item.user); // Check if any row has the 'user' field
   const columns = hasUserData
     ? allColumns // Show all columns
-    : allColumns.filter((column) => column.accessorKey !== 'programManager')
+    : allColumns.filter((column) => column.accessorKey !== "programManager");
 
   const table = useReactTable({
     data,
@@ -485,7 +484,7 @@ export function ProgramTableDemo() {
         pageSize: 5, // Set page size to 5
       },
     },
-  })
+  });
   // const table = useReactTable({
   //   data,
   //   columns,
@@ -511,26 +510,26 @@ export function ProgramTableDemo() {
   // })
 
   const openDialog = (rowData) => {
-    setIsDialogOpen(true)
-  }
+    setIsDialogOpen(true);
+  };
 
   const closeDialog = () => {
-    setIsDialogOpen(false)
+    setIsDialogOpen(false);
     // Clear any row data when canceled
-  }
+  };
   const handleFilterChange = (filter) => {
-    setSelectedFilter(filter)
+    setSelectedFilter(filter);
     // Apply your filtering logic here based on `filter`
-    console.log(`Filter applied: ${filter}`)
-  }
+    console.log(`Filter applied: ${filter}`);
+  };
   const downloadCSV = () => {
     // Convert table data to CSV
-    const csv = Papa.unparse(data)
+    const csv = Papa.unparse(data);
     // Create a Blob object for the CSV
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     // Use FileSaver to trigger a download
-    saveAs(blob, 'table-data.csv')
-  }
+    saveAs(blob, "table-data.csv");
+  };
   return (
     <Card>
       <CardHeader>
@@ -574,7 +573,7 @@ export function ProgramTableDemo() {
                       <FormField
                         name="product_name"
                         control={form.control}
-                        rules={{ required: 'Program name is required' }}
+                        rules={{ required: "Program name is required" }}
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Product Name</FormLabel>
@@ -593,7 +592,7 @@ export function ProgramTableDemo() {
                       <FormField
                         name="product_category"
                         control={form.control}
-                        rules={{ required: 'Program name is required' }}
+                        rules={{ required: "Program name is required" }}
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Product Category</FormLabel>
@@ -642,8 +641,8 @@ export function ProgramTableDemo() {
                                 onChange={(e) => {
                                   const files = e.target.files
                                     ? Array.from(e.target.files)
-                                    : []
-                                  field.onChange(files)
+                                    : [];
+                                  field.onChange(files);
                                 }}
                               />
                             </FormControl>
@@ -681,7 +680,7 @@ export function ProgramTableDemo() {
                                 header.getContext()
                               )}
                         </TableHead>
-                      )
+                      );
                     })}
                   </TableRow>
                 ))}
@@ -691,7 +690,7 @@ export function ProgramTableDemo() {
                   table.getRowModel().rows.map((row) => (
                     <TableRow
                       key={row.id}
-                      data-state={row.getIsSelected() && 'selected'}
+                      data-state={row.getIsSelected() && "selected"}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell key={cell.id}>
@@ -720,5 +719,5 @@ export function ProgramTableDemo() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

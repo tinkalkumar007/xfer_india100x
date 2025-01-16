@@ -1,6 +1,6 @@
-import * as React from 'react'
-import { Link } from 'react-router-dom'
-import axios from '@/api/axios'
+import * as React from "react";
+import { Link } from "react-router-dom";
+import axios from "@/api/axios";
 import {
   flexRender,
   getCoreRowModel,
@@ -8,10 +8,10 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from '@tanstack/react-table'
-import { saveAs } from 'file-saver'
-import * as Papa from 'papaparse'
-import { DataTablePagination } from '@/components/DataTablePagination'
+} from "@tanstack/react-table";
+import { saveAs } from "file-saver";
+import * as Papa from "papaparse";
+import { DataTablePagination } from "@/components/DataTablePagination";
 import {
   ArrowUpDown,
   ChevronDown,
@@ -28,14 +28,14 @@ import {
   ChevronsRight,
   MoreHorizontal,
   FileDown,
-} from 'lucide-react'
+} from "lucide-react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from "@/components/ui/select";
 
 import {
   AlertDialog,
@@ -45,17 +45,17 @@ import {
   AlertDialogHeader,
   AlertDialogFooter,
   AlertDialogDescription,
-} from '@/components/ui/alert-dialog'
+} from "@/components/ui/alert-dialog";
 
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from '@/components/ui/card'
+} from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -64,8 +64,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -73,117 +73,117 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from "@/components/ui/table";
 
-import { Badge } from '@/components/ui/badge'
-import { status, program_manager } from '@/data/pending-kyc-data'
-import DataTableViewOptions from './DataTableViewOptions'
-import DataTableToolbar from './DataTableToolbar'
+import { Badge } from "@/components/ui/badge";
+import { status, program_manager } from "@/data/pending-kyc-data";
+import DataTableViewOptions from "./DataTableViewOptions";
+import DataTableToolbar from "./DataTableToolbar";
 
 const data = [
   {
-    product_id: '1',
-    customerId: '123654789',
-    Name: 'Mona',
-    ProgramManager: 'Sales Card',
-    status: 'pending',
-    verificationRemarks: 'Resubmission Required',
-    submissionDate: '2022-10-05',
+    product_id: "1",
+    customerId: "123654789",
+    Name: "Mona",
+    ProgramManager: "Sales Card",
+    status: "pending",
+    verificationRemarks: "Resubmission Required",
+    submissionDate: "2022-10-05",
   },
   {
-    product_id: '2',
-    customerId: '123664789',
-    Name: 'John Doe',
-    ProgramManager: 'Platinum Card',
-    status: 'pending',
-    verificationRemarks: 'Address proof missing',
-    submissionDate: '2023-09-15',
+    product_id: "2",
+    customerId: "123664789",
+    Name: "John Doe",
+    ProgramManager: "Platinum Card",
+    status: "pending",
+    verificationRemarks: "Address proof missing",
+    submissionDate: "2023-09-15",
   },
   {
-    product_id: '3',
-    customerId: '123654782',
-    Name: 'Sophia Smith',
-    ProgramManager: 'Business Loan',
-    status: 'under review',
-    verificationRemarks: 'Verification in progress',
-    submissionDate: '2023-11-01',
+    product_id: "3",
+    customerId: "123654782",
+    Name: "Sophia Smith",
+    ProgramManager: "Business Loan",
+    status: "under review",
+    verificationRemarks: "Verification in progress",
+    submissionDate: "2023-11-01",
   },
   {
-    product_id: '4',
-    customerId: '123684789',
-    Name: 'Ethan Brown',
-    ProgramManager: 'Travel Card',
-    status: 'rejected',
-    verificationRemarks: 'ID proof mismatch',
-    submissionDate: '2023-08-20',
+    product_id: "4",
+    customerId: "123684789",
+    Name: "Ethan Brown",
+    ProgramManager: "Travel Card",
+    status: "rejected",
+    verificationRemarks: "ID proof mismatch",
+    submissionDate: "2023-08-20",
   },
   {
-    product_id: '5',
-    customerId: '123656554',
-    Name: 'Liam Wilson',
-    ProgramManager: 'Premium Savings',
-    status: 'pending',
-    verificationRemarks: 'Photo unclear, resubmit',
-    submissionDate: '2023-10-10',
+    product_id: "5",
+    customerId: "123656554",
+    Name: "Liam Wilson",
+    ProgramManager: "Premium Savings",
+    status: "pending",
+    verificationRemarks: "Photo unclear, resubmit",
+    submissionDate: "2023-10-10",
   },
   {
-    product_id: '6',
-    customerId: '123654779',
-    Name: 'Emma Davis',
-    ProgramManager: 'Retail Finance',
-    status: 'under review',
-    verificationRemarks: 'Cross-verifying documents',
-    submissionDate: '2023-09-25',
+    product_id: "6",
+    customerId: "123654779",
+    Name: "Emma Davis",
+    ProgramManager: "Retail Finance",
+    status: "under review",
+    verificationRemarks: "Cross-verifying documents",
+    submissionDate: "2023-09-25",
   },
   {
-    product_id: '7',
-    customerId: '123654798',
-    Name: 'Oliver Martinez',
-    ProgramManager: 'Gold Card',
-    status: 'pending',
-    verificationRemarks: 'Bank statement not submitted',
-    submissionDate: '2023-10-02',
+    product_id: "7",
+    customerId: "123654798",
+    Name: "Oliver Martinez",
+    ProgramManager: "Gold Card",
+    status: "pending",
+    verificationRemarks: "Bank statement not submitted",
+    submissionDate: "2023-10-02",
   },
   {
-    product_id: '8',
-    customerId: '189654789',
-    Name: 'Ava Taylor',
-    ProgramManager: 'Student Plan',
-    status: 'pending',
-    verificationRemarks: 'Document not signed',
-    submissionDate: '2023-11-15',
+    product_id: "8",
+    customerId: "189654789",
+    Name: "Ava Taylor",
+    ProgramManager: "Student Plan",
+    status: "pending",
+    verificationRemarks: "Document not signed",
+    submissionDate: "2023-11-15",
   },
   {
-    product_id: '9',
-    customerId: '123654756',
-    Name: 'Michael Johnson',
-    ProgramManager: 'Cashback Offers',
-    status: 'rejected',
-    verificationRemarks: 'Document not legible',
-    submissionDate: '2023-07-30',
+    product_id: "9",
+    customerId: "123654756",
+    Name: "Michael Johnson",
+    ProgramManager: "Cashback Offers",
+    status: "rejected",
+    verificationRemarks: "Document not legible",
+    submissionDate: "2023-07-30",
   },
   {
-    product_id: '10',
-    customerId: '123654723',
-    Name: 'Emily Clark',
-    ProgramManager: 'Merchant Services',
-    status: 'under review',
-    verificationRemarks: 'Final verification stage',
-    submissionDate: '2023-11-10',
+    product_id: "10",
+    customerId: "123654723",
+    Name: "Emily Clark",
+    ProgramManager: "Merchant Services",
+    status: "under review",
+    verificationRemarks: "Final verification stage",
+    submissionDate: "2023-11-10",
   },
-]
+];
 
 //console.log(data)
 
 export function PendingKycTable() {
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false)
-  const [sorting, setSorting] = React.useState([])
-  const [columnFilters, setColumnFilters] = React.useState([])
-  const [columnVisibility, setColumnVisibility] = React.useState({})
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [sorting, setSorting] = React.useState([]);
+  const [columnFilters, setColumnFilters] = React.useState([]);
+  const [columnVisibility, setColumnVisibility] = React.useState({});
+  const [rowSelection, setRowSelection] = React.useState({});
   // const [data, setData] = React.useState([])
-  const [loading, setLoading] = React.useState(true)
-  const [error, setError] = React.useState(null)
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
 
   // React.useEffect(() => {
   //   const fetchData = async () => {
@@ -222,10 +222,10 @@ export function PendingKycTable() {
 
   async function handleCopy(rowData) {
     try {
-      const entireRow = `{\n\n\tID: ${rowData.productId},\n\tName: ${rowData.Name},\n\tProgram Manager: ${rowData.programManager},\n\tStatus: ${rowData.status},\n\tVerification Remark: ${rowData.verificationRemarks},\n\tSubmission Date: ${rowData.submissionDate}\n\n}`
-      await navigator.clipboard.writeText(entireRow)
+      const entireRow = `{\n\n\tID: ${rowData.productId},\n\tName: ${rowData.Name},\n\tProgram Manager: ${rowData.programManager},\n\tStatus: ${rowData.status},\n\tVerification Remark: ${rowData.verificationRemarks},\n\tSubmission Date: ${rowData.submissionDate}\n\n}`;
+      await navigator.clipboard.writeText(entireRow);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -250,12 +250,12 @@ export function PendingKycTable() {
     //   ),
     // },
     {
-      id: 'select',
+      id: "select",
       header: ({ table }) => (
         <Checkbox
           checked={
             table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && 'indeterminate')
+            (table.getIsSomePageRowsSelected() && "indeterminate")
           }
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
@@ -272,46 +272,46 @@ export function PendingKycTable() {
       enableHiding: false,
     },
     {
-      accessorKey: 'customerId',
-      header: 'Customer Id',
+      accessorKey: "customerId",
+      header: "Customer Id",
       cell: ({ row }) => (
-        <Link to={`/pending-for-kyc/customer/${row.original.id}`}>
+        <Link to={`/xfer/pending-for-kyc/customer/${row.original.id}`}>
           <div className="capitalize text-center hover:underline">
-            {row.getValue('customerId')}
+            {row.getValue("customerId")}
           </div>
         </Link>
       ),
     },
     {
-      accessorKey: 'Name',
-      header: 'Name',
+      accessorKey: "Name",
+      header: "Name",
       cell: ({ row }) => (
-        <div className="capitalize text-center">{row.getValue('Name')}</div>
+        <div className="capitalize text-center">{row.getValue("Name")}</div>
       ),
     },
     {
-      accessorKey: 'ProgramManager',
-      header: 'Program Manager',
+      accessorKey: "ProgramManager",
+      header: "Program Manager",
       cell: ({ row }) => (
         <div className="text-center hover:underline">
-          {row.getValue('ProgramManager')}
+          {row.getValue("ProgramManager")}
         </div>
       ),
     },
 
     {
-      accessorKey: 'verificationRemarks',
-      header: 'Verification Remarks',
+      accessorKey: "verificationRemarks",
+      header: "Verification Remarks",
       cell: ({ row }) => (
-        <div className="text-center">{row.getValue('verificationRemarks')}</div>
+        <div className="text-center">{row.getValue("verificationRemarks")}</div>
       ),
     },
 
     {
-      accessorKey: 'submissionDate',
-      header: 'Submission Date',
+      accessorKey: "submissionDate",
+      header: "Submission Date",
       cell: ({ row }) => {
-        const date = row.original.submissionDate
+        const date = row.original.submissionDate;
         // const time1 = row.original.submissionDate.split('T')[1]
         // const time2 = time1.split('.')[0]
         //const
@@ -321,39 +321,39 @@ export function PendingKycTable() {
             <span>{date}</span>
             {/* <span className="text-slate-400">{time2}</span> */}
           </div>
-        )
+        );
       },
     },
     {
-      accessorKey: 'status',
-      header: 'Status',
+      accessorKey: "status",
+      header: "Status",
       cell: ({ row }) => {
-        const status = row.original.status
+        const status = row.original.status;
 
         switch (status) {
-          case 'pending':
+          case "pending":
             return (
               <Badge className="bg-[#fff7d3] text-[#ab6e05]">Pending</Badge>
-            )
-          case 'under review':
+            );
+          case "under review":
             return (
               <Badge className="bg-[#e3f2fd] text-[#1976d2]">
                 Under Review
               </Badge>
-            )
-          case 'rejected':
+            );
+          case "rejected":
             return (
               <Badge className="bg-[#ffe6e6] text-[#d32f2f]">Rejected</Badge>
-            )
+            );
         }
       },
     },
     {
-      accessorKey: 'actions',
-      header: '',
+      accessorKey: "actions",
+      header: "",
       cell: ({ row }) => {
-        const id = row.original.product_id
-        const rowData = row.original // Get the entire row's data for actions
+        const id = row.original.product_id;
+        const rowData = row.original; // Get the entire row's data for actions
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -369,17 +369,17 @@ export function PendingKycTable() {
               <DropdownMenuItem
                 className="cursor-pointer"
                 onClick={() => {
-                  handleCopy(rowData)
+                  handleCopy(rowData);
                 }}
               >
                 Copy
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        )
+        );
       },
     },
-  ]
+  ];
 
   const table = useReactTable({
     data,
@@ -403,25 +403,25 @@ export function PendingKycTable() {
         pageSize: 5, // Set page size to 5
       },
     },
-  })
+  });
 
   const openDialog = (rowData) => {
-    setIsDialogOpen(true)
-  }
+    setIsDialogOpen(true);
+  };
 
   const closeDialog = () => {
-    setIsDialogOpen(false)
+    setIsDialogOpen(false);
     // Clear any row data when canceled
-  }
+  };
 
   const downloadCSV = () => {
     // Convert table data to CSV
-    const csv = Papa.unparse(data)
+    const csv = Papa.unparse(data);
     // Create a Blob object for the CSV
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     // Use FileSaver to trigger a download
-    saveAs(blob, 'table-data.csv')
-  }
+    saveAs(blob, "table-data.csv");
+  };
 
   return (
     <Card>
@@ -462,7 +462,7 @@ export function PendingKycTable() {
                                 header.getContext()
                               )}
                         </TableHead>
-                      )
+                      );
                     })}
                   </TableRow>
                 ))}
@@ -472,13 +472,13 @@ export function PendingKycTable() {
                   table.getRowModel().rows.map((row) => (
                     <TableRow
                       key={row.id}
-                      data-state={row.getIsSelected() && 'selected'}
+                      data-state={row.getIsSelected() && "selected"}
                     >
                       {row.getVisibleCells().map((cell) => {
                         const clickableColumns = [
-                          'customerId',
-                          'ProgramManager',
-                        ] // List of clickable column keys
+                          "customerId",
+                          "ProgramManager",
+                        ]; // List of clickable column keys
 
                         return (
                           <TableCell className="text-center" key={cell.id}>
@@ -487,9 +487,9 @@ export function PendingKycTable() {
                               <button
                                 onClick={() => handleClick(cell.row.original)}
                                 style={{
-                                  background: 'transparent',
-                                  border: 'none',
-                                  cursor: 'pointer',
+                                  background: "transparent",
+                                  border: "none",
+                                  cursor: "pointer",
                                 }}
                               >
                                 {flexRender(
@@ -505,7 +505,7 @@ export function PendingKycTable() {
                               )
                             )}
                           </TableCell>
-                        )
+                        );
                       })}
                     </TableRow>
                   ))
@@ -526,5 +526,5 @@ export function PendingKycTable() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

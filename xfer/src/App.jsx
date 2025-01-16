@@ -48,12 +48,16 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 function App() {
   const getSiteName = () => {
     // @ts-ignore
-    if (window.frappe?.boot?.versions?.frappe && (window.frappe.boot.versions.frappe.startsWith('15') || window.frappe.boot.versions.frappe.startsWith('16'))) {
+    if (
+      window.frappe?.boot?.versions?.frappe &&
+      (window.frappe.boot.versions.frappe.startsWith("15") ||
+        window.frappe.boot.versions.frappe.startsWith("16"))
+    ) {
       // @ts-ignore
-      return window.frappe?.boot?.sitename ?? import.meta.env.VITE_SITE_NAME
+      return window.frappe?.boot?.sitename ?? import.meta.env.VITE_SITE_NAME;
     }
-    return import.meta.env.VITE_SITE_NAME
-  }
+    return import.meta.env.VITE_SITE_NAME;
+  };
   return (
     <ThemeProvider storageKey="vite-ui-theme">
       <Toaster />
@@ -90,6 +94,11 @@ function App() {
             element={<OrderDetails />}
           />
           <Route path="/xfer/issued-cards" element={<IssuedCards />} />
+          <Route
+            path="xfer/issued-cards/issuedcards-details/:id"
+            element={<IssuedCardsDetails />}
+          />
+
           <Route path="/xfer/all-customers" element={<AllCustomers />} />
           <Route
             path="/xfer/all-customers/customer/:id"
@@ -103,7 +112,10 @@ function App() {
             path="/xfer/pending-for-kyc/customer/:id"
             element={<CustomerDetails />}
           />
-          <Route path="/xfer/flagged-customers" element={<FlaggedCustomers />} />
+          <Route
+            path="/xfer/flagged-customers"
+            element={<FlaggedCustomers />}
+          />
           <Route path="/xfer/pending-for-kyc" element={<PendingKyc />} />
           <Route path="/xfer/pool-accounts" element={<PoolAccounts />} />
           <Route
