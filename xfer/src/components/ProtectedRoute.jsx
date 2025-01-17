@@ -1,17 +1,19 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 import { useFrappeAuth } from 'frappe-react-sdk'
 
 const ProtectedRoute = () => {
-  const { currentUser, loading } = useFrappeAuth()
+  const { currentUser, isLoading } = useFrappeAuth()
 
-  console.log(currentUser)
+  useEffect(() => {
+    console.log(`Loading: ${isLoading}, currentUser: ${currentUser}!`)
+  }, [isLoading, currentUser])
 
-  if (loading) {
-    return <div>Loading...</div>
+  if (isLoading) {
+    return <div>isLoading...</div>
   }
 
-  if (!loading && currentUser) {
+  if (!isLoading && currentUser) {
     return <Outlet />
   }
 

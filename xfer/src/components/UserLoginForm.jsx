@@ -54,7 +54,6 @@ export default function UserLoginForm({ setScreen }) {
       .then((response) => {
         console.log(response)
         if (response.message === 'Logged In') {
-          updateCurrentUser()
           navigate('/business-dashboard')
         }
       })

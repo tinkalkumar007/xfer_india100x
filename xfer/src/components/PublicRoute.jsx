@@ -3,20 +3,17 @@ import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 
 const PublicRoute = () => {
-  const { currentUser } = useFrappeAuth()
+  const { currentUser, isLoading } = useFrappeAuth()
 
-  if (loading) {
+  if (isLoading) {
     return <div>Loading...</div>
   }
 
-  if (!loading && currentUser) {
-    return <Navigate to="/business-dashboard" />
-  }
-
-  if (!loading && !currentUser) {
+  if (!isLoading && !currentUser) {
     return <Outlet />
   }
-s
+
+  return <Navigate to="/business-dashboard" />
 }
 
 export default PublicRoute
