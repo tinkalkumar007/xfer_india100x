@@ -1,73 +1,68 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import { ThemeProvider } from "./components/theme-provider";
-import { setAccessToken } from "./api/axios";
-import Layout from "./components/Layout";
-import BusinessDashboard from "./pages/BusinessDashboard/BusinessDashboard";
-import SystemDashboard from "./pages/SystemDashboard/SystemDashboard";
-import Error404 from "./pages/Error404/Error404";
-import Programs from "./pages/Programs/Programs";
-import ProgramManagers from "./pages/ProgramManagers/ProgramManagers";
-import Inventory from "./pages/Inventory/Inventory";
-import IssuedCards from "./pages/IssuedCards/IssuedCards";
-import AllCustomers from "./pages/AllCustomers/AllCustomers";
-import FlaggedCustomers from "./pages/FlaggedCustomers/FlaggedCustomers";
-import PendingKyc from "./pages/PendingKyc/PendingKyc";
-import PoolAccounts from "./pages/PoolAccounts/PoolAccounts";
-import FundingTransactions from "./pages/FundingTransactions/FundingTransactions";
-import SystemUsers from "./pages/SystemUsers/SystemUsers";
-import UserActivityLogs from "./pages/UserActivityLogs/UserActivityLogs";
-import CreateProgram from "./pages/CreateProgram/CreateProgram";
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { ThemeProvider } from './components/theme-provider'
+import { setAccessToken } from './api/axios'
+import Layout from './components/Layout'
+import BusinessDashboard from './pages/BusinessDashboard/BusinessDashboard'
+import SystemDashboard from './pages/SystemDashboard/SystemDashboard'
+import Error404 from './pages/Error404/Error404'
+import Programs from './pages/Programs/Programs'
+import ProgramManagers from './pages/ProgramManagers/ProgramManagers'
+import Inventory from './pages/Inventory/Inventory'
+import IssuedCards from './pages/IssuedCards/IssuedCards'
+import AllCustomers from './pages/AllCustomers/AllCustomers'
+import FlaggedCustomers from './pages/FlaggedCustomers/FlaggedCustomers'
+import PendingKyc from './pages/PendingKyc/PendingKyc'
+import PoolAccounts from './pages/PoolAccounts/PoolAccounts'
+import FundingTransactions from './pages/FundingTransactions/FundingTransactions'
+import SystemUsers from './pages/SystemUsers/SystemUsers'
+import UserActivityLogs from './pages/UserActivityLogs/UserActivityLogs'
+import CreateProgram from './pages/CreateProgram/CreateProgram'
 
-import Profile from "@/pages/AccountProfile/Profile";
-import Security from "@/pages/AccountSecurity/Security";
-import Appearance from "@/pages/AccountAppearance/Appearance";
-import ProgramManagerDetails from "./pages/ProgramManagerDetails/ProgramManagerDetails";
-import Notifications from "@/pages/AccountNotifications/Notifications";
-import OrderDetails from "./pages/OrderDetails/OrderDetails";
+import Profile from '@/pages/AccountProfile/Profile'
+import Security from '@/pages/AccountSecurity/Security'
+import Appearance from '@/pages/AccountAppearance/Appearance'
+import ProgramManagerDetails from './pages/ProgramManagerDetails/ProgramManagerDetails'
+import Notifications from '@/pages/AccountNotifications/Notifications'
+import OrderDetails from './pages/OrderDetails/OrderDetails'
 
-import ApiKeys from "@/pages/DeveloperApiKeys/ApiKeys";
-import Webhooks from "@/pages/DeveloperWebhooks/Webhooks";
-import IpWhitelisting from "@/pages/DeveloperIpWhitelisting/IpWhitelisting";
+import ApiKeys from '@/pages/DeveloperApiKeys/ApiKeys'
+import Webhooks from '@/pages/DeveloperWebhooks/Webhooks'
+import IpWhitelisting from '@/pages/DeveloperIpWhitelisting/IpWhitelisting'
 
-import Users from "@/pages/TeamUsers/Users";
+import Users from '@/pages/TeamUsers/Users'
 
-import Logs from "@/pages/TeamLogs/Logs";
-import Login from "@/pages/Login/Login";
+import Logs from '@/pages/TeamLogs/Logs'
+import Login from '@/pages/Login/Login'
 
-import UserProfileLayout from "./components/UserProfileLayout";
-import ApiLogs from "./pages/DeveloperApiLogs/ApiLogs";
-import CreateOrder from "./pages/CreateOrder/CreateOrder";
-import ProgramDetails from "@/pages/ProgramDetails/ProgramDetails";
+import UserProfileLayout from './components/UserProfileLayout'
+import ApiLogs from './pages/DeveloperApiLogs/ApiLogs'
+import CreateOrder from './pages/CreateOrder/CreateOrder'
+import ProgramDetails from '@/pages/ProgramDetails/ProgramDetails'
 
-import IssuedCardsDetails from "./pages/IssuedCardsDetails/IssuedCardsDetails";
+import IssuedCardsDetails from './pages/IssuedCardsDetails/IssuedCardsDetails'
 
-import CustomerDetails from "./pages/CustomerDetails/CustomerDetails";
-import { Toaster } from "@/components/ui/toaster";
-import ProtectedRoute from "@/components/ProtectedRoute";
+import CustomerDetails from './pages/CustomerDetails/CustomerDetails'
+import { Toaster } from '@/components/ui/toaster'
+import ProtectedRoute from '@/components/ProtectedRoute'
+import PublicRoute from './components/PublicRoute'
+import TestDoc from './components/TestDoc'
 
 function App() {
-  
   return (
     <ThemeProvider storageKey="vite-ui-theme">
       <Toaster />
       <Routes>
+        {/* <Route element={<PublicRoute />}>
+        </Route> */}
         <Route path={`/`} element={<Login />} />
-
+        {/* <Route element={<ProtectedRoute />}> */}
         <Route element={<Layout />}>
-          <Route
-            path="/business-dashboard"
-            element={<BusinessDashboard />}
-          />
+          <Route path="/business-dashboard" element={<BusinessDashboard />} />
+          <Route path="/test-doc" element={<TestDoc />} />
           <Route path="/system-dashboard" element={<SystemDashboard />} />
           <Route path="/programs" element={<Programs />} />
-          <Route
-            path="/programs/program/:id"
-            element={<ProgramDetails />}
-          />
-          <Route
-            path="/programs/create-program"
-            element={<CreateProgram />}
-          />
+          <Route path="/programs/program/:id" element={<ProgramDetails />} />
+          <Route path="/programs/create-program" element={<CreateProgram />} />
           <Route path="/program-managers" element={<ProgramManagers />} />
 
           <Route
@@ -98,10 +93,7 @@ function App() {
             path="/pending-for-kyc/customer/:id"
             element={<CustomerDetails />}
           />
-          <Route
-            path="/flagged-customers"
-            element={<FlaggedCustomers />}
-          />
+          <Route path="/flagged-customers" element={<FlaggedCustomers />} />
           <Route path="/pending-for-kyc" element={<PendingKyc />} />
           <Route path="/pool-accounts" element={<PoolAccounts />} />
           <Route
@@ -109,15 +101,12 @@ function App() {
             element={<FundingTransactions />}
           />
           <Route path="/system-users" element={<SystemUsers />} />
-          <Route
-            path="/user-activity-logs"
-            element={<UserActivityLogs />}
-          />
+          <Route path="/user-activity-logs" element={<UserActivityLogs />} />
           {/* Nested Routes */}
           <Route element={<UserProfileLayout />}>
             {/* Account Routes */}
             <Route path="/account">
-              <Route index element={<Navigate to="profile" />} />{" "}
+              <Route index element={<Navigate to="profile" />} />{' '}
               {/* Default redirect */}
               <Route path="profile" element={<Profile />} />
               <Route path="security" element={<Security />} />
@@ -127,7 +116,7 @@ function App() {
 
             {/* Developer Routes */}
             <Route path="/developer">
-              <Route index element={<Navigate to="api-keys" />} />{" "}
+              <Route index element={<Navigate to="api-keys" />} />{' '}
               {/* Default redirect */}
               <Route path="api-keys" element={<ApiKeys />} />
               <Route path="api-logs" element={<ApiLogs />} />
@@ -138,19 +127,19 @@ function App() {
             {/* Team Routes */}
 
             <Route path="/team">
-              <Route index element={<Navigate to="users" />} />{" "}
+              <Route index element={<Navigate to="users" />} />{' '}
               {/* Default redirect */}
               <Route path="users" element={<Users />} />
               <Route path="logs" element={<Logs />} />
             </Route>
           </Route>
         </Route>
-
+        {/* </Route> */}
         {/* Fallback Route */}
         <Route path="*" element={<Error404 />} />
       </Routes>
     </ThemeProvider>
-  );
+  )
 }
 
-export default App;
+export default App
