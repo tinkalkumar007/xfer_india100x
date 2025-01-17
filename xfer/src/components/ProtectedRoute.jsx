@@ -10,7 +10,11 @@ const ProtectedRoute = () => {
   }, [isLoading, currentUser])
 
   if (isLoading) {
-    return <div>isLoading...</div>
+    return (
+      <div className="w-screen h-screen flex justify-center items-center">
+        <div className="spinner w-14 h-14 rounded-full border-4 border-gray-200 border-r-blue-500 animate-spin"></div>
+      </div>
+    )
   }
 
   if (!isLoading && currentUser) {

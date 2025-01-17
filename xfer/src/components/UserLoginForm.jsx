@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { useForm } from 'react-hook-form'
 
 import { z } from 'zod'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -35,7 +35,8 @@ const formSchema = z.object({
 
 export default function UserLoginForm({ setScreen }) {
   const navigate = useNavigate()
-  const { login, currentUser, updateCurrentUser } = useFrappeAuth()
+  const { login, currentUser, updateCurrentUser, getUserCookie } =
+    useFrappeAuth()
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
