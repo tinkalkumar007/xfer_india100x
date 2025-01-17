@@ -46,10 +46,27 @@ import { Toaster } from '@/components/ui/toaster'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import PublicRoute from './components/PublicRoute'
 import TestDoc from './components/TestDoc'
+import { FrappeProvider } from 'frappe-react-sdk'
 
 function App() {
+  const getSiteName = () => {
+    // @ts-ignore
+    if (
+      window.frappe?.boot?.versions?.frappe &&
+      (window.frappe.boot.versions.frappe.startsWith('15') ||
+        window.frappe.boot.versions.frappe.startsWith('16'))
+    ) {
+      // @ts-ignore
+      return window.frappe?.boot?.sitename ?? import.meta.env.VITE_SITE_NAME
+    }
+    return import.meta.env.VITE_SITE_NAME
+  }
   return (
     <ThemeProvider storageKey="vite-ui-theme">
+    <FrappeProvider
+      socketPort={import.meta.env.VITE_SOCKET_PORT}
+      siteName={getSiteName()}
+    >
       <Toaster />
       <Routes>
         {/* <Route element={<PublicRoute />}>
@@ -138,7 +155,9 @@ function App() {
         {/* Fallback Route */}
         <Route path="*" element={<Error404 />} />
       </Routes>
+    </FrappeProvider>
     </ThemeProvider>
+
   )
 }
 
