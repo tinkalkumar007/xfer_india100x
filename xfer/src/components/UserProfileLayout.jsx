@@ -6,47 +6,47 @@ const UserProfileLayout = () => {
     account: [
       {
         title: "Profile",
-        href: "xfer/account/profile",
+        href: "/account/profile",
       },
       {
         title: "Security",
-        href: "xfer/account/security",
+        href: "/account/security",
       },
       {
         title: "Appearance",
-        href: "xfer/account/appearance",
+        href: "/account/appearance",
       },
       {
         title: "Notifications",
-        href: "xfer/account/notifications",
+        href: "/account/notifications",
       },
     ],
     developer: [
       {
         title: "API Keys",
-        href: "xfer/developer/API-keys",
+        href: "/developer/API-keys",
       },
       {
         title: "API Logs",
-        href: "xfer/developer/API-Logs",
+        href: "/developer/API-Logs",
       },
       {
         title: "Webhooks",
-        href: "xfer/developer/webhooks",
+        href: "/developer/webhooks",
       },
       {
         title: `IP's Whitelisting`,
-        href: "xfer/developer/ip-whitelisting",
+        href: "/developer/ip-whitelisting",
       },
     ],
     team: [
       {
         title: "Users",
-        href: "xfer/team/users",
+        href: "/team/users",
       },
       {
         title: `Logs`,
-        href: "xfer/team/logs",
+        href: "/team/logs",
       },
     ],
   };

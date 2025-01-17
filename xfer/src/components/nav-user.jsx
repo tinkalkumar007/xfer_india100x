@@ -12,11 +12,11 @@ import {
   FileSliders,
   CircleUser,
   Users,
-} from "lucide-react";
+} from 'lucide-react'
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,20 +29,23 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
   DropdownMenuPortal,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu'
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
   SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/sidebar'
+import { Button } from '@/components/ui/button'
+import { useFrappeAuth } from 'frappe-react-sdk'
 
 export function NavUser({ user }) {
-  console.log(user);
-  const { isMobile } = useSidebar();
-  const { closeSidebar } = useSidebar();
+  const navigate = useNavigate()
+  const { logout } = useFrappeAuth()
+
+  const { isMobile } = useSidebar()
+  const { closeSidebar } = useSidebar()
 
   return (
     <SidebarMenu>
@@ -69,7 +72,7 @@ export function NavUser({ user }) {
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
+            side={isMobile ? 'bottom' : 'right'}
             align="end"
             sideOffset={4}
           >
@@ -91,9 +94,9 @@ export function NavUser({ user }) {
             <DropdownMenuSeparator />
 
             <Link
-              to="xfer/account"
+              to="/account"
               onClick={() => {
-                closeSidebar();
+                closeSidebar()
               }}
             >
               <DropdownMenuItem onClick={() => {}}>
@@ -103,9 +106,9 @@ export function NavUser({ user }) {
             </Link>
 
             <Link
-              to="xfer/developer"
+              to="/developer"
               onClick={() => {
-                closeSidebar();
+                closeSidebar()
               }}
             >
               <DropdownMenuItem onClick={() => {}}>
@@ -115,9 +118,9 @@ export function NavUser({ user }) {
             </Link>
 
             <Link
-              to="xfer/team"
+              to="/team"
               onClick={() => {
-                closeSidebar();
+                closeSidebar()
               }}
             >
               <DropdownMenuItem onClick={() => {}}>
@@ -129,15 +132,21 @@ export function NavUser({ user }) {
             {/*  */}
 
             <DropdownMenuSeparator />
-            <Link to="/">
-              <DropdownMenuItem className="text-[#b52a2a]">
+            <div>
+              <DropdownMenuItem
+                className="text-[#b52a2a] cursor-pointer"
+                onClick={() => {
+                  logout()
+                  navigate('/')
+                }}
+              >
                 <LogOut />
                 Log out
               </DropdownMenuItem>
-            </Link>
+            </div>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  );
+  )
 }

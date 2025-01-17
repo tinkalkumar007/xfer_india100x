@@ -266,7 +266,7 @@ export function IssuedCardsTable() {
       cell: ({ row }) => {
         const id = row.original.card_ref_id;
         return (
-          <Link to={`/xfer/issued-cards/issuedcards-details/${id}`}>
+          <Link to={`/issued-cards/issuedcards-details/${id}`}>
             <div className="capitalize text-center hover:underline">
               {row.getValue("card_ref_id")}
             </div>

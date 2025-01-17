@@ -106,6 +106,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import  { useFrappeGetDocList, useFrappeCreateDoc, useFrappeUpdateDoc } from "frappe-react-sdk";
 
 const fieldIconMap = {
   kycRequired: {
@@ -140,56 +141,56 @@ const fieldIconMap = {
   },
 };
 
-const data = [
-  {
-    productName: "Travel Card",
-    productCategory: "Business",
-    minLoadAmount: "1000.00",
-    maxLoadAmount: "500000.00",
-    updatedAt: "2024-12-17T04:15:22.000Z",
-    kycRequired: "1",
-    isPhysical: true,
-    contactlessAllowed: false,
-    isRewardsApplicable: true,
-    user: {
-      firstName: "ONO",
-      lastName: "dev",
-      username: "ONO90",
-    },
-  },
-  {
-    productName: "Shopping Card",
-    productCategory: "Business",
-    minLoadAmount: "1000.00",
-    maxLoadAmount: "50000.00",
-    updatedAt: "2024-12-17T05:24:40.000Z",
-    kycRequired: "1",
-    isPhysical: false,
-    contactlessAllowed: true,
-    isRewardsApplicable: true,
-    user: {
-      firstName: "Privacy",
-      lastName: "Card",
-      username: "PC9090",
-    },
-  },
-  {
-    productName: "Expense Card",
-    productCategory: "Business",
-    minLoadAmount: "1000.00",
-    maxLoadAmount: "50000.00",
-    updatedAt: "2024-12-17T05:28:19.000Z",
-    kycRequired: "1",
-    isPhysical: true,
-    contactlessAllowed: true,
-    isRewardsApplicable: true,
-    user: {
-      firstName: "Privacy",
-      lastName: "Card",
-      username: "PC9090",
-    },
-  },
-];
+// const data = [
+//   {
+//     productName: "Travel Card",
+//     productCategory: "Business",
+//     minLoadAmount: "1000.00",
+//     maxLoadAmount: "500000.00",
+//     updatedAt: "2024-12-17T04:15:22.000Z",
+//     kycRequired: "1",
+//     isPhysical: true,
+//     contactlessAllowed: false,
+//     isRewardsApplicable: true,
+//     user: {
+//       firstName: "ONO",
+//       lastName: "dev",
+//       username: "ONO90",
+//     },
+//   },
+//   {
+//     productName: "Shopping Card",
+//     productCategory: "Business",
+//     minLoadAmount: "1000.00",
+//     maxLoadAmount: "50000.00",
+//     updatedAt: "2024-12-17T05:24:40.000Z",
+//     kycRequired: "1",
+//     isPhysical: false,
+//     contactlessAllowed: true,
+//     isRewardsApplicable: true,
+//     user: {
+//       firstName: "Privacy",
+//       lastName: "Card",
+//       username: "PC9090",
+//     },
+//   },
+//   {
+//     productName: "Expense Card",
+//     productCategory: "Business",
+//     minLoadAmount: "1000.00",
+//     maxLoadAmount: "50000.00",
+//     updatedAt: "2024-12-17T05:28:19.000Z",
+//     kycRequired: "1",
+//     isPhysical: true,
+//     contactlessAllowed: true,
+//     isRewardsApplicable: true,
+//     user: {
+//       firstName: "Privacy",
+//       lastName: "Card",
+//       username: "PC9090",
+//     },
+//   },
+// ];
 
 const filters = [
   "Today",
@@ -200,9 +201,9 @@ const filters = [
 ];
 
 const productSchema = z.object({
-  product_name: z.string().min(1, "Program name is required"),
+  program_name: z.string().min(1, "Program name is required"),
   description: z.string().optional(),
-  product_category: z.string().optional(),
+  category: z.string().optional(),
   terms_conditions: z.string().optional(),
 });
 
@@ -210,15 +211,29 @@ export function ProgramTableDemo() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
   const onSubmit = (data) => {
-    console.log(data);
-  };
+
+    console.log(data)
+   
+      createDoc('Program', {
+        program_name: data.program_name,
+        category: data.category, 
+        description: data.description,
+        status: "Pending For Approval",
+        terms_conditions: data.terms_conditions
+      });
+      
+     
+      form.reset(); // Reset form fields
+      // Close the sheet after successful submission
+      
+    } 
 
   const form = useForm({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      product_name: "",
+      program_name: "",
       description: "",
-      product_category: "",
+      category: "",
       terms_conditions: "",
     },
   });
@@ -233,30 +248,36 @@ export function ProgramTableDemo() {
   const [loading, setLoading] = React.useState(true); // State for loading
   const [error, setError] = React.useState(null); // State for error handling
 
-  // React.useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       setLoading(true)
-  //       //const token=Cookies.get("auth_token");
-  //       //console.log(token);
-  //       //axios.default.withCredentials=true;
-  //       const response = await axios.get('/cms/fetchall_product', {
-  //         withCredentials: true,
-  //       }) // Replace with your API endpoint
-  //       //setData(response.data.data); // Assuming the response is an array of pool accounts
-  //       console.log(response.data.data)
-  //       setData(response.data.data)
-  //     } catch (err) {
-  //       console.error('Error fetching data:', err)
-  //       setError('Failed to fetch data. Please try again later.')
-  //     } finally {
-  //       setLoading(false)
-  //     }
-  //   }
-  //   fetchData()
-  // }, [])
+  const { data: programData } = useFrappeGetDocList('Program', {
+    fields: ["name", "program_name", "status", "description", "category"]
+  })
 
-  const allColumns = [
+  const { createDoc } = useFrappeCreateDoc();
+  const { updateDoc } = useFrappeUpdateDoc();
+
+  const tableData = React.useMemo(() => {
+    if (!programData) return [];
+    return programData.map(program => ({
+      id: program.name, // Frappe's unique identifier
+      product_name: program.program_name,
+      category: program.category,
+      description: program.description,
+      status: program.status
+    }));
+  }, [programData]);
+
+  function handleBlock(id) {
+  
+  
+      updateDoc('Program', id, {
+        status: 'Blocked'  // or whatever status you want to set
+      });
+      // Optionally refresh your data here
+    
+  }
+  
+
+  const columns = [
     {
       id: "select",
       header: ({ table }) => (
@@ -281,123 +302,166 @@ export function ProgramTableDemo() {
       enableHiding: false,
     },
     {
-      accessorKey: "productName",
+      accessorKey: "product_name",
       header: "Name",
       cell: ({ row }) => {
-        const id = row.original.product_id;
+        
         return (
-          <Link to={`/xfer/programs/program/${id}`}>
+          <Link to={`/programs/program/${row.original.name}`}>
             <div className="capitalize text-center cursor-pointer hover:underline">
-              {row.getValue("productName")}
+              {row.original.product_name || ""}  
             </div>
           </Link>
         );
       },
     },
     {
-      accessorKey: "productCategory",
+      accessorKey: "category",
       header: "Category",
       cell: ({ row }) => (
         <div className="capitalize text-center">
-          {row.getValue("productCategory")}
+          {row.original.category || ""}
         </div>
       ),
     },
     {
-      accessorKey: "programManager",
-      header: "Program Manager",
-      cell: ({ row }) => {
-        const user = row.original.user; // Access the 'user' field from the data
-        return (
-          <div className="text-center cursor-pointer hover:underline">
-            {user
-              ? `${user.firstName || ""} ${user.lastName || ""}`.trim() // Combine firstName and lastName
-              : "N/A"}
-          </div>
-        );
-      },
-    },
-
-    {
-      accessorKey: "maxLoadAmount",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Maximum Limit
-            <ArrowUpDown />
-          </Button>
-        );
-      },
-      cell: ({ row }) => {
-        // const minAmount = Number(row.original.minLoadAmount) // Access the raw data directly
-
-        const maxAmount = Number(row.original.maxLoadAmount);
-        const [whole2, decimal2] = maxAmount.toFixed(2).split(".");
-        return (
-          <div className="text-center flex items-center justify-center">
-            <span>₹{whole2}</span>
-            <span className="text-gray-500">.{decimal2}</span>
-          </div>
-        );
-      },
-    },
-
-    {
-      accessorKey: "createdOn",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Created On
-            <ArrowUpDown />
-          </Button>
-        );
-      },
-      cell: ({ row }) => {
-        const date = row.original.updatedAt.split("T")[0];
-        const time1 = row.original.updatedAt.split("T")[1];
-        const time2 = time1.split(".")[0];
-
-        return (
-          <div className="flex flex-col items-center text-center">
-            <span>{date}</span>
-            <span className="text-slate-400">{time2}</span>
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "tags",
-      header: "Tags",
+      accessorKey: "description",
+      header: "Description",
       cell: ({ row }) => (
-        <div className="flex items-center justify-left gap-2">
-          {Object.keys(fieldIconMap).map((field) => {
-            if (row.original[field]) {
-              return (
-                <span
-                  key={field}
-                  className={`flex items-center gap-1`}
-                  title={fieldIconMap[field].label}
-                >
-                  {fieldIconMap[field].icon}
-                </span>
-              );
-            }
-            return null;
-          })}
+        <div className="capitalize text-center">
+          {row.original.description || ""}
         </div>
       ),
     },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => {
+        const status = row.original.status || "";
+        return (
+   
+  
+          <div className="text-center">
+
+            {
+              status === "" && ""
+            }
+            
+            {status === 'Active' && (
+              <Badge className="bg-[#e4f5e9] text-[#16794c]">Active</Badge>
+            )} 
+             {status === 'Suspended' && (
+              <Badge className="bg-[#fff7d3] text-[#ab6e05]">Suspended</Badge>
+            )} 
+            {status === 'Inactive' && (
+              <Badge className="bg-[#fff0f0] text-[#b52a2a]">Inactive</Badge>
+            )}
+            {status === 'Pending For Approval' && (
+              <Badge className="bg-[#fff0f0] text-[#b52a2a]">Pending</Badge>
+            )}
+            {status === 'Blocked' && (
+              <Badge className="bg-[#fff0f0] text-[#b52a2a]">Blocked</Badge>
+            )}
+          </div>
+      
+      )},
+    },
+    // {
+    //   accessorKey: "programManager",
+    //   header: "Program Manager",
+    //   cell: ({ row }) => {
+    //     const user = row.original.user; // Access the 'user' field from the data
+    //     return (
+    //       <div className="text-center cursor-pointer hover:underline">
+    //         {user
+    //           ? `${user.firstName || ""} ${user.lastName || ""}`.trim() // Combine firstName and lastName
+    //           : "N/A"}
+    //       </div>
+    //     );
+    //   },
+    // },
+
+    // {
+    //   accessorKey: "maxLoadAmount",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //       >
+    //         Maximum Limit
+    //         <ArrowUpDown />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => {
+    //     // const minAmount = Number(row.original.minLoadAmount) // Access the raw data directly
+
+    //     const maxAmount = Number(row.original.maxLoadAmount);
+    //     const [whole2, decimal2] = maxAmount.toFixed(2).split(".");
+    //     return (
+    //       <div className="text-center flex items-center justify-center">
+    //         <span>₹{whole2}</span>
+    //         <span className="text-gray-500">.{decimal2}</span>
+    //       </div>
+    //     );
+    //   },
+    // },
+
+    // {
+    //   accessorKey: "createdOn",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //       >
+    //         Created On
+    //         <ArrowUpDown />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => {
+    //     const date = row.original.updatedAt.split("T")[0];
+    //     const time1 = row.original.updatedAt.split("T")[1];
+    //     const time2 = time1.split(".")[0];
+
+    //     return (
+    //       <div className="flex flex-col items-center text-center">
+    //         <span>{date}</span>
+    //         <span className="text-slate-400">{time2}</span>
+    //       </div>
+    //     );
+    //   },
+    // },
+    // {
+    //   accessorKey: "tags",
+    //   header: "Tags",
+    //   cell: ({ row }) => (
+    //     <div className="flex items-center justify-left gap-2">
+    //       {Object.keys(fieldIconMap).map((field) => {
+    //         if (row.original[field]) {
+    //           return (
+    //             <span
+    //               key={field}
+    //               className={`flex items-center gap-1`}
+    //               title={fieldIconMap[field].label}
+    //             >
+    //               {fieldIconMap[field].icon}
+    //             </span>
+    //           );
+    //         }
+    //         return null;
+    //       })}
+    //     </div>
+    //   ),
+    // },
     {
       accessorKey: "actions",
       header: "",
       cell: ({ row }) => {
-        const rowData = row.original; // Get the entire row's data for actions
+        const id = row.original.id; // Get the entire row's data for actions
+        console.log("Print console id:",id)
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -409,13 +473,13 @@ export function ProgramTableDemo() {
             <DropdownMenuContent align="end">
               <DropdownMenuItem
                 className="cursor-pointer"
-                onClick={() => navigator.clipboard.writeText(payment.id)}
+
               >
                 Edit
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="cursor-pointer"
-                onClick={() => navigator.clipboard.writeText(payment.id)}
+                onClick={() => handleBlock(id)}
               >
                 Block
               </DropdownMenuItem>
@@ -454,13 +518,10 @@ export function ProgramTableDemo() {
     //   },
     // },
   ];
-  const hasUserData = data.some((item) => item.user); // Check if any row has the 'user' field
-  const columns = hasUserData
-    ? allColumns // Show all columns
-    : allColumns.filter((column) => column.accessorKey !== "programManager");
+
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     state: {
       sorting,
@@ -538,9 +599,9 @@ export function ProgramTableDemo() {
       <CardContent>
         <div className="w-full flex flex-col gap-4">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
-            <div className="w-full">
+            {/* <div className="w-full">
               <DataTableToolbar table={table} inputFilter="productName" />
-            </div>
+            </div> */}
             <div className="flex gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>
                 <FileDown />
@@ -567,21 +628,21 @@ export function ProgramTableDemo() {
                       analytics, and seamless user control.
                     </SheetDescription>
                   </SheetHeader>
-                  <Form {...form} onSubmit={form.handleSubmit(onSubmit)}>
-                    <form className="space-y-4 mt-4">
+                  <Form {...form}>
+                    <form className="space-y-4 mt-4" onSubmit={form.handleSubmit(onSubmit)}>
                       {/* Program Name Field */}
                       <FormField
-                        name="product_name"
+                        name="program_name"
                         control={form.control}
-                        rules={{ required: "Program name is required" }}
+                  
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Product Name</FormLabel>
+                            <FormLabel>Program Name</FormLabel>
                             <FormControl>
                               <Input
-                                type="text"
-                                placeholder="Enter product name"
-                                className="input"
+                            
+                                placeholder="Enter program name"
+                            
                                 {...field}
                               />
                             </FormControl>
@@ -590,17 +651,17 @@ export function ProgramTableDemo() {
                         )}
                       />
                       <FormField
-                        name="product_category"
+                        name="category"
                         control={form.control}
-                        rules={{ required: "Program name is required" }}
+                     
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Product Category</FormLabel>
+                            <FormLabel>Program Category</FormLabel>
                             <FormControl>
                               <Input
-                                type="text"
-                                placeholder="Enter product category"
-                                className="input"
+                          
+                                placeholder="Enter program category"
+                              
                                 {...field}
                               />
                             </FormControl>
@@ -611,15 +672,15 @@ export function ProgramTableDemo() {
 
                       {/* Description Field */}
                       <FormField
-                        name="product_description"
+                        name="description"
                         control={form.control}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Product Description</FormLabel>
+                            <FormLabel>Program Description</FormLabel>
                             <FormControl>
                               <Textarea
                                 placeholder="Enter product description"
-                                className="textarea"
+                             
                                 {...field}
                               />
                             </FormControl>
@@ -653,11 +714,11 @@ export function ProgramTableDemo() {
 
                       {/* Submit Button */}
                       <SheetFooter>
-                        <SheetClose asChild>
-                          <Button type="submit" className="btn btn-success">
+                       
+                          <Button type="submit">
                             Submit
                           </Button>
-                        </SheetClose>
+                    
                       </SheetFooter>
                     </form>
                   </Form>
