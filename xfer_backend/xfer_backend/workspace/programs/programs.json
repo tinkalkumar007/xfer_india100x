@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"O7AULWrmG9\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Programs</span>\",\"col\":12}},{\"id\":\"8bBfg4kPSj\",\"type\":\"card\",\"data\":{\"card_name\":\"Program Management\",\"col\":4}}]",
+ "content": "[{\"id\":\"O7AULWrmG9\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Programs - Dashboard</span>\",\"col\":12}},{\"id\":\"8bBfg4kPSj\",\"type\":\"card\",\"data\":{\"card_name\":\"Program Management\",\"col\":4}}]",
  "creation": "2025-01-18 12:49:15.836370",
  "custom_blocks": [],
  "docstatus": 0,
@@ -43,7 +43,7 @@
    "type": "Link"
   }
  ],
- "modified": "2025-01-18 12:55:05.323671",
+ "modified": "2025-01-18 14:53:12.342693",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Programs",

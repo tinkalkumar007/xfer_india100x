@@ -1,0 +1,153 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-01-18 16:25:49.237443",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "processor_detail_section",
+  "processor_name",
+  "api_version",
+  "certificate_path",
+  "webhook_url",
+  "retry_settings",
+  "column_break_ulep",
+  "processor_type",
+  "api_base_url",
+  "encryption_key",
+  "timeout_settings",
+  "health_check_url",
+  "limitations_section",
+  "column_break_ewov",
+  "key_expiry_date",
+  "connection_pool_size",
+  "logging_level",
+  "column_break_fimh",
+  "last_health_check",
+  "max_retries"
+ ],
+ "fields": [
+  {
+   "fieldname": "processor_detail_section",
+   "fieldtype": "Section Break",
+   "label": "Processor Detail"
+  },
+  {
+   "fieldname": "processor_name",
+   "fieldtype": "Data",
+   "label": "Processor Name"
+  },
+  {
+   "fieldname": "api_version",
+   "fieldtype": "Data",
+   "label": "API Version"
+  },
+  {
+   "fieldname": "certificate_path",
+   "fieldtype": "Data",
+   "label": "Certificate Path"
+  },
+  {
+   "fieldname": "webhook_url",
+   "fieldtype": "Data",
+   "label": "Webhook URL"
+  },
+  {
+   "fieldname": "retry_settings",
+   "fieldtype": "JSON",
+   "label": "Retry Settings"
+  },
+  {
+   "fieldname": "column_break_ulep",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "processor_type",
+   "fieldtype": "Select",
+   "label": "Processor Type"
+  },
+  {
+   "fieldname": "api_base_url",
+   "fieldtype": "Data",
+   "label": "API Base URL"
+  },
+  {
+   "fieldname": "encryption_key",
+   "fieldtype": "Data",
+   "label": "Encryption Key"
+  },
+  {
+   "fieldname": "timeout_settings",
+   "fieldtype": "JSON",
+   "label": "Timeout Settings"
+  },
+  {
+   "fieldname": "health_check_url",
+   "fieldtype": "Data",
+   "label": "Health Check URL"
+  },
+  {
+   "fieldname": "limitations_section",
+   "fieldtype": "Section Break",
+   "label": "Limitations"
+  },
+  {
+   "fieldname": "key_expiry_date",
+   "fieldtype": "Date",
+   "label": "Key Expiry Date"
+  },
+  {
+   "fieldname": "column_break_fimh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_health_check",
+   "fieldtype": "Datetime",
+   "label": "Last Health Check"
+  },
+  {
+   "fieldname": "column_break_ewov",
+   "fieldtype": "Column Break",
+   "options": "Yes\nNo"
+  },
+  {
+   "fieldname": "connection_pool_size",
+   "fieldtype": "Int",
+   "label": "Connection Pool Size"
+  },
+  {
+   "fieldname": "logging_level",
+   "fieldtype": "Select",
+   "label": "Logging Level"
+  },
+  {
+   "fieldname": "max_retries",
+   "fieldtype": "Int",
+   "label": "Max Retries"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-01-18 16:32:43.304689",
+ "modified_by": "Administrator",
+ "module": "Xfer Backend",
+ "name": "Processor Configuration",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

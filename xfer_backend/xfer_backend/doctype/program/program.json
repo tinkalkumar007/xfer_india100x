@@ -24,8 +24,17 @@
   "column_break_rjhp",
   "lounge_access",
   "column_break_hcat",
+  "reward_points",
   "notifications_section",
   "table_zcnq",
+  "whitelist_mcc_section",
+  "mcc_code",
+  "column_break_iwuw",
+  "is__enabled",
+  "kyc_requirements_section",
+  "document_name",
+  "column_break_ydle",
+  "is_enabled",
   "compliance_tab",
   "compliance_section",
   "compliance_level",
@@ -212,11 +221,59 @@
    "fieldname": "table_zcnq",
    "fieldtype": "Table",
    "options": "Notification Template"
+  },
+  {
+   "fieldname": "whitelist_mcc_section",
+   "fieldtype": "Section Break",
+   "label": "Whitelist MCC"
+  },
+  {
+   "fieldname": "mcc_code",
+   "fieldtype": "Select",
+   "label": "MCC Code",
+   "options": "MCC Detail"
+  },
+  {
+   "default": "0",
+   "fieldname": "is__enabled",
+   "fieldtype": "Check",
+   "label": "Is  Enabled"
+  },
+  {
+   "fieldname": "column_break_iwuw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "reward_points",
+   "fieldtype": "Check",
+   "label": "Reward Points"
+  },
+  {
+   "fieldname": "kyc_requirements_section",
+   "fieldtype": "Section Break",
+   "label": "KYC Requirements"
+  },
+  {
+   "fieldname": "document_name",
+   "fieldtype": "Link",
+   "label": "Document Name",
+   "options": "KYC Document"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_enabled",
+   "fieldtype": "Check",
+   "label": "Is Enabled"
+  },
+  {
+   "fieldname": "column_break_ydle",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 14:14:51.871446",
+ "modified": "2025-01-18 15:01:22.440109",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Program",
