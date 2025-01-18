@@ -19,12 +19,13 @@
    "default": "0",
    "fieldname": "is_active",
    "fieldtype": "Check",
+   "in_list_view": 1,
    "label": "Is Active"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 11:55:39.316224",
+ "modified": "2025-01-18 17:46:16.114899",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Program Category",

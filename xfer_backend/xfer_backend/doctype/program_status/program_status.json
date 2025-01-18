@@ -1,34 +1,21 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-01-18 17:34:38.558772",
+ "creation": "2025-01-18 17:51:01.789839",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "program_status_section",
-  "status",
-  "is_enabled"
+  "section_break_wrwg"
  ],
  "fields": [
   {
-   "fieldname": "program_status_section",
+   "fieldname": "section_break_wrwg",
    "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "status",
-   "fieldtype": "Data",
-   "label": "Status"
-  },
-  {
-   "default": "0",
-   "fieldname": "is_enabled",
-   "fieldtype": "Check",
-   "label": "Is Enabled"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 17:42:23.429584",
+ "modified": "2025-01-18 17:51:01.789839",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Program Status",
