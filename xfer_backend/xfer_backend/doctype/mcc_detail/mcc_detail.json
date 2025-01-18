@@ -1,34 +1,37 @@
 {
  "actions": [],
- "autoname": "field:category_name",
- "creation": "2025-01-15 18:31:50.461088",
+ "allow_rename": 1,
+ "creation": "2025-01-18 14:19:59.941128",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "category_name",
-  "is_active"
+  "mcc_code",
+  "mcc_type",
+  "description"
  ],
  "fields": [
   {
-   "fieldname": "category_name",
+   "fieldname": "mcc_code",
    "fieldtype": "Data",
-   "label": "Category Name",
-   "unique": 1
+   "label": "MCC Code"
   },
   {
-   "default": "0",
-   "fieldname": "is_active",
-   "fieldtype": "Check",
-   "label": "Is Active"
+   "fieldname": "mcc_type",
+   "fieldtype": "Data",
+   "label": "MCC Type"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 11:55:39.316224",
+ "modified": "2025-01-18 14:21:11.676250",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
- "name": "Program Category",
- "naming_rule": "By fieldname",
+ "name": "MCC Detail",
  "owner": "Administrator",
  "permissions": [
   {
