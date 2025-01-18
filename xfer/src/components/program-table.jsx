@@ -111,7 +111,6 @@ import {
   useFrappeGetCall,
   useFrappeCreateDoc,
   useFrappeUpdateDoc,
-  useFrappeD
 } from 'frappe-react-sdk'
 
 const fieldIconMap = {
@@ -247,22 +246,32 @@ export function ProgramTableDemo() {
   const [rowSelection, setRowSelection] = React.useState({})
   const [selectedFilter, setSelectedFilter] = React.useState('Today')
 
-  const { data: programData } = useFrappeGetDocList('Program', {
-    fields: ['name', 'program_name', 'status', 'description', 'category'],
-  })
+  const { data: programData, isLoading: isDocsLoading } = useFrappeGetDocList(
+    'Program',
+    {
+      fields: ['*'],
+    }
+  )
+
+  if (!isDocsLoading) {
+    console.log('Program Data:', programData)
+  }
 
   const { data: statuses, isLoading } = useFrappeGetCall(
-    /** method **/
-    'frappe.client.get_value',
-    /** params **/
+    'frappe.desk.form.load.getdoctype',
     {
       doctype: 'Program',
-      fieldname: ['*'],
     }
   )
   if (!isLoading) {
     console.log('Is Loading: ', isLoading)
-    console.log('Statuses: ', statuses)
+    const statusField = statuses?.docs[0]?.fields?.find(
+      (field) => field.fieldname === 'status'
+    )
+    const optionArray = statusField?.options?.split('\n')
+    console.log('options:', optionArray)
+
+    console.log('Status Field:', statusField)
   }
 
   const { createDoc } = useFrappeCreateDoc()
@@ -351,25 +360,25 @@ export function ProgramTableDemo() {
             {status === '' && ''}
 
             {status === 'Active' && (
-              <Badge className="bg-[#e4f5e9] text-[#16794c]">Active</Badge>
+              <Badge className="bg-[#e4f5e9] text-[#16794c]">{status}</Badge>
             )}
             {status === 'Processed' && (
-              <Badge className="bg-[#fff7d3] text-[#ab6e05]">Processed</Badge>
+              <Badge className="bg-[#fff7d3] text-[#ab6e05]">{status}</Badge>
             )}
             {status === 'Submitted' && (
-              <Badge className="bg-[#fff7d3] text-[#ab6e05]">Submitted</Badge>
+              <Badge className="bg-[#fff7d3] text-[#ab6e05]">{status}</Badge>
             )}
             {status === 'Inactive' && (
-              <Badge className="bg-[#fff0f0] text-[#b52a2a]">Inactive</Badge>
+              <Badge className="bg-[#fff0f0] text-[#b52a2a]">{status}</Badge>
             )}
             {status === 'Pending for approval' && (
-              <Badge className="bg-[#fff0f0] text-[#b52a2a]">Pending</Badge>
+              <Badge className="bg-[#fff0f0] text-[#b52a2a]">{status}</Badge>
             )}
             {status === 'Draft' && (
-              <Badge className="bg-[#fff0f0] text-[#b52a2a]">Draft</Badge>
+              <Badge className="bg-[#fff0f0] text-[#b52a2a]">{status}</Badge>
             )}
             {status === 'Terminated' && (
-              <Badge className="bg-[#fff0f0] text-[#b52a2a]">Terminated</Badge>
+              <Badge className="bg-[#fff0f0] text-[#b52a2a]">{status}</Badge>
             )}
           </div>
         )
@@ -469,10 +478,10 @@ export function ProgramTableDemo() {
       accessorKey: 'actions',
       header: '',
       cell: ({ row }) => {
-        const currentStatus = row.original.status
-        const availableStatuses = statuses?.filter(
-          (status) => status !== currentStatus
+        const statusField = statuses?.docs[0]?.fields?.find(
+          (field) => field.fieldname === 'status'
         )
+        const optionsArray = statusField?.options?.split('\n')
         const id = row.original.id // Get the entire row's data for actions
 
         return (
@@ -487,7 +496,7 @@ export function ProgramTableDemo() {
               <DropdownMenuItem className="cursor-pointer">
                 Edit
               </DropdownMenuItem>
-              {availableStatuses?.map((status) => (
+              {optionsArray?.map((status) => (
                 <DropdownMenuItem
                   key={status}
                   className="cursor-pointer"
