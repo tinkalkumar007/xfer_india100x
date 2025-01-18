@@ -12,8 +12,7 @@
  "fields": [
   {
    "fieldname": "program_status_section",
-   "fieldtype": "Section Break",
-   "label": "Program Status"
+   "fieldtype": "Section Break"
   },
   {
    "fieldname": "status",
@@ -29,7 +28,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 17:35:23.887415",
+ "modified": "2025-01-18 17:42:23.429584",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Program Status",
