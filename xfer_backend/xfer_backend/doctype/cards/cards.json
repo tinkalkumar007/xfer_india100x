@@ -1,0 +1,216 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-01-18 11:35:01.504808",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "card_detail_section",
+  "card_reference_id",
+  "card_type",
+  "card_nature",
+  "balance",
+  "column_break_izvn",
+  "card_number",
+  "pin_type",
+  "card_status",
+  "customer_detail_section",
+  "mobile_number",
+  "customer_name",
+  "column_break_zgwb",
+  "holder_name",
+  "program_detail_section",
+  "program_name",
+  "column_break_rani",
+  "program_category",
+  "column_break_snsp",
+  "program_manager",
+  "activity_section",
+  "issue_date",
+  "expiry_date",
+  "column_break_msbl",
+  "activation_data",
+  "last_used_date",
+  "section_break_hhys",
+  "blocked_reason",
+  "column_break_ozvc",
+  "kyc_status"
+ ],
+ "fields": [
+  {
+   "fieldname": "card_detail_section",
+   "fieldtype": "Section Break",
+   "label": "Card Detail"
+  },
+  {
+   "fieldname": "card_reference_id",
+   "fieldtype": "Data",
+   "label": "Card Reference Id"
+  },
+  {
+   "fieldname": "column_break_izvn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "card_number",
+   "fieldtype": "Data",
+   "label": "Card Number"
+  },
+  {
+   "fieldname": "card_type",
+   "fieldtype": "Select",
+   "label": "Card Type"
+  },
+  {
+   "fieldname": "card_nature",
+   "fieldtype": "Select",
+   "label": "Card Nature"
+  },
+  {
+   "fieldname": "pin_type",
+   "fieldtype": "Select",
+   "label": "PIN Type"
+  },
+  {
+   "fieldname": "card_status",
+   "fieldtype": "Link",
+   "label": "Card Status",
+   "options": "Card Status"
+  },
+  {
+   "fieldname": "customer_detail_section",
+   "fieldtype": "Section Break",
+   "label": "Customer Detail"
+  },
+  {
+   "fieldname": "customer_name",
+   "fieldtype": "Link",
+   "label": "Customer Name",
+   "options": "Customers"
+  },
+  {
+   "fieldname": "mobile_number",
+   "fieldtype": "Link",
+   "label": "Mobile Number",
+   "options": "Customers"
+  },
+  {
+   "fieldname": "column_break_zgwb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "holder_name",
+   "fieldtype": "Data",
+   "label": "Holder Name"
+  },
+  {
+   "fieldname": "program_detail_section",
+   "fieldtype": "Section Break",
+   "label": "Program Detail"
+  },
+  {
+   "fieldname": "program_name",
+   "fieldtype": "Link",
+   "label": "Program Name",
+   "options": "Program"
+  },
+  {
+   "fieldname": "column_break_snsp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "program_manager",
+   "fieldtype": "Link",
+   "label": "Program Manager",
+   "options": "Program"
+  },
+  {
+   "fieldname": "program_category",
+   "fieldtype": "Link",
+   "label": "Program Category",
+   "options": "Program"
+  },
+  {
+   "fieldname": "column_break_rani",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "activity_section",
+   "fieldtype": "Section Break",
+   "label": "Activity"
+  },
+  {
+   "fieldname": "issue_date",
+   "fieldtype": "Datetime",
+   "label": "Issue Date"
+  },
+  {
+   "fieldname": "activation_data",
+   "fieldtype": "Datetime",
+   "label": "Activation Data"
+  },
+  {
+   "fieldname": "expiry_date",
+   "fieldtype": "Datetime",
+   "label": "Expiry Date"
+  },
+  {
+   "fieldname": "last_used_date",
+   "fieldtype": "Datetime",
+   "label": "Last Used Date"
+  },
+  {
+   "fieldname": "column_break_msbl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_hhys",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "fieldname": "balance",
+   "fieldtype": "Float",
+   "label": "Balance"
+  },
+  {
+   "fieldname": "column_break_ozvc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "kyc_status",
+   "fieldtype": "Link",
+   "label": "KYC Status",
+   "options": "KYC Status"
+  },
+  {
+   "fieldname": "blocked_reason",
+   "fieldtype": "Data",
+   "label": "Blocked Reason"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-01-18 15:42:01.955694",
+ "modified_by": "Administrator",
+ "module": "Xfer Backend",
+ "name": "Cards",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

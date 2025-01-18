@@ -1,0 +1,56 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-01-18 12:19:08.736778",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "channel",
+  "min_amount",
+  "max_amount",
+  "is_enabled"
+ ],
+ "fields": [
+  {
+   "fieldname": "channel",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Channel",
+   "link_filters": "[[\"Transaction Channel\",\"is_enabled\",\"=\",1]]",
+   "options": "Transaction Channel"
+  },
+  {
+   "default": "1",
+   "fieldname": "min_amount",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Min Amount"
+  },
+  {
+   "fieldname": "max_amount",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Max Amount"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_enabled",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Enabled"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-01-18 12:25:48.202167",
+ "modified_by": "Administrator",
+ "module": "Xfer Backend",
+ "name": "Transaction Limit",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

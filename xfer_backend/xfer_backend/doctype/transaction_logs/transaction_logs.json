@@ -1,0 +1,191 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-01-18 15:58:05.033745",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "transaction_detail_section",
+  "transaction_id",
+  "transaction_type",
+  "amount",
+  "status",
+  "column_break_ibet",
+  "card_ref_id",
+  "from_account",
+  "to_account",
+  "exchange_rate",
+  "response_section",
+  "response_code",
+  "column_break_wsmv",
+  "response_message",
+  "merchant_detail_section",
+  "mcc_code",
+  "column_break_bqpb",
+  "merchant_name",
+  "info_section",
+  "ip_address",
+  "device_info",
+  "reversal_status",
+  "settlement_status",
+  "settlement_date",
+  "column_break_uqhq",
+  "lat_long"
+ ],
+ "fields": [
+  {
+   "fieldname": "transaction_detail_section",
+   "fieldtype": "Section Break",
+   "label": "Transaction Detail"
+  },
+  {
+   "fieldname": "transaction_id",
+   "fieldtype": "Data",
+   "label": "Transaction Id"
+  },
+  {
+   "fieldname": "card_ref_id",
+   "fieldtype": "Link",
+   "label": "Card Ref Id",
+   "options": "Cards"
+  },
+  {
+   "fieldname": "column_break_ibet",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "transaction_type",
+   "fieldtype": "Select",
+   "label": "Transaction Type"
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status"
+  },
+  {
+   "fieldname": "from_account",
+   "fieldtype": "Data",
+   "label": "From Account"
+  },
+  {
+   "fieldname": "to_account",
+   "fieldtype": "Data",
+   "label": "To Account"
+  },
+  {
+   "fieldname": "exchange_rate",
+   "fieldtype": "Float",
+   "label": "Exchange Rate"
+  },
+  {
+   "fieldname": "response_section",
+   "fieldtype": "Section Break",
+   "label": "Response"
+  },
+  {
+   "fieldname": "response_code",
+   "fieldtype": "Data",
+   "label": "Response Code"
+  },
+  {
+   "fieldname": "column_break_wsmv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "response_message",
+   "fieldtype": "Data",
+   "label": "Response Message"
+  },
+  {
+   "fieldname": "merchant_detail_section",
+   "fieldtype": "Section Break",
+   "label": "Merchant Detail"
+  },
+  {
+   "fieldname": "mcc_code",
+   "fieldtype": "Link",
+   "label": "MCC Code",
+   "options": "MCC Detail"
+  },
+  {
+   "fieldname": "merchant_name",
+   "fieldtype": "Data",
+   "label": "Merchant Name"
+  },
+  {
+   "fieldname": "column_break_bqpb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "info_section",
+   "fieldtype": "Section Break",
+   "label": "Info"
+  },
+  {
+   "fieldname": "ip_address",
+   "fieldtype": "Data",
+   "label": "IP Address"
+  },
+  {
+   "fieldname": "device_info",
+   "fieldtype": "Data",
+   "label": "Device Info"
+  },
+  {
+   "fieldname": "reversal_status",
+   "fieldtype": "Select",
+   "label": "Reversal Status"
+  },
+  {
+   "fieldname": "settlement_status",
+   "fieldtype": "Select",
+   "label": "Settlement Status"
+  },
+  {
+   "fieldname": "settlement_date",
+   "fieldtype": "Datetime",
+   "label": "Settlement Date"
+  },
+  {
+   "fieldname": "column_break_uqhq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "lat_long",
+   "fieldtype": "Geolocation",
+   "label": "Lat Long"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-01-18 16:23:46.751343",
+ "modified_by": "Administrator",
+ "module": "Xfer Backend",
+ "name": "Transaction Logs",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
