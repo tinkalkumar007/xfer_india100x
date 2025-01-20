@@ -42,11 +42,13 @@
   {
    "fieldname": "first_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "First Name"
   },
   {
    "fieldname": "last_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Last Name"
   },
   {
@@ -74,6 +76,7 @@
   {
    "fieldname": "channel",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Gender",
    "options": "Male\nFemale\nOther"
   },
@@ -147,6 +150,7 @@
   {
    "fieldname": "risk_category",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Risk Category",
    "options": "Risk Category"
   },
@@ -179,6 +183,9 @@
   {
    "fieldname": "manager_name",
    "fieldtype": "Link",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Manager Name",
    "options": "Program Manager"
   },
@@ -186,6 +193,9 @@
    "fetch_from": "manager_name.email_id",
    "fieldname": "manager_email",
    "fieldtype": "Data",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Manager Email",
    "options": "Email"
   },
@@ -202,7 +212,7 @@
  "image_field": "selfie",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 21:50:32.329178",
+ "modified": "2025-01-20 17:25:49.239942",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Customers",

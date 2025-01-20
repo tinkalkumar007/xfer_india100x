@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class MCCDetail(Document):
+class MCCWhitelisting(Document):
 	pass

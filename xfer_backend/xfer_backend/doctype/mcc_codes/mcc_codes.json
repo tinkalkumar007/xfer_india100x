@@ -1,37 +1,37 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-01-18 14:19:59.941128",
+ "creation": "2025-01-20 17:33:22.234506",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "mcc_code",
-  "mcc_type",
+  "mcc",
+  "column_break_vdcf",
   "description"
  ],
  "fields": [
   {
-   "fieldname": "mcc_code",
+   "fieldname": "mcc",
    "fieldtype": "Data",
-   "label": "MCC Code"
-  },
-  {
-   "fieldname": "mcc_type",
-   "fieldtype": "Data",
-   "label": "MCC Type"
+   "label": "MCC"
   },
   {
    "fieldname": "description",
    "fieldtype": "Small Text",
-   "label": "Description"
+   "in_list_view": 1,
+   "label": "Description "
+  },
+  {
+   "fieldname": "column_break_vdcf",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 14:21:11.676250",
+ "modified": "2025-01-20 17:35:38.474535",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
- "name": "MCC Detail",
+ "name": "MCC Codes",
  "owner": "Administrator",
  "permissions": [
   {

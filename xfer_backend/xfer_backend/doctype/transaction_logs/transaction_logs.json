@@ -113,7 +113,7 @@
    "fieldname": "mcc_code",
    "fieldtype": "Link",
    "label": "MCC Code",
-   "options": "MCC Detail"
+   "options": "MCC Codes"
   },
   {
    "fieldname": "merchant_name",
@@ -166,7 +166,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 21:43:36.538960",
+ "modified": "2025-01-20 15:11:47.553216",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Transaction Logs",

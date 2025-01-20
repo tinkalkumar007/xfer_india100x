@@ -30,7 +30,6 @@
   "whitelist_mcc_section",
   "mcc_code",
   "column_break_iwuw",
-  "is__enabled",
   "kyc_requirements_section",
   "document_name",
   "column_break_ydle",
@@ -229,15 +228,9 @@
   },
   {
    "fieldname": "mcc_code",
-   "fieldtype": "Select",
+   "fieldtype": "Table",
    "label": "MCC Code",
-   "options": "MCC Detail"
-  },
-  {
-   "default": "0",
-   "fieldname": "is__enabled",
-   "fieldtype": "Check",
-   "label": "Is  Enabled"
+   "options": "MCC Whitelisting"
   },
   {
    "fieldname": "column_break_iwuw",
@@ -273,7 +266,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 15:01:22.440109",
+ "modified": "2025-01-20 15:16:11.582503",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Program",
