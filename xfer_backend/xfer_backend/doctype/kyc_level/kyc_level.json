@@ -1,35 +1,31 @@
 {
  "actions": [],
- "autoname": "field:category_name",
- "creation": "2025-01-15 18:31:50.461088",
+ "allow_rename": 1,
+ "creation": "2025-01-18 12:06:30.036050",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "category_name",
+  "level",
   "is_active"
  ],
  "fields": [
   {
-   "fieldname": "category_name",
+   "fieldname": "is_active",
    "fieldtype": "Data",
-   "label": "Category Name",
-   "unique": 1
+   "label": "Is active"
   },
   {
-   "default": "0",
-   "fieldname": "is_active",
-   "fieldtype": "Check",
-   "in_list_view": 1,
-   "label": "Is Active"
+   "fieldname": "level",
+   "fieldtype": "Data",
+   "label": "Level"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 17:46:16.114899",
+ "modified": "2025-01-18 12:08:14.155262",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
- "name": "Program Category",
- "naming_rule": "By fieldname",
+ "name": "KYC Level",
  "owner": "Administrator",
  "permissions": [
   {

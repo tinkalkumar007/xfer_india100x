@@ -1,34 +1,45 @@
 {
  "actions": [],
- "autoname": "field:category_name",
- "creation": "2025-01-15 18:31:50.461088",
+ "allow_rename": 1,
+ "autoname": "field:status",
+ "creation": "2025-01-18 12:01:37.181691",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "category_name",
-  "is_active"
+  "status",
+  "is_active",
+  "column_break_fvqe",
+  "remark"
  ],
  "fields": [
   {
-   "fieldname": "category_name",
+   "fieldname": "status",
    "fieldtype": "Data",
-   "label": "Category Name",
+   "label": "Status",
    "unique": 1
   },
   {
    "default": "0",
    "fieldname": "is_active",
    "fieldtype": "Check",
-   "in_list_view": 1,
    "label": "Is Active"
+  },
+  {
+   "fieldname": "remark",
+   "fieldtype": "Data",
+   "label": "Remark"
+  },
+  {
+   "fieldname": "column_break_fvqe",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 17:46:16.114899",
+ "modified": "2025-01-18 15:39:34.071617",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
- "name": "Program Category",
+ "name": "Card Status",
  "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [

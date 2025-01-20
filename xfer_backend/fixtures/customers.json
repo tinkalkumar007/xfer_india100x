@@ -1,0 +1,32 @@
+[
+ {
+  "_liked_by": "[]",
+  "account_locked": 0,
+  "address_line_1": null,
+  "address_line_2": null,
+  "channel": "Male",
+  "city": null,
+  "country": null,
+  "date_of_birth": null,
+  "device_id": null,
+  "docstatus": 0,
+  "doctype": "Customers",
+  "email": null,
+  "failed_login_attempts": 0,
+  "first_name": "Raunak",
+  "kyc_level": null,
+  "last_name": "Jha",
+  "lat_long": null,
+  "location_coordinates": null,
+  "manager_email": null,
+  "manager_name": null,
+  "mobile_no": "6789876789",
+  "modified": "2025-01-18 21:51:33.053278",
+  "name": "6789876789",
+  "pincode": null,
+  "risk_category": null,
+  "selfie": "/files/nitin.jpeg",
+  "state": null,
+  "status": null
+ }
+]

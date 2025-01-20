@@ -1,35 +1,37 @@
 {
  "actions": [],
- "autoname": "field:category_name",
- "creation": "2025-01-15 18:31:50.461088",
+ "allow_rename": 1,
+ "creation": "2025-01-18 11:59:14.681493",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "category_name",
-  "is_active"
+  "check_name",
+  "remark",
+  "score"
  ],
  "fields": [
   {
-   "fieldname": "category_name",
+   "fieldname": "check_name",
    "fieldtype": "Data",
-   "label": "Category Name",
-   "unique": 1
+   "label": "Check Name"
   },
   {
-   "default": "0",
-   "fieldname": "is_active",
-   "fieldtype": "Check",
-   "in_list_view": 1,
-   "label": "Is Active"
+   "fieldname": "remark",
+   "fieldtype": "Data",
+   "label": "Remark"
+  },
+  {
+   "fieldname": "score",
+   "fieldtype": "Data",
+   "label": "Score"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 17:46:16.114899",
+ "modified": "2025-01-18 12:17:57.456979",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
- "name": "Program Category",
- "naming_rule": "By fieldname",
+ "name": "Compliance Checklist",
  "owner": "Administrator",
  "permissions": [
   {

@@ -5,6 +5,54 @@ app_description = "Backend Development System"
 app_email = "jharaunak58@gmail.com"
 app_license = "mit"
 
+import os
+import json
+
+def get_doctypes_for_fixtures():
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    doctype_path = os.path.join(current_path, "xfer_backend", "doctype")
+    
+    fixtures_list = []
+    
+    if os.path.exists(doctype_path):
+        # Get all directories in doctype folder
+        doctype_folders = [d for d in os.listdir(doctype_path) 
+                         if os.path.isdir(os.path.join(doctype_path, d))
+                         and not d.startswith('__')]
+        
+        for folder in doctype_folders:
+            # Construct path to the JSON file
+            json_file_path = os.path.join(doctype_path, folder, f"{folder}.json")
+            
+            if os.path.exists(json_file_path):
+                try:
+                    with open(json_file_path, 'r') as f:
+                        doctype_data = json.load(f)
+                        # Get the actual DocType name from the JSON
+                        if doctype_data and "name" in doctype_data:
+                            doctype_name = doctype_data["name"]
+                            fixtures_list.append({
+                                "doctype": doctype_name
+                            })
+                except Exception as e:
+                    print(f"Error reading {json_file_path}: {str(e)}")
+    
+    return fixtures_list
+
+# Set fixtures dynamically
+fixtures = get_doctypes_for_fixtures()
+
+# fixtures = [
+#     "Program Category", "Program Status"
+# ]   
+# fixtures = [
+#     {
+#         "doctype": "Program Category",
+#         # "filters": [
+#         #     ["name", "=", "program_category"]
+#         # ]
+#     }
+# ]
 
 # Apps
 # ------------------

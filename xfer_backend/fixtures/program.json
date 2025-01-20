@@ -1,0 +1,30 @@
+[
+ {
+  "category": null,
+  "compliance_level": null,
+  "description": null,
+  "docstatus": 0,
+  "doctype": "Program",
+  "document_name": null,
+  "insurance__travel": 0,
+  "insurance_card": 0,
+  "is__enabled": 0,
+  "is_enabled": 0,
+  "lounge_access": 0,
+  "mcc_code": "MCC Detail",
+  "modified": "2025-01-18 21:53:29.436643",
+  "name": "Spacex Ltd-0004",
+  "policy_url": null,
+  "program_manager": "Spacex Ltd",
+  "program_name": null,
+  "remark": null,
+  "reward_points": 0,
+  "risk_score": 0,
+  "score": null,
+  "status": null,
+  "table_eosn": [],
+  "table_ujtz": [],
+  "table_zcnq": [],
+  "terms_conditions": null
+ }
+]
