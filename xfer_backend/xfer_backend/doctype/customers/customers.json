@@ -16,6 +16,7 @@
   "email",
   "lat_long",
   "channel",
+  "selfie",
   "address_detail_section",
   "address_line_1",
   "address_line_2",
@@ -191,11 +192,17 @@
   {
    "fieldname": "column_break_hfan",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "selfie",
+   "fieldtype": "Attach Image",
+   "label": "Selfie"
   }
  ],
+ "image_field": "selfie",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 16:07:23.929042",
+ "modified": "2025-01-18 21:50:32.329178",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Customers",

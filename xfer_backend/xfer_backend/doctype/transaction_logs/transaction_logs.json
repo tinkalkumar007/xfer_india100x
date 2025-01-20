@@ -47,7 +47,7 @@
    "fieldname": "card_ref_id",
    "fieldtype": "Link",
    "label": "Card Ref Id",
-   "options": "Cards"
+   "options": "Card"
   },
   {
    "fieldname": "column_break_ibet",
@@ -166,7 +166,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 16:23:46.751343",
+ "modified": "2025-01-18 21:43:36.538960",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Transaction Logs",
