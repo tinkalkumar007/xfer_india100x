@@ -18,6 +18,9 @@ import { Separator } from '@/components/ui/separator'
 import { Clock, Mail, MapPin, Phone, ShieldCheck, User } from 'lucide-react'
 
 import { AlertTriangle } from 'lucide-react'
+import { useParams } from 'react-router-dom'
+import { useFrappeGetDoc } from 'frappe-react-sdk'
+import { custom } from 'zod'
 
 const activities = [
   {
@@ -44,6 +47,18 @@ const activities = [
 ]
 
 const CustomerDetails = () => {
+  const { id } = useParams();
+ 
+  const { data: customerDetails, isLoading: customerDetailsLoading } = useFrappeGetDoc(
+    'Customers',
+    id,
+    
+  );
+
+  if(!customerDetailsLoading){
+    console.log("Customer Details:", customerDetails)
+  }
+
   return (
     <>
       <div className="w-full flex flex-col lg:flex-row gap-2 items-center border rounded-md px-2">
@@ -53,14 +68,14 @@ const CustomerDetails = () => {
           </div>
           <div className="flex flex-col gap-1 w-[70%]">
             <div className="flex gap-2">
-              <h2 className="font-bold text-xl">John Doe </h2>
+              <h2 className="font-bold text-xl">{`${customerDetails?.first_name} ${customerDetails?.last_name}`}</h2>
               <Badge className="bg-[#e4f5e9] text-[#16794c]">Active</Badge>
             </div>
             <h2 className="text-sm text-muted-foreground">
-              Customer ID : <span className="font-medium">123456789</span>
+              Customer ID : <span className="font-medium">{customerDetails?.name}</span>
             </h2>
             <p className="text-sm text-muted-foreground">
-              Created On : <span className="font-medium">14/12/2024</span>
+              Created On : <span className="font-medium">{customerDetails?.creation.split(' ')[0].split('-').reverse().join('/')}</span>
             </p>
           </div>
         </div>
@@ -76,7 +91,7 @@ const CustomerDetails = () => {
                 <User size={20} />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground w-[50%]">mitsu</p>
+                <p className="text-sm text-muted-foreground w-[50%]">{customerDetails?.first_name.toLowerCase()}</p>
                 <p className="text-sm font-medium text-muted-foreground w-[50%]">
                   Username
                 </p>
@@ -87,7 +102,7 @@ const CustomerDetails = () => {
                 <Phone size={20} />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground ">8448954679</p>
+                <p className="text-sm text-muted-foreground ">{customerDetails?.mobile_no}</p>
                 <p className="text-sm font-medium text-muted-foreground">
                   Phone
                 </p>
@@ -98,7 +113,7 @@ const CustomerDetails = () => {
                 <Mail size={20} />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">mitsu@gmail.com</p>
+                <p className="text-sm text-muted-foreground">{customerDetails?.email}</p>
                 <p className="text-sm font-medium text-muted-foreground ">
                   Email
                 </p>
@@ -122,7 +137,7 @@ const CustomerDetails = () => {
                 <Clock size={20} />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">24/12/2024</p>
+                <p className="text-sm text-muted-foreground">{customerDetails?.modified.split(' ')[0].split('-').reverse().join('/')}</p>
                 <p className="text-sm font-medium text-muted-foreground">
                   Last Active
                 </p>
@@ -134,8 +149,7 @@ const CustomerDetails = () => {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground ">
-                  Sovereign Capital Gate, Sector 16a, Noida, Uttar Pradesh,
-                  201301
+                  {`${customerDetails?.address_line_1} ${customerDetails?.address_line_2}`}
                 </p>
                 <p className="text-sm font-medium text-muted-foreground ">
                   Address

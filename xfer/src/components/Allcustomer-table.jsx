@@ -78,6 +78,7 @@ import DataTableToolbar from './DataTableToolbar'
 import { ProgramManager } from '../data/all-customer-data'
 import { DataTablePagination } from '@/components/DataTablePagination'
 import ProgramManagerDetails from '../pages/ProgramManagerDetails/ProgramManagerDetails'
+import { useFrappeGetDocList } from 'frappe-react-sdk'
 
 const data = [
   {
@@ -199,41 +200,25 @@ export function AllCustomerTable() {
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  // const [data, setData] = React.useState([]) 
-  const [loading, setLoading] = React.useState(true) // State for loading
-  const [error, setError] = React.useState(null) // State for error handling
+  const { data: customersData, isLoading: customersLoading} = useFrappeGetDocList('Customers', {
+      fields: ["*"]
+    })
+  
+    if(!customersLoading) {
+      console.log("Customers data:", customersData)
+    }
 
-  // React.useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       setLoading(true)
-  //       //const token=Cookies.get("auth_token");
-  //       //console.log(token);
-  //       //axios.default.withCredentials=true;
-  //       const response = await axios.get('/customer/allCustomers', {
-  //         withCredentials: true,
-  //       }) // Replace with your API endpoint
-  //       //setData(response.data.data); // Assuming the response is an array of pool accounts
-  //       console.log(response.data.data)
-
-  //       const transformedData = response.data.data.map((item, index) => ({
-  //         customerId: index + 1, // Generate a unique ID
-  //         Name: `${item.firstName} ${item.lastName}`, // Combine firstName and lastName
-  //         ProgramManager: `${item.user.firstName} ${item.user.lastName}`, // Access nested user details
-  //         totalCards: item.totalCards || 0, // Default value if undefined
-  //         totalTransactions: item.totalTransactions || 0, // Default value if undefined
-  //         lastActive: item.updatedAt, // Format the date
-  //       }))
-  //       setData(transformedData)
-  //     } catch (err) {
-  //       console.error('Error fetching data:', err)
-  //       setError('Failed to fetch data. Please try again later.')
-  //     } finally {
-  //       setLoading(false)
-  //     }
-  //   }
-  //   fetchData()
-  // }, [])
+  const tableData = React.useMemo(() => {
+      if (!customersData) return []
+      return customersData.map((customer) => ({
+        customer_id: customer.name,
+        first_name: customer.first_name,
+        last_name: customer.last_name,
+        total_cards: '',
+        total_transactions: '',
+        last_active: customer.modified
+      }))
+    }, [customersData])
 
   const columns = [
     {
@@ -259,14 +244,14 @@ export function AllCustomerTable() {
       enableHiding: false,
     },
     {
-      accessorKey: 'customerId',
+      accessorKey: 'customer_id',
       header: 'Customer ID',
       cell: ({ row }) => {
-        const id = row.original.customerId
+        const id = row.original?.customer_id
         return (
           <Link to={`/all-customers/customer/${id}`}>
             <div className="capitalize text-center hover:underline">
-              {row.getValue('customerId')}
+              {id}
             </div>
           </Link>
         )
@@ -274,26 +259,15 @@ export function AllCustomerTable() {
     },
 
     {
-      accessorKey: 'Name',
+      accessorKey: 'name',
       header: 'Name',
       cell: ({ row }) => (
-        <div className="capitalize text-center">{row.getValue('Name')}</div>
+        <div className="capitalize text-center">{`${row.original?.first_name} ${row.original?.last_name}`}</div>
       ),
     },
+   
     {
-      accessorKey: 'ProgramManager',
-      header: 'Program Manager',
-      cell: ({ row }) => {
-        const ProgramManager = row.original.ProgramManager
-        return (
-          <div className="text-center cursor-pointer hover:underline">
-            {ProgramManager}
-          </div>
-        )
-      },
-    },
-    {
-      accessorKey: 'totalCards',
+      accessorKey: 'total_cards',
       header: ({ column }) => {
         return (
           <Button
@@ -307,12 +281,12 @@ export function AllCustomerTable() {
       },
       cell: ({ row }) => (
         <div className="text-center">
-          {row.getValue('totalCards') ? row.getValue('totalCards') : '0'}
+          {row.original?.total_cards ? row.original.total_cards : '0'}
         </div>
       ),
     },
     {
-      accessorKey: 'totalTransactions',
+      accessorKey: 'total_transactions',
       header: ({ column }) => {
         return (
           <Button
@@ -326,24 +300,30 @@ export function AllCustomerTable() {
       },
       cell: ({ row }) => (
         <div className="text-center">
-          {row.getValue('totalTransactions')
-            ? row.getValue('totalTransactions')
-            : '0'}
+          {row.original?.total_transactions ? row.original?.total_transactions : '0'}
         </div>
       ),
     },
     {
-      accessorKey: 'lastActive',
+      accessorKey: 'last_active',
       header: 'Last Active',
       cell: ({ row }) => {
-        const date = row.original.lastActive
+        
         // const time1 = row.original.lastActive.split('T')[1]
         // const time2 = time1.split('.')[0]
-        //const
+        //2025-01-20 17:25:49.239942
+        //const 
+        const dateTime = row.original?.last_active.split('.')[0]
+        const date = dateTime.split(' ')[0]
+        const time = dateTime.split(' ')[1]
+
 
         return (
           <div className="flex flex-col items-center text-center">
             <span>{date}</span>
+            <span>
+              {time}
+            </span>
           </div>
         )
       },
@@ -382,7 +362,7 @@ export function AllCustomerTable() {
   ]
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -430,13 +410,13 @@ export function AllCustomerTable() {
       <CardContent>
         <div className="w-full">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
-            <div className="w-full">
+            {/* <div className="w-full">
               <DataTableToolbar
                 table={table}
                 inputFilter="Name"
                 ProgramManager={ProgramManager}
               />
-            </div>
+            </div> */}
             <div className="flex gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>
                 <FileDown />

@@ -239,7 +239,7 @@ export function IssuedCardsTable() {
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const { data: issuedCardsData, isLoading: issuedCardsLoading} = useFrappeGetDocList('Card', {
+  const { data: issuedCardsData, isLoading: issuedCardsLoading} = useFrappeGetDocList('Cards', {
     fields: ["*"]
   })
 
