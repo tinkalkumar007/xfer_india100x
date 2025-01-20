@@ -74,6 +74,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useMemo } from "react";
+import { useFrappeGetDocList } from "frappe-react-sdk";
 import { Badge } from "@/components/ui/badge";
 import { status } from "@/data/issued-cards-data";
 import DataTableToolbar from "./DataTableToolbar";
@@ -236,6 +238,14 @@ export function IssuedCardsTable() {
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
+
+  const { data: issuedCardsData, isLoading: issuedCardsLoading} = useFrappeGetDocList('Card', {
+    fields: ["*"]
+  })
+
+  if(issuedCardsLoading === false) {
+    console.log("Issued cards data:", issuedCardsData)
+  }
 
   const columns = [
     {

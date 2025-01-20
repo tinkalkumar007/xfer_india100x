@@ -109,7 +109,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import {
   useFrappeGetDocList,
   useFrappeGetCall,
-  useFrappeCreateDoc,
+ 
   useFrappeUpdateDoc,
 } from 'frappe-react-sdk'
 
@@ -197,48 +197,9 @@ const fieldIconMap = {
 //   },
 // ];
 
-const filters = [
-  'Today',
-  'Last 7 days',
-  'Last 30 days',
-  'Last 3 months',
-  'Last 6 months',
-]
-
-const productSchema = z.object({
-  program_name: z.string().min(1, 'Program name is required'),
-  description: z.string().optional(),
-  category: z.string().optional(),
-  terms_conditions: z.string().optional(),
-})
-
 export function ProgramTableDemo() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
 
-  const onSubmit = (data) => {
-    console.log(data)
-
-    createDoc('Program', {
-      program_name: data.program_name,
-      category: data.category,
-      description: data.description,
-      status: 'Pending for approval',
-      terms_conditions: data.terms_conditions,
-    })
-
-    form.reset() // Reset form fields
-    // Close the sheet after successful submission
-  }
-
-  const form = useForm({
-    resolver: zodResolver(productSchema),
-    defaultValues: {
-      program_name: '',
-      description: '',
-      category: '',
-      terms_conditions: '',
-    },
-  })
 
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState([])
@@ -257,24 +218,19 @@ export function ProgramTableDemo() {
     console.log('Program Data:', programData)
   }
 
-  const { data: statuses, isLoading } = useFrappeGetCall(
-    'frappe.desk.form.load.getdoctype',
+  const { data: programStatuses, isLoading: programStatusesLoading } = useFrappeGetDocList(
+    'Program Status',
     {
-      doctype: 'Program',
+      fields: ['*'],
     }
   )
-  if (!isLoading) {
-    console.log('Is Loading: ', isLoading)
-    const statusField = statuses?.docs[0]?.fields?.find(
-      (field) => field.fieldname === 'status'
-    )
-    const optionArray = statusField?.options?.split('\n')
-    console.log('options:', optionArray)
 
-    console.log('Status Field:', statusField)
+  if(!programStatusesLoading) {
+    console.log("Program Statuses:", programStatuses)
   }
 
-  const { createDoc } = useFrappeCreateDoc()
+
+
   const { updateDoc } = useFrappeUpdateDoc()
 
   const tableData = React.useMemo(() => {
@@ -478,10 +434,11 @@ export function ProgramTableDemo() {
       accessorKey: 'actions',
       header: '',
       cell: ({ row }) => {
-        const statusField = statuses?.docs[0]?.fields?.find(
-          (field) => field.fieldname === 'status'
+        const statuses = programStatuses?.filter(
+          (status) => status.name !== row.original.status
         )
-        const optionsArray = statusField?.options?.split('\n')
+        console.log("Status:", row.original?.status)
+      
         const id = row.original.id // Get the entire row's data for actions
 
         return (
@@ -496,7 +453,7 @@ export function ProgramTableDemo() {
               <DropdownMenuItem className="cursor-pointer">
                 Edit
               </DropdownMenuItem>
-              {optionsArray?.map((status) => (
+              {statuses?.map((status) => (
                 <DropdownMenuItem
                   key={status}
                   className="cursor-pointer"
@@ -629,114 +586,7 @@ export function ProgramTableDemo() {
               </Button>
 
               <DataTableViewOptions table={table} />
-              <Sheet>
-                <SheetTrigger asChild>
-                  <div className="flex justify-center items-center">
-                    <Button
-                      variant=""
-                      className="h-8 flex justify-center items-center"
-                    >
-                      <CirclePlus />
-                      Create Program
-                    </Button>
-                  </div>
-                </SheetTrigger>
-                <SheetContent className="">
-                  <SheetHeader>
-                    <SheetTitle>Create Program</SheetTitle>
-                    <SheetDescription>
-                      A versatile program for efficient management, real-time
-                      analytics, and seamless user control.
-                    </SheetDescription>
-                  </SheetHeader>
-                  <Form {...form}>
-                    <form
-                      className="space-y-4 mt-4"
-                      onSubmit={form.handleSubmit(onSubmit)}
-                    >
-                      {/* Program Name Field */}
-                      <FormField
-                        name="program_name"
-                        control={form.control}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Program Name</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Enter program name"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        name="category"
-                        control={form.control}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Program Category</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Enter program category"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      {/* Description Field */}
-                      <FormField
-                        name="description"
-                        control={form.control}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Program Description</FormLabel>
-                            <FormControl>
-                              <Textarea
-                                placeholder="Enter product description"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        name="terms_conditions"
-                        control={form.control}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Upload T&C Document</FormLabel>
-                            <FormControl>
-                              <Input
-                                id="terms_conditions"
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => {
-                                  const files = e.target.files
-                                    ? Array.from(e.target.files)
-                                    : []
-                                  field.onChange(files)
-                                }}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      {/* Submit Button */}
-                      <SheetFooter>
-                        <Button type="submit">Submit</Button>
-                      </SheetFooter>
-                    </form>
-                  </Form>
-                </SheetContent>
-              </Sheet>
+             
             </div>
           </div>
           <div className="rounded-md border">
