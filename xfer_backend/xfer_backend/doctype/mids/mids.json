@@ -1,45 +1,39 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:mcc",
- "creation": "2025-01-20 15:12:54.188516",
+ "creation": "2025-01-20 17:19:39.163014",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "mcc",
-  "column_break_lahj",
+  "merchant_id",
+  "column_break_umrc",
   "is_enabled"
  ],
  "fields": [
   {
-   "fieldname": "mcc",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "MCC",
-   "options": "MCC Codes",
-   "unique": 1
+   "fieldname": "merchant_id",
+   "fieldtype": "Data",
+   "label": "Merchant ID"
   },
   {
    "default": "0",
    "fieldname": "is_enabled",
    "fieldtype": "Check",
-   "in_list_view": 1,
-   "label": "Is Enabled"
+   "label": "Is enabled"
   },
   {
-   "fieldname": "column_break_lahj",
+   "fieldname": "column_break_umrc",
    "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-01-20 17:34:09.666772",
+ "modified": "2025-01-20 17:20:17.863722",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
- "name": "MCC Whitelisting",
- "naming_rule": "By fieldname",
+ "name": "MIDs",
  "owner": "Administrator",
  "permissions": [],
  "sort_field": "modified",
