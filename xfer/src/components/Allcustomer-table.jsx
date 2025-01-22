@@ -78,6 +78,7 @@ import DataTableToolbar from './DataTableToolbar'
 import { ProgramManager } from '../data/all-customer-data'
 import { DataTablePagination } from '@/components/DataTablePagination'
 import ProgramManagerDetails from '../pages/ProgramManagerDetails/ProgramManagerDetails'
+import { useFrappeGetDocList } from 'frappe-react-sdk'
 
 const data = [
   {
@@ -198,8 +199,16 @@ export function AllCustomerTable() {
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const { data: customersData, isLoading: customersDataLoading } =
+    useFrappeGetDocList('Customers', {
+      fields: ['*'],
+    })
 
-  // const [data, setData] = React.useState([]) 
+  if (!customersDataLoading) {
+    console.log(customersData)
+  }
+
+  // const [data, setData] = React.useState([])
   const [loading, setLoading] = React.useState(true) // State for loading
   const [error, setError] = React.useState(null) // State for error handling
 

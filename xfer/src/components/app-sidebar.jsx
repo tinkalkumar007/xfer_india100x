@@ -1,7 +1,7 @@
-import { Link, NavLink, useLocation } from "react-router-dom";
-import { Layers } from "lucide-react";
+import { Link, NavLink, useLocation } from 'react-router-dom'
+import { Layers } from 'lucide-react'
 
-import { NavUser } from "@/components/nav-user";
+import { NavUser } from '@/components/nav-user'
 import {
   BookOpen,
   Bot,
@@ -30,7 +30,7 @@ import {
   ShieldAlert,
   Settings,
   Key,
-} from "lucide-react";
+} from 'lucide-react'
 
 import {
   Sidebar,
@@ -57,121 +57,121 @@ import {
   SidebarSeparator,
   SidebarTrigger,
   useSidebar,
-} from "@/components/ui/sidebar";
+} from '@/components/ui/sidebar'
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+} from '@/components/ui/collapsible'
 
 const sidebarData = {
   overview: [
     {
-      title: "Business Dashboard",
-      url: "/business-dashboard",
+      title: 'Business Dashboard',
+      url: '/business-dashboard',
       icon: LayoutDashboard, // Dashboard layout icon for business overview
     },
     {
-      title: "System Dashboard",
-      url: "/system-dashboard",
+      title: 'System Dashboard',
+      url: '/system-dashboard',
       icon: Monitor, // Monitor icon for system overview
     },
   ],
   program_management: [
     {
-      title: "Programs",
-      url: "/programs",
+      title: 'Programs',
+      url: '/programs',
       icon: ClipboardList, // Represents a list of programs
     },
-    {
-      title: "Program Managers",
-      url: "/program-managers",
-      icon: Users, // Group icon for managers
-    },
+    // {
+    //   title: "Program Managers",
+    //   url: "/program-managers",
+    //   icon: Users,
+    // },
   ],
   card_management: [
     {
-      title: "Inventory",
-      url: "/inventory",
+      title: 'Inventory',
+      url: '/inventory',
       icon: Box, // Box icon for inventory
     },
     {
-      title: "Issued Cards",
-      url: "/issued-cards",
+      title: 'Issued Cards',
+      url: '/issued-cards',
       icon: CreditCard, // Card icon for issued cards
     },
   ],
   customers: [
     {
-      title: "All Customers",
-      url: "/all-customers",
+      title: 'All Customers',
+      url: '/all-customers',
       icon: UserCheck, // User check icon for all verified customers
     },
     {
-      title: "Flagged Customers",
-      url: "/flagged-customers",
+      title: 'Flagged Customers',
+      url: '/flagged-customers',
       icon: Flag, // Flag icon for flagged customers
     },
     {
-      title: "Pending for KYC",
-      url: "/pending-for-kyc",
+      title: 'Pending for KYC',
+      url: '/pending-for-kyc',
       icon: FileText, // Document icon for pending KYC
     },
   ],
   fund_management: [
     {
-      title: "Pool Accounts",
-      url: "/pool-accounts",
+      title: 'Pool Accounts',
+      url: '/pool-accounts',
       icon: Landmark, // Landmark icon for pool accounts
     },
     {
-      title: "Funding Transactions",
-      url: "/funding-transactions",
+      title: 'Funding Transactions',
+      url: '/funding-transactions',
       icon: DollarSign, // Dollar icon for funding transactions
     },
   ],
   user_management: [
+    // {
+    //   title: 'System Users',
+    //   url: '/system-users',
+    //   icon: UserCog,
+    // },
     {
-      title: "System Users",
-      url: "/system-users",
-      icon: UserCog, // User settings icon for system users
-    },
-    {
-      title: "User Activity Logs",
-      url: "/user-activity-logs",
+      title: 'User Activity Logs',
+      url: '/user-activity-logs',
       icon: Activity, // Activity icon for logs
     },
   ],
   settings: [
     {
-      title: "Security Settings",
-      url: "/security-settings",
+      title: 'Security Settings',
+      url: '/security-settings',
       icon: ShieldAlert, // Shield icon for security
     },
     {
-      title: "API Settings",
-      url: "/api-settings",
+      title: 'API Settings',
+      url: '/api-settings',
       icon: Key, // Key icon for API settings
     },
     {
-      title: "Default Configs",
-      url: "/default-configs",
+      title: 'Default Configs',
+      url: '/default-configs',
       icon: Settings, // General settings icon for default configurations
     },
   ],
-};
+}
 
 export function AppSidebar({ ...props }) {
-  const location = useLocation();
-  const { toggle } = useSidebar();
+  const location = useLocation()
+  const { toggle } = useSidebar()
 
   const handleItemClick = () => {
     if (window.innerWidth <= 768) {
       // Only toggle on mobile screen
-      toggle();
+      toggle()
     }
-  };
+  }
   return (
     <Sidebar collapsible="icon" variant="inset" {...props}>
       <SidebarHeader>
@@ -469,5 +469,5 @@ export function AppSidebar({ ...props }) {
         <NavUser />
       </SidebarFooter>
     </Sidebar>
-  );
+  )
 }

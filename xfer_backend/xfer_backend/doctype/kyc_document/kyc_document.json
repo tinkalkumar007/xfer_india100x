@@ -6,7 +6,6 @@
  "engine": "InnoDB",
  "field_order": [
   "document_name",
-  "document_id",
   "column_break_dfpn",
   "status"
  ],
@@ -15,11 +14,6 @@
    "fieldname": "document_name",
    "fieldtype": "Data",
    "label": "Document Name"
-  },
-  {
-   "fieldname": "document_id",
-   "fieldtype": "Data",
-   "label": "Document Id"
   },
   {
    "fieldname": "column_break_dfpn",
@@ -34,7 +28,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-20 11:31:59.875520",
+ "modified": "2025-01-22 12:19:02.783737",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "KYC Document",
