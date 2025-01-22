@@ -20,6 +20,7 @@
   {
    "fieldname": "remark",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Remark"
   },
   {
@@ -29,7 +30,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-20 17:43:40.996355",
+ "modified": "2025-01-22 16:01:46.468279",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Risk Category",

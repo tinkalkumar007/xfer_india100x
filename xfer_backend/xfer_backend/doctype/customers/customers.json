@@ -30,6 +30,7 @@
   "section_break_myhj",
   "risk_category",
   "failed_login_attempts",
+  "remark",
   "column_break_jzip",
   "kyc_level",
   "account_locked",
@@ -65,8 +66,10 @@
   },
   {
    "fieldname": "status",
-   "fieldtype": "Data",
-   "label": "Status"
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Customer Status"
   },
   {
    "fieldname": "lat_long",
@@ -207,6 +210,12 @@
    "fieldname": "selfie",
    "fieldtype": "Attach Image",
    "label": "Selfie"
+  },
+  {
+   "fetch_from": "risk_category.remark",
+   "fieldname": "remark",
+   "fieldtype": "Read Only",
+   "label": "Remark"
   }
  ],
  "image_field": "selfie",
@@ -217,7 +226,7 @@
    "link_fieldname": "mobile_number"
   }
  ],
- "modified": "2025-01-21 17:09:16.332675",
+ "modified": "2025-01-22 17:58:17.732723",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Customers",

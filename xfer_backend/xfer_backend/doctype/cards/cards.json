@@ -34,8 +34,7 @@
   "last_used_date",
   "section_break_hhys",
   "blocked_reason",
-  "column_break_ozvc",
-  "kyc_status"
+  "column_break_ozvc"
  ],
  "fields": [
   {
@@ -180,12 +179,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "kyc_status",
-   "fieldtype": "Link",
-   "label": "KYC Status",
-   "options": "KYC Status"
-  },
-  {
    "fieldname": "blocked_reason",
    "fieldtype": "Data",
    "label": "Blocked Reason"
@@ -198,7 +191,7 @@
    "link_fieldname": "card_reference_id"
   }
  ],
- "modified": "2025-01-21 19:58:17.267847",
+ "modified": "2025-01-22 15:39:45.347212",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Cards",
