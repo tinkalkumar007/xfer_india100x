@@ -1,34 +1,34 @@
 {
  "actions": [],
- "autoname": "field:category_name",
- "creation": "2025-01-15 18:31:50.461088",
+ "allow_rename": 1,
+ "autoname": "field:channel",
+ "creation": "2025-01-18 12:22:52.573308",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "category_name",
-  "is_active"
+  "channel",
+  "is_enabled"
  ],
  "fields": [
   {
-   "fieldname": "category_name",
+   "fieldname": "channel",
    "fieldtype": "Data",
-   "label": "Category Name",
+   "label": "Channel",
    "unique": 1
   },
   {
    "default": "0",
-   "fieldname": "is_active",
+   "fieldname": "is_enabled",
    "fieldtype": "Check",
-   "in_list_view": 1,
-   "label": "Is Active"
+   "label": "Is Enabled"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 17:46:16.114899",
+ "modified": "2025-01-18 12:27:29.096323",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
- "name": "Program Category",
+ "name": "Transaction Channel",
  "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [

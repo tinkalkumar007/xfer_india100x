@@ -1,34 +1,38 @@
 {
  "actions": [],
- "autoname": "field:category_name",
- "creation": "2025-01-15 18:31:50.461088",
+ "allow_rename": 1,
+ "autoname": "field:category",
+ "creation": "2025-01-18 12:05:11.318634",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "category_name",
-  "is_active"
+  "category",
+  "column_break_nazi",
+  "remark"
  ],
  "fields": [
   {
-   "fieldname": "category_name",
+   "fieldname": "category",
    "fieldtype": "Data",
-   "label": "Category Name",
+   "label": "Category",
    "unique": 1
   },
   {
-   "default": "0",
-   "fieldname": "is_active",
-   "fieldtype": "Check",
-   "in_list_view": 1,
-   "label": "Is Active"
+   "fieldname": "remark",
+   "fieldtype": "Data",
+   "label": "Remark"
+  },
+  {
+   "fieldname": "column_break_nazi",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 17:46:16.114899",
+ "modified": "2025-01-20 17:43:40.996355",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
- "name": "Program Category",
+ "name": "Risk Category",
  "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
