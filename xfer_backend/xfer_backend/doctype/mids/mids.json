@@ -14,12 +14,14 @@
   {
    "fieldname": "merchant_id",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Merchant ID"
   },
   {
    "default": "0",
    "fieldname": "is_enabled",
    "fieldtype": "Check",
+   "in_list_view": 1,
    "label": "Is enabled"
   },
   {
@@ -30,7 +32,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-01-20 17:20:17.863722",
+ "modified": "2025-01-20 17:49:57.449549",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "MIDs",

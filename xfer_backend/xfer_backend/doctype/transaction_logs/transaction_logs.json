@@ -11,7 +11,7 @@
   "amount",
   "status",
   "column_break_ibet",
-  "card_ref_id",
+  "card_reference_id",
   "from_account",
   "to_account",
   "exchange_rate",
@@ -42,12 +42,6 @@
    "fieldname": "transaction_id",
    "fieldtype": "Data",
    "label": "Transaction Id"
-  },
-  {
-   "fieldname": "card_ref_id",
-   "fieldtype": "Link",
-   "label": "Card Ref Id",
-   "options": "Card"
   },
   {
    "fieldname": "column_break_ibet",
@@ -162,11 +156,17 @@
    "fieldname": "lat_long",
    "fieldtype": "Geolocation",
    "label": "Lat Long"
+  },
+  {
+   "fieldname": "card_reference_id",
+   "fieldtype": "Link",
+   "label": "Card Ref Id",
+   "options": "Cards"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-20 15:11:47.553216",
+ "modified": "2025-01-21 20:01:32.366048",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Transaction Logs",

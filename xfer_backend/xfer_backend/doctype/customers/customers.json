@@ -211,8 +211,13 @@
  ],
  "image_field": "selfie",
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2025-01-20 17:25:49.239942",
+ "links": [
+  {
+   "link_doctype": "Cards",
+   "link_fieldname": "mobile_number"
+  }
+ ],
+ "modified": "2025-01-21 17:09:16.332675",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Customers",

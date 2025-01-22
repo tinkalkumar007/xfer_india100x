@@ -8,6 +8,7 @@
  "field_order": [
   "company_name",
   "gstin",
+  "country",
   "column_break_ajmt",
   "website",
   "column_break_iayq",
@@ -44,11 +45,17 @@
    "fieldtype": "Data",
    "label": "Email ID",
    "options": "Email"
+  },
+  {
+   "fieldname": "country",
+   "fieldtype": "Link",
+   "label": "Country",
+   "options": "Country"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 12:45:50.882653",
+ "modified": "2025-01-21 20:03:43.311727",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Program Manager",
