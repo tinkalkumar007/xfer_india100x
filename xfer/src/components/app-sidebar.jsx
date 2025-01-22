@@ -84,11 +84,7 @@ const sidebarData = {
       url: "/programs",
       icon: ClipboardList, // Represents a list of programs
     },
-    {
-      title: "Program Managers",
-      url: "/program-managers",
-      icon: Users, // Group icon for managers
-    },
+    
   ],
   card_management: [
     {
@@ -132,34 +128,18 @@ const sidebarData = {
     },
   ],
   user_management: [
-    {
-      title: "System Users",
-      url: "/system-users",
-      icon: UserCog, // User settings icon for system users
-    },
+    // {
+    //   title: "System Users",
+    //   url: "/system-users",
+    //   icon: UserCog, // User settings icon for system users
+    // },
     {
       title: "User Activity Logs",
       url: "/user-activity-logs",
       icon: Activity, // Activity icon for logs
     },
   ],
-  settings: [
-    {
-      title: "Security Settings",
-      url: "/security-settings",
-      icon: ShieldAlert, // Shield icon for security
-    },
-    {
-      title: "API Settings",
-      url: "/api-settings",
-      icon: Key, // Key icon for API settings
-    },
-    {
-      title: "Default Configs",
-      url: "/default-configs",
-      icon: Settings, // General settings icon for default configurations
-    },
-  ],
+
 };
 
 export function AppSidebar({ ...props }) {

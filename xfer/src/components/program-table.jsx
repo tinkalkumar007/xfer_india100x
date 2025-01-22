@@ -111,6 +111,7 @@ import {
   useFrappeGetCall,
  
   useFrappeUpdateDoc,
+  useFrappeAuth,
 } from 'frappe-react-sdk'
 
 const fieldIconMap = {
@@ -206,15 +207,19 @@ export function ProgramTableDemo() {
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
   const [selectedFilter, setSelectedFilter] = React.useState('Today')
+  const { currentUser} = useFrappeAuth()
 
-  const { data: programData, isLoading: isDocsLoading } = useFrappeGetDocList(
+  const { data: programData, isLoading: programDocsLoading } = useFrappeGetDocList(
     'Program',
     {
       fields: ['*'],
+      filters: [
+        ["owner", "in", [currentUser, ""]]
+      ]
     }
   )
 
-  if (!isDocsLoading) {
+  if (!programDocsLoading) {
     console.log('Program Data:', programData)
   }
 
@@ -237,7 +242,7 @@ export function ProgramTableDemo() {
     if (!programData) return []
     return programData.map((program) => ({
       id: program.name,
-      product_name: program.program_name,
+      program_name: program.program_name,
       category: program.category,
       description: program.description,
       status: program.status,
@@ -255,7 +260,8 @@ export function ProgramTableDemo() {
     {
       id: 'select',
       header: ({ table }) => (
-        <Checkbox
+        <div className='flex justify-left items-center'>
+          <Checkbox
           checked={
             table.getIsAllPageRowsSelected() ||
             (table.getIsSomePageRowsSelected() && 'indeterminate')
@@ -263,14 +269,17 @@ export function ProgramTableDemo() {
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
         />
+        </div>
       ),
       cell: ({ row }) => (
-        <Checkbox
+        <div className='flex justify-left items-center'> 
+          <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
           aria-label="Select row"
-          className=""
+          
         />
+        </div>
       ),
       enableSorting: false,
       enableHiding: false,
@@ -282,7 +291,7 @@ export function ProgramTableDemo() {
         return (
           <Link to={`/programs/program/${row.original.name}`}>
             <div className="capitalize text-center cursor-pointer hover:underline">
-              {row.original.product_name || ''}
+              {row.original.program_name || ''}
             </div>
           </Link>
         )

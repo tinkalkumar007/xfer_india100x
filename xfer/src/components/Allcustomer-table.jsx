@@ -78,7 +78,7 @@ import DataTableToolbar from './DataTableToolbar'
 import { ProgramManager } from '../data/all-customer-data'
 import { DataTablePagination } from '@/components/DataTablePagination'
 import ProgramManagerDetails from '../pages/ProgramManagerDetails/ProgramManagerDetails'
-import { useFrappeGetDocList } from 'frappe-react-sdk'
+import { useFrappeAuth, useFrappeGetDocList } from 'frappe-react-sdk'
 
 const data = [
   {
@@ -199,9 +199,14 @@ export function AllCustomerTable() {
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const {currentUser} = useFrappeAuth()
 
   const { data: customersData, isLoading: customersLoading} = useFrappeGetDocList('Customers', {
-      fields: ["*"]
+      fields: ["*"],
+      filters: [
+        ["owner", "in", [currentUser, ""]]
+      ]
+      
     })
   
     if(!customersLoading) {
@@ -313,14 +318,14 @@ export function AllCustomerTable() {
         // const time2 = time1.split('.')[0]
         //2025-01-20 17:25:49.239942
         //const 
-        const dateTime = row.original?.last_active.split('.')[0]
+        const dateTime = row.original?.last_active.split('.')[0] || ''
         const date = dateTime.split(' ')[0]
         const time = dateTime.split(' ')[1]
 
 
         return (
           <div className="flex flex-col items-center text-center">
-            <span>{date}</span>
+            <span>{date?.split('-').reverse().join('-') || ''}</span>
             <span>
               {time}
             </span>

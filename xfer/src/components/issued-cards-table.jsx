@@ -75,11 +75,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useMemo } from "react";
-import { useFrappeGetDocList } from "frappe-react-sdk";
+import { useFrappeAuth, useFrappeGetDocList } from "frappe-react-sdk";
 import { Badge } from "@/components/ui/badge";
 import { status } from "@/data/issued-cards-data";
 import DataTableToolbar from "./DataTableToolbar";
 import DataTableViewOptions from "./DataTableViewOptions";
+import { tags } from "./programData";
 
 const fieldIconMap = {
   kycRequired: {
@@ -238,14 +239,32 @@ export function IssuedCardsTable() {
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const { currentUser }  = useFrappeAuth()
 
   const { data: issuedCardsData, isLoading: issuedCardsLoading} = useFrappeGetDocList('Cards', {
-    fields: ["*"]
+    fields: ["card_reference_id", "card_number", "program_category", "issue_date", "kyc_status", "_user_tags"],
+    filters: [
+      ["owner", "in", [currentUser, ""]]
+    ]
   })
 
-  if(issuedCardsLoading === false) {
+  if(!issuedCardsLoading) {
     console.log("Issued cards data:", issuedCardsData)
   }
+
+  const tableData = React.useMemo( () => {
+    if(!issuedCardsData) return []
+    return (
+      issuedCardsData.map( (card) => ({
+        card_ref_id: card.card_reference_id,
+        last_four_digits: card.card_number.slice(-4),
+        category: card.program_category,
+        issued_date: card.issue_date,
+        status: card.kyc_status,
+        tags: card._user_tags
+      }))
+    )
+  }, [issuedCardsData])
 
   const columns = [
     {
@@ -278,7 +297,7 @@ export function IssuedCardsTable() {
         return (
           <Link to={`/issued-cards/issuedcards-details/${id}`}>
             <div className="capitalize text-center hover:underline">
-              {row.getValue("card_ref_id")}
+              {row.original?.card_ref_id}
             </div>
           </Link>
         );
@@ -298,17 +317,17 @@ export function IssuedCardsTable() {
         );
       },
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("last_four_digit")}</div>
+        <div className="capitalize">{row.original.last_four_digits}</div>
       ),
     },
     {
       accessorKey: "Product",
       header: "Product Category",
       cell: ({ row }) => {
-        const product = row.original.Product;
+        const category = row.original.category;
         //console.log(product);
         return (
-          <div className="capitalize">{product?.productCategory || "N/A"}</div>
+          <div className="capitalize">{category || "-"}</div>
         );
       },
     },
@@ -324,7 +343,7 @@ export function IssuedCardsTable() {
 
         return (
           <div className="flex flex-col items-center text-center">
-            <span>{row.original.issued_date}</span>
+            <span>{row.original.issued_date || "-"}</span>
             {/* <span className="text-slate-400">{time2}</span> */}
           </div>
         );
@@ -335,34 +354,41 @@ export function IssuedCardsTable() {
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => {
-        const status = row.getValue("status");
-        return status === "Active" ? (
-          <Badge className="bg-[#e4f5e9] text-[#16794c]">Active</Badge>
-        ) : (
-          <Badge className="bg-[#fff0f0] text-[#b52a2a]">Inactive</Badge>
-        );
+        const status = row.original?.status;
+        return (
+          <> 
+            {status === "Active" && (
+              <Badge className="bg-[#e4f5e9] text-[#16794c]">Active</Badge>
+            )} 
+            { status === "Inactive" && (
+              <Badge className="bg-[#fff0f0] text-[#b52a2a]">Inactive</Badge>
+            )}
+            {
+              status === null && (
+                <div>-</div>
+              )
+            }
+          </>
+        )
       },
     },
     {
       header: "Tags",
-      cell: ({ row }) => (
-        <div className="flex items-center justify-left gap-2">
-          {Object.keys(fieldIconMap).map((field) => {
-            if (row.original.Product?.[field]) {
+      cell: ({ row }) => {
+        const slicedTags = row.original.tags.slice(1)
+        const tagsArray = slicedTags.split(',')
+        console.log(tagsArray)
+        return (
+        <div className="flex items-center justify-center gap-2">
+          {
+            tagsArray.map( (tag) => {
               return (
-                <span
-                  key={field}
-                  className="flex items-center gap-1"
-                  title={fieldIconMap[field].label}
-                >
-                  {fieldIconMap[field].icon}
-                </span>
-              );
-            }
-            return null;
-          })}
+                <Badge variant="primary">{tag}</Badge>
+              )
+            })
+          }
         </div>
-      ),
+      )},
     },
     {
       accessorKey: "actions",
@@ -398,7 +424,7 @@ export function IssuedCardsTable() {
   ];
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

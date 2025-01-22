@@ -79,6 +79,7 @@ import {
 } from "@/components/ui/table";
 import DataTableViewOptions from "./DataTableViewOptions";
 import DataTableToolbar from "./DataTableToolbar";
+import { useFrappeGetDocList } from "frappe-react-sdk";
 
 const data = [
   {
@@ -125,6 +126,14 @@ export function FlaggedCustomerTable() {
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
+
+  const { data: flaggedCustomersData, isLoading: flaggedCustomersLoading} = useFrappeGetDocList('Customers', {
+        fields: ["*"]
+      })
+    
+      if(!flaggedCustomersLoading) {
+        console.log("Flagged Customers data:", flaggedCustomersData)
+      }
 
   const columns = [
     {
@@ -337,12 +346,12 @@ export function FlaggedCustomerTable() {
         <div className="w-full">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
             <div className="w-full">
-              <DataTableToolbar
+              {/* <DataTableToolbar
                 table={table}
                 inputFilter="product_name"
                 program_manager={program_manager}
                 priority={priority}
-              />
+              /> */}
             </div>
             <div className="flex gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>

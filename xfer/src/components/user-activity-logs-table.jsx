@@ -75,54 +75,55 @@ import {
 } from '@/components/ui/table'
 import DataTableViewOptions from './DataTableViewOptions'
 import DataTableToolbar from './DataTableToolbar'
+import { useFrappeAuth, useFrappeGetDocList } from 'frappe-react-sdk'
 
-const data = [
-  {
-    product_id: '1',
-    team_member: 'Alice Johnson',
-    date: '01-12-2024',
-    event: 'Product Launch',
-    team: 'Marketing',
-    product: 'EduPal App',
-    ip_address: '192.168.1.1',
-  },
-  {
-    product_id: '2',
-    team_member: 'Bob Smith',
-    date: '02-12-2024',
-    event: 'Client Meeting',
-    team: 'Sales',
-    product: 'Golzo Platform',
-    ip_address: '192.168.1.2',
-  },
-  {
-    product_id: '3',
-    team_member: 'Charlie Brown',
-    date: '03-12-2024',
-    event: 'Bug Fix',
-    team: 'Development',
-    product: 'Call Recorder App',
-    ip_address: '192.168.1.3',
-  },
-  {
-    product_id: '4',
-    team_member: 'Diana Prince',
-    date: '04-12-2024',
-    event: 'Team Workshop',
-    team: 'Human Resources',
-    product: 'Employee Handbook',
-    ip_address: '192.168.1.4',
-  },
-  {
-    product_id: '5',
-    team_member: 'Evan Williams',
-    date: '05-12-2024',
-    event: 'Server Maintenance',
-    team: 'IT Support',
-    product: 'Internal Systems',
-    ip_address: '192.168.1.5',
-  },
-]
+// const data = [
+//   {
+//     product_id: '1',
+//     team_member: 'Alice Johnson',
+//     date: '01-12-2024',
+//     event: 'Product Launch',
+//     team: 'Marketing',
+//     product: 'EduPal App',
+//     ip_address: '192.168.1.1',
+//   },
+//   {
+//     product_id: '2',
+//     team_member: 'Bob Smith',
+//     date: '02-12-2024',
+//     event: 'Client Meeting',
+//     team: 'Sales',
+//     product: 'Golzo Platform',
+//     ip_address: '192.168.1.2',
+//   },
+//   {
+//     product_id: '3',
+//     team_member: 'Charlie Brown',
+//     date: '03-12-2024',
+//     event: 'Bug Fix',
+//     team: 'Development',
+//     product: 'Call Recorder App',
+//     ip_address: '192.168.1.3',
+//   },
+//   {
+//     product_id: '4',
+//     team_member: 'Diana Prince',
+//     date: '04-12-2024',
+//     event: 'Team Workshop',
+//     team: 'Human Resources',
+//     product: 'Employee Handbook',
+//     ip_address: '192.168.1.4',
+//   },
+//   {
+//     product_id: '5',
+//     team_member: 'Evan Williams',
+//     date: '05-12-2024',
+//     event: 'Server Maintenance',
+//     team: 'IT Support',
+//     product: 'Internal Systems',
+//     ip_address: '192.168.1.5',
+//   },
+// ]
 
 export function ActivityLogsTable() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
@@ -130,6 +131,32 @@ export function ActivityLogsTable() {
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const { currentUser } = useFrappeAuth()  
+  const { data: activityLogsData, isLoading: activityLogsLoading } = useFrappeGetDocList(
+    'Activity Log',
+    {
+      fields: ['*'],
+      filters: [['user', '=', currentUser || '']], // Filter by current logged-in user
+     
+    }
+  )
+
+
+
+  if(!activityLogsLoading) {
+    console.log("Activity Logs:",activityLogsData)
+  }
+
+  const tableData = React.useMemo( () => {
+    if(!activityLogsData) return [];
+    return activityLogsData.map( (log) => ({
+      id: log.name,
+      ip_address: log.ip_address,
+      user: log.modified_by,
+      event: log.subject,
+      modified_on: log.modified
+    }))
+  }, [activityLogsData])
 
   const columns = [
     {
@@ -178,7 +205,9 @@ export function ActivityLogsTable() {
       header: 'Team Member',
       cell: ({ row }) => (
         <div className="capitalize cursor-pointer hover:underline">
-          {row.getValue('team_member')}
+          {
+            row.original.user
+          }
         </div>
       ),
     },
@@ -187,7 +216,7 @@ export function ActivityLogsTable() {
       accessorKey: 'event',
       header: 'Event',
       cell: ({ row }) => (
-        <div className="capitalize pl-4">{row.getValue('event')}</div>
+        <div className="capitalize pl-4">{row.original.event}</div>
       ),
     },
     // {
@@ -201,15 +230,25 @@ export function ActivityLogsTable() {
       accessorKey: 'ip_address',
       header: 'IP Address',
       cell: ({ row }) => (
-        <div className="lowercase">{row.getValue('ip_address')}</div>
+        <div className="lowercase">{row.original.ip_address}</div>
       ),
     },
     {
       accessorKey: 'date',
-      header: 'Date',
-      cell: ({ row }) => (
-        <div className="lowercase pl-4">{row.getValue('date')}</div>
-      ),
+      header: 'Date&Time',
+      cell: ({ row }) => {
+        const dateTime = row.original?.modified_on?.split('.')[0] || ''
+        const [date, time] = dateTime?.split(' ')
+        return (
+        <div className="flex flex-col lowercase pl-4">
+          <span>
+            {date?.split('-').reverse().join('-') || ''}
+          </span>
+          <span>
+            {time || ''}
+          </span>
+        </div>
+      )},
     },
     // {
     //   accessorKey: 'actions',
@@ -272,7 +311,7 @@ export function ActivityLogsTable() {
   ]
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -321,9 +360,9 @@ export function ActivityLogsTable() {
       <CardContent>
         <div className="w-full">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
-            <div className="w-full">
+            {/* <div className="w-full">
               <DataTableToolbar table={table} inputFilter="card_ref_id" />
-            </div>
+            </div> */}
             <div className="flex gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>
                 <FileDown />

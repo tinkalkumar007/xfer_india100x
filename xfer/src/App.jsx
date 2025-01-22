@@ -66,12 +66,7 @@ function App() {
               path="/programs/create-program"
               element={<CreateProgram />}
             />
-            <Route path="/program-managers" element={<ProgramManagers />} />
-
-            <Route
-              path="/program-managers/manager/:id"
-              element={<ProgramManagerDetails />}
-            />
+           
             <Route path="/inventory" element={<Inventory />} />
             <Route
               path="/inventory/order-details/:id"
@@ -103,7 +98,7 @@ function App() {
               path="/funding-transactions"
               element={<FundingTransactions />}
             />
-            <Route path="/system-users" element={<SystemUsers />} />
+            {/* <Route path="/system-users" element={<SystemUsers />} /> */}
             <Route path="/user-activity-logs" element={<UserActivityLogs />} />
             {/* Nested Routes */}
             <Route element={<UserProfileLayout />}>

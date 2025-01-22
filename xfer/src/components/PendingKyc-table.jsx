@@ -79,6 +79,7 @@ import { Badge } from "@/components/ui/badge";
 import { status, program_manager } from "@/data/pending-kyc-data";
 import DataTableViewOptions from "./DataTableViewOptions";
 import DataTableToolbar from "./DataTableToolbar";
+import { useFrappeGetDocList } from "frappe-react-sdk";
 
 const data = [
   {
@@ -181,44 +182,15 @@ export function PendingKycTable() {
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
-  // const [data, setData] = React.useState([])
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(null);
 
-  // React.useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       setLoading(true);
-  //       //const token=Cookies.get("auth_token");
-  //       //console.log(token);
-  //       //axios.default.withCredentials=true;
-  //       const response = await axios.get('/customer/allPendingKycCustomers',{
-  //         withCredentials: true,
-  //       }); // Replace with your API endpoint
-  //       //setData(response.data.data); // Assuming the response is an array of pool accounts
-  //       console.log(response.data.data);
 
-  //       const transformedData = response.data.data.map((item, index) => ({
-  //         customerId: item.id, // Generate a unique ID
-  //         Name: `${item.firstName} ${item.lastName}`, // Combine firstName and lastName
-  //         ProgramManager: `${item.user.firstName} ${item.user.lastName}`, // Access nested user details
-  //         verificationRemarks:`${item.kyc.remarks}`,
-  //         totalCards: item.totalCards || 0, // Default value if undefined
-  //         totalTransactions: item.totalTransactions || 0, // Default value if undefined
-  //         submissionDate:`${item.kyc.updatedAt}`, // Format the date
-  //         status:`${item.kyc.status}`
-
-  //       }));
-  //       setData(transformedData);
-  //     } catch (err) {
-  //       console.error('Error fetching data:', err);
-  //       setError('Failed to fetch data. Please try again later.');
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
+  const { data: pendingCustomersData, isLoading: pendingCustomersLoading} = useFrappeGetDocList('Customers', {
+        fields: ["*"]
+      })
+    
+      if(!pendingCustomersLoading) {
+        console.log("Pending Customers data:", pendingCustomersData)
+      }
 
   async function handleCopy(rowData) {
     try {
@@ -432,12 +404,12 @@ export function PendingKycTable() {
         <div className="w-full">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
             <div className="w-full">
-              <DataTableToolbar
+              {/* <DataTableToolbar
                 table={table}
                 inputFilter="product_name"
                 program_manager={program_manager}
                 status={status}
-              />
+              /> */}
             </div>
             <div className="flex gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>
