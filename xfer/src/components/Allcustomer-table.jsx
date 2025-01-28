@@ -253,7 +253,7 @@ export function AllCustomerTable() {
       cell: ({ row }) => {
         const id = row.original.id
         return (
-          <Link to={`/all-customers/customer/${id}`}>
+          <Link to={`/customers/customer/${id}`}>
             <div className="capitalize text-center hover:underline">
               {row.original?.id}
             </div>

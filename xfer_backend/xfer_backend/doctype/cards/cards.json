@@ -84,9 +84,10 @@
    "label": "Customer Detail"
   },
   {
-   "fetch_from": "mobile_number.last_name",
+   "fetch_from": "mobile_number.first_name",
    "fieldname": "customer_name",
    "fieldtype": "Read Only",
+   "in_list_view": 1,
    "label": "Customer Name"
   },
   {
@@ -112,6 +113,7 @@
   {
    "fieldname": "program_name",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Program Name",
    "options": "Program"
   },
@@ -120,16 +122,17 @@
    "fieldtype": "Column Break"
   },
   {
+   "fetch_from": "program_name.program_manager",
    "fieldname": "program_manager",
-   "fieldtype": "Link",
-   "label": "Program Manager",
-   "options": "Program"
+   "fieldtype": "Read Only",
+   "in_list_view": 1,
+   "label": "Program Manager"
   },
   {
    "fieldname": "program_category",
    "fieldtype": "Link",
    "label": "Program Category",
-   "options": "Program"
+   "options": "Program Category"
   },
   {
    "fieldname": "column_break_rani",
@@ -143,6 +146,7 @@
   {
    "fieldname": "issue_date",
    "fieldtype": "Datetime",
+   "in_list_view": 1,
    "label": "Issue Date"
   },
   {
@@ -191,7 +195,7 @@
    "link_fieldname": "card_reference_id"
   }
  ],
- "modified": "2025-01-22 15:39:45.347212",
+ "modified": "2025-01-27 15:45:21.625635",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Cards",

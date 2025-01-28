@@ -6,7 +6,5 @@ tags
 node_modules
 __pycache__
 -
-xfer_backend/public/xfer
 xfer_backend/public/node_modules
-xfer_backend/www/xfer.html
-xfer_backend/
+

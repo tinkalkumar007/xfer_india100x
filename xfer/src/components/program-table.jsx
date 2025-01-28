@@ -266,7 +266,7 @@ export function ProgramTableDemo() {
     if (!programData) return []
     return programData.map((program) => ({
       id: program.name, // Frappe's unique identifier
-      product_name: program.program_name,
+      program_name: program.program_name,
       category: program.category,
       description: program.description,
       status: program.status,
@@ -308,13 +308,13 @@ export function ProgramTableDemo() {
       enableHiding: false,
     },
     {
-      accessorKey: 'product_name',
+      accessorKey: 'program_name',
       header: 'Name',
       cell: ({ row }) => {
         return (
-          <Link to={`/programs/program/${row.original.name}`}>
+          <Link to={`/programs/program/${row.original.id}`}>
             <div className="capitalize text-center cursor-pointer hover:underline">
-              {row.original.product_name || '-'}
+              {row.original.program_name || '-'}
             </div>
           </Link>
         )

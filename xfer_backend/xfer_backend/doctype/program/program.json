@@ -13,10 +13,19 @@
   "program_name",
   "category",
   "terms_conditions",
+  "card_type",
   "column_break_trnb",
   "status",
   "risk_score",
   "policy_url",
+  "controls_section",
+  "reload_applicable",
+  "column_break_xcmu",
+  "jit_applicable",
+  "column_break_bimn",
+  "kit_to_kit_transfer",
+  "column_break_rujg",
+  "add_on_allowed",
   "rewards_section",
   "insurance_card",
   "column_break_bcye",
@@ -269,11 +278,58 @@
    "fieldtype": "Table",
    "label": "KYC Documents",
    "options": "KYC Requirements"
+  },
+  {
+   "fieldname": "card_type",
+   "fieldtype": "Select",
+   "label": "Card Type",
+   "options": "Virtual\nPhysical\nVirtual & Physical"
+  },
+  {
+   "fieldname": "controls_section",
+   "fieldtype": "Section Break",
+   "label": "Controls"
+  },
+  {
+   "default": "0",
+   "fieldname": "reload_applicable",
+   "fieldtype": "Check",
+   "label": "Reload Applicable"
+  },
+  {
+   "default": "0",
+   "fieldname": "jit_applicable",
+   "fieldtype": "Check",
+   "label": "JIT Applicable"
+  },
+  {
+   "default": "0",
+   "fieldname": "kit_to_kit_transfer",
+   "fieldtype": "Check",
+   "label": "Kit To Kit Transfer"
+  },
+  {
+   "fieldname": "column_break_xcmu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_bimn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_rujg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "add_on_allowed",
+   "fieldtype": "Check",
+   "label": "Add On Allowed"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-22 13:06:22.380065",
+ "modified": "2025-01-28 11:05:18.543790",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Program",

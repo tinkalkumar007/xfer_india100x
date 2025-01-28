@@ -259,7 +259,7 @@ export function PendingKycTable() {
       accessorKey: 'id',
       header: 'Customer ID',
       cell: ({ row }) => (
-        <Link to={`/pending-for-kyc/customer/${row.original.id}`}>
+        <Link to={`/customers/customer/${row.original.id}`}>
           <div className="capitalize text-center hover:underline">
             {row.original.id}
           </div>

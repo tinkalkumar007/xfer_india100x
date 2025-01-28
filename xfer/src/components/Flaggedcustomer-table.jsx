@@ -155,7 +155,7 @@ export function FlaggedCustomerTable() {
       accessorKey: 'id',
       header: 'Customer ID',
       cell: ({ row }) => (
-        <Link to={`/flagged-customers/customer/:${row.original.customerId}`}>
+        <Link to={`/customers/customer/${row.original.id}`}>
           <div className="capitalize text-center hover:underline">
             {row.original?.id}
           </div>

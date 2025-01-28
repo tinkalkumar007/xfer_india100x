@@ -15,9 +15,25 @@ import { Button } from '@/components/ui/button'
 
 import OnoLogo from '@/assets/ono-logo.png'
 import { Separator } from '@/components/ui/separator'
-import { Clock, Mail, MapPin, Phone, ShieldCheck, User } from 'lucide-react'
+import {
+  Accessibility,
+  Clock,
+  Mail,
+  MapPin,
+  Phone,
+  ShieldCheck,
+  User,
+} from 'lucide-react'
 
 import { AlertTriangle } from 'lucide-react'
+import { useParams } from 'react-router-dom'
+import {
+  useFrappeGetDoc,
+  useFrappeGetDocCount,
+  useFrappeGetDocList,
+} from 'frappe-react-sdk'
+import { filterFns } from '@tanstack/react-table'
+import React from 'react'
 
 const activities = [
   {
@@ -44,6 +60,25 @@ const activities = [
 ]
 
 const CustomerDetails = () => {
+  const { id } = useParams()
+  const { data: totalCards, isLoading: totalCardsLoading } =
+    useFrappeGetDocCount('Cards', [['mobile_number', '=', id]])
+
+  const { data: customerCardsData, isLoading: customerCardsDataLoading } =
+    useFrappeGetDocList('Cards', {
+      fields: ['*'],
+      filters: [['mobile_number', '=', id]],
+    })
+  const { data: CustomerDetails, isLoading: customerDetailsLoading } =
+    useFrappeGetDoc('Customers', id)
+
+  const totalBalance = React.useMemo(() => {
+    if (!customerCardsData) return null
+    return customerCardsData.reduce((acc, current) => acc + current.balance, 0)
+  }, [customerCardsData])
+
+  console.log(!customerCardsDataLoading && customerCardsData)
+
   return (
     <>
       <div className="w-full flex flex-col lg:flex-row gap-2 items-center border rounded-md px-2">
@@ -53,14 +88,25 @@ const CustomerDetails = () => {
           </div>
           <div className="flex flex-col gap-1 w-[70%]">
             <div className="flex gap-2">
-              <h2 className="font-bold text-xl">John Doe </h2>
+              <h2 className="font-bold text-xl">
+                {CustomerDetails?.first_name} {CustomerDetails?.last_name}
+              </h2>
               <Badge className="bg-[#e4f5e9] text-[#16794c]">Active</Badge>
             </div>
             <h2 className="text-sm text-muted-foreground">
-              Customer ID : <span className="font-medium">123456789</span>
+              Customer ID :{' '}
+              <span className="font-medium">{CustomerDetails?.name}</span>
             </h2>
             <p className="text-sm text-muted-foreground">
-              Created On : <span className="font-medium">14/12/2024</span>
+              Created On :{' '}
+              <span className="font-medium">
+                {CustomerDetails?.creation
+                  ?.split('.')[0]
+                  ?.split(' ')[0]
+                  .split('-')
+                  .reverse()
+                  .join('-')}
+              </span>
             </p>
           </div>
         </div>
@@ -75,10 +121,12 @@ const CustomerDetails = () => {
               <div>
                 <User size={20} />
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground w-[50%]">mitsu</p>
+              <div className="w-full">
+                <p className="text-sm text-muted-foreground w-[50%]">
+                  {CustomerDetails?.first_name}
+                </p>
                 <p className="text-sm font-medium text-muted-foreground w-[50%]">
-                  Username
+                  First Name
                 </p>
               </div>
             </div>
@@ -87,7 +135,9 @@ const CustomerDetails = () => {
                 <Phone size={20} />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground ">8448954679</p>
+                <p className="text-sm text-muted-foreground ">
+                  {CustomerDetails?.mobile_no}
+                </p>
                 <p className="text-sm font-medium text-muted-foreground">
                   Phone
                 </p>
@@ -98,7 +148,9 @@ const CustomerDetails = () => {
                 <Mail size={20} />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">mitsu@gmail.com</p>
+                <p className="text-sm text-muted-foreground">
+                  {CustomerDetails?.email}
+                </p>
                 <p className="text-sm font-medium text-muted-foreground ">
                   Email
                 </p>
@@ -111,7 +163,9 @@ const CustomerDetails = () => {
                 <ShieldCheck size={20} />
               </div>
               <div>
-                <Badge className="bg-[#e4f5e9] text-[#16794c]">Approved</Badge>
+                <Badge className="bg-[#e4f5e9] text-[#16794c]">
+                  {CustomerDetails?.kyc_level}
+                </Badge>
                 <p className="text-sm font-medium text-muted-foreground">
                   KYC Status
                 </p>
@@ -122,7 +176,7 @@ const CustomerDetails = () => {
                 <Clock size={20} />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">24/12/2024</p>
+                <p className="text-sm text-muted-foreground">-</p>
                 <p className="text-sm font-medium text-muted-foreground">
                   Last Active
                 </p>
@@ -134,8 +188,7 @@ const CustomerDetails = () => {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground ">
-                  Sovereign Capital Gate, Sector 16a, Noida, Uttar Pradesh,
-                  201301
+                  {`${CustomerDetails?.address_line_1} ${CustomerDetails?.address_line_2} ${CustomerDetails?.city} ${CustomerDetails?.country}`}
                 </p>
                 <p className="text-sm font-medium text-muted-foreground ">
                   Address
@@ -233,14 +286,16 @@ const CustomerDetails = () => {
                   <p className="font-medium text-sm text-muted-foreground">
                     Total Cards
                   </p>
-                  <p className="font-medium text-md">10</p>
+                  <p className="font-medium text-md">
+                    {!totalCardsLoading && totalCards}
+                  </p>
                 </div>
 
                 <div className="flex flex-col gap-1 xl:border-r-2">
                   <p className="font-medium text-sm text-muted-foreground">
                     Total Balance
                   </p>
-                  <p className="font-medium text-md">&#8377;100000</p>
+                  <p className="font-medium text-md">&#8377;{totalBalance}</p>
                 </div>
 
                 <div className="flex flex-col gap-1 xl:border-r-2 ">
@@ -270,7 +325,10 @@ const CustomerDetails = () => {
               <Separator className="w-[96%]" />
             </div>
             <div>
-              <ManagerProgramList />
+              <ManagerProgramList
+                customerCardsData={customerCardsData}
+                customerCardsDataLoading={customerCardsDataLoading}
+              />
               <div className="w-full flex justify-center pb-6">
                 <p className="text-sm font-semibold underline tracking-wide cursor-pointer">
                   View All Cards

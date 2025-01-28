@@ -98,17 +98,10 @@ function App() {
               />
               <Route path="/all-customers" element={<AllCustomers />} />
               <Route
-                path="/all-customers/customer/:id"
+                path="/customers/customer/:id"
                 element={<CustomerDetails />}
               />
-              <Route
-                path="/flagged-customers/customer/:id"
-                element={<CustomerDetails />}
-              />
-              <Route
-                path="/pending-for-kyc/customer/:id"
-                element={<CustomerDetails />}
-              />
+
               <Route path="/flagged-customers" element={<FlaggedCustomers />} />
               <Route path="/pending-for-kyc" element={<PendingKyc />} />
               <Route path="/pool-accounts" element={<PoolAccounts />} />
