@@ -1,0 +1,11 @@
+.DS_Store
+*.pyc
+*.egg-info
+*.swp
+tags
+node_modules
+__pycache__
+-
+xfer_backend/public/xfer
+xfer_backend/public/node_modules
+xfer_backend/www/xfer.html

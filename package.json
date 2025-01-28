@@ -1,0 +1,15 @@
+{
+  "name": "xfer_backend",
+  "version": "1.0.0",
+  "description": "Backend Development System",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "cd xfer && yarn install",
+    "dev": "cd xfer && yarn dev",
+    "build": "cd xfer && yarn build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

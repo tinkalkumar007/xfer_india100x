@@ -1,0 +1,243 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:mobile_no",
+ "creation": "2025-01-15 18:04:21.904771",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "customer_data_section",
+  "first_name",
+  "mobile_no",
+  "status",
+  "date_of_birth",
+  "column_break_wbhw",
+  "last_name",
+  "email",
+  "lat_long",
+  "channel",
+  "selfie",
+  "address_detail_section",
+  "address_line_1",
+  "address_line_2",
+  "city",
+  "state",
+  "country",
+  "pincode",
+  "device_id",
+  "column_break_lxhh",
+  "location_coordinates",
+  "section_break_myhj",
+  "risk_category",
+  "failed_login_attempts",
+  "column_break_jzip",
+  "kyc_level",
+  "account_locked",
+  "manager_detail_section",
+  "manager_name",
+  "column_break_hfan",
+  "manager_email"
+ ],
+ "fields": [
+  {
+   "fieldname": "first_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "First Name"
+  },
+  {
+   "fieldname": "last_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Last Name"
+  },
+  {
+   "fieldname": "mobile_no",
+   "fieldtype": "Data",
+   "label": "Mobile No.",
+   "unique": 1
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "label": "Status"
+  },
+  {
+   "fieldname": "lat_long",
+   "fieldtype": "Data",
+   "label": "Lat Long"
+  },
+  {
+   "fieldname": "channel",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Gender",
+   "options": "Male\nFemale\nOther"
+  },
+  {
+   "fieldname": "customer_data_section",
+   "fieldtype": "Section Break",
+   "label": "Customer Detail"
+  },
+  {
+   "fieldname": "date_of_birth",
+   "fieldtype": "Date",
+   "label": "Date of Birth"
+  },
+  {
+   "fieldname": "column_break_wbhw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "address_detail_section",
+   "fieldtype": "Section Break",
+   "label": "Address Detail"
+  },
+  {
+   "fieldname": "address_line_1",
+   "fieldtype": "Data",
+   "label": "Address Line 1"
+  },
+  {
+   "fieldname": "address_line_2",
+   "fieldtype": "Data",
+   "label": "Address Line 2"
+  },
+  {
+   "fieldname": "country",
+   "fieldtype": "Data",
+   "label": "Country"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "label": "City"
+  },
+  {
+   "fieldname": "column_break_lxhh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "state",
+   "fieldtype": "Data",
+   "label": "State"
+  },
+  {
+   "fieldname": "pincode",
+   "fieldtype": "Data",
+   "label": "Pincode"
+  },
+  {
+   "fieldname": "device_id",
+   "fieldtype": "Data",
+   "label": "Device Id"
+  },
+  {
+   "fieldname": "location_coordinates",
+   "fieldtype": "Geolocation",
+   "label": "Location Coordinates"
+  },
+  {
+   "fieldname": "section_break_myhj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "risk_category",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Risk Category",
+   "options": "Risk Category"
+  },
+  {
+   "fieldname": "failed_login_attempts",
+   "fieldtype": "Int",
+   "label": "Failed Login Attempts"
+  },
+  {
+   "fieldname": "column_break_jzip",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "kyc_level",
+   "fieldtype": "Link",
+   "label": "KYC Level",
+   "options": "KYC Level"
+  },
+  {
+   "default": "0",
+   "fieldname": "account_locked",
+   "fieldtype": "Check",
+   "label": "Account Locked"
+  },
+  {
+   "fieldname": "manager_detail_section",
+   "fieldtype": "Section Break",
+   "label": "Manager Detail"
+  },
+  {
+   "fieldname": "manager_name",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Manager Name",
+   "options": "Program Manager"
+  },
+  {
+   "fetch_from": "manager_name.email_id",
+   "fieldname": "manager_email",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Manager Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "column_break_hfan",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "selfie",
+   "fieldtype": "Attach Image",
+   "label": "Selfie"
+  }
+ ],
+ "image_field": "selfie",
+ "index_web_pages_for_search": 1,
+ "links": [
+  {
+   "link_doctype": "Cards",
+   "link_fieldname": "mobile_number"
+  }
+ ],
+ "modified": "2025-01-21 17:09:16.332675",
+ "modified_by": "Administrator",
+ "module": "Xfer Backend",
+ "name": "Customers",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
