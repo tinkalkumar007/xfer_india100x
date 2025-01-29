@@ -25,6 +25,12 @@
   "lounge_access",
   "column_break_hcat",
   "reward_points",
+  "controls_section",
+  "allow_kit_to_kit",
+  "column_break_duua",
+  "allow_contactless",
+  "column_break_unsb",
+  "allow_add_on",
   "notifications_section",
   "table_zcnq",
   "whitelist_mcc_section",
@@ -276,11 +282,42 @@
    "fieldtype": "Table",
    "label": "MIDs",
    "options": "MIDs"
+  },
+  {
+   "fieldname": "controls_section",
+   "fieldtype": "Section Break",
+   "label": "Controls"
+  },
+  {
+   "default": "0",
+   "fieldname": "allow_kit_to_kit",
+   "fieldtype": "Check",
+   "label": "Allow KIT to KIT"
+  },
+  {
+   "default": "0",
+   "fieldname": "allow_contactless",
+   "fieldtype": "Check",
+   "label": "Allow Contactless"
+  },
+  {
+   "default": "0",
+   "fieldname": "allow_add_on",
+   "fieldtype": "Check",
+   "label": "Allow ADD ON"
+  },
+  {
+   "fieldname": "column_break_duua",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_unsb",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-20 17:49:15.869758",
+ "modified": "2025-01-29 11:34:45.549056",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Program",

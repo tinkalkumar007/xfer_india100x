@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:transaction_id",
  "creation": "2025-01-18 15:58:05.033745",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -30,7 +31,8 @@
   "settlement_status",
   "settlement_date",
   "column_break_uqhq",
-  "lat_long"
+  "lat_long",
+  "amended_from"
  ],
  "fields": [
   {
@@ -41,7 +43,9 @@
   {
    "fieldname": "transaction_id",
    "fieldtype": "Data",
-   "label": "Transaction Id"
+   "in_list_view": 1,
+   "label": "Transaction Id",
+   "unique": 1
   },
   {
    "fieldname": "column_break_ibet",
@@ -55,6 +59,7 @@
   {
    "fieldname": "amount",
    "fieldtype": "Currency",
+   "in_list_view": 1,
    "label": "Amount",
    "non_negative": 1,
    "precision": "2"
@@ -62,6 +67,7 @@
   {
    "fieldname": "status",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Status"
   },
   {
@@ -161,15 +167,28 @@
    "fieldname": "card_reference_id",
    "fieldtype": "Link",
    "label": "Card Ref Id",
-   "options": "Cards"
+   "options": "Cards",
+   "search_index": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Transaction Logs",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "index_web_pages_for_search": 1,
+ "is_submittable": 1,
  "links": [],
- "modified": "2025-01-21 20:01:32.366048",
+ "modified": "2025-01-29 11:36:37.102074",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Transaction Logs",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

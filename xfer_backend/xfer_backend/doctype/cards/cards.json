@@ -35,7 +35,9 @@
   "section_break_hhys",
   "blocked_reason",
   "column_break_ozvc",
-  "kyc_status"
+  "kyc_status",
+  "transaction_logs_section",
+  "table_bhql"
  ],
  "fields": [
   {
@@ -189,6 +191,16 @@
    "fieldname": "blocked_reason",
    "fieldtype": "Data",
    "label": "Blocked Reason"
+  },
+  {
+   "fieldname": "transaction_logs_section",
+   "fieldtype": "Section Break",
+   "label": "Transaction Logs"
+  },
+  {
+   "fieldname": "table_bhql",
+   "fieldtype": "Table",
+   "options": "Transaction Logs"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -198,7 +210,7 @@
    "link_fieldname": "card_reference_id"
   }
  ],
- "modified": "2025-01-21 19:58:17.267847",
+ "modified": "2025-01-28 16:02:37.297010",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Cards",
