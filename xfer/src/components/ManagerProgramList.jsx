@@ -143,9 +143,14 @@ const ManagerProgramList = ({
                 Active
               </Badge>
             )}
+            {status === 'KYC Pending' && (
+              <Badge className="bg-[#E4F5E9] text-[#16794C] cursor-pointer">
+                Pending
+              </Badge>
+            )}
             {status === 'Blocked' && (
               <Badge className="bg-[#FFF0F0] text-[#B52A2A] cursor-pointer">
-                Inactive
+                Blocked
               </Badge>
             )}
           </div>

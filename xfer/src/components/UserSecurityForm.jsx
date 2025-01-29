@@ -32,6 +32,13 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import {
+  useFrappeAuth,
+  useFrappeCreateDoc,
+  useFrappeGetDoc,
+  useFrappeUpdateDoc,
+} from 'frappe-react-sdk'
+import { CircleX } from 'lucide-react'
 const otpSchema = z.object({
   otp: z
     .string()
@@ -40,67 +47,33 @@ const otpSchema = z.object({
 })
 
 const UserSecurityForm = () => {
-  const [twoOnDialogBox, setTwoOnDialogBox] = useState(false)
-  const [twoOffDialogBox, setTwoOffDialogBox] = useState(false)
-  const [activateMethod, setActivateMethod] = useState(null) // Track selected method
-  const [sendOtp, setSendOtp] = useState(false)
-  const [cookieValue, setCookieValue] = useState('')
+  const [screen, setScreen] = useState('select-screen')
 
-  useEffect(() => {
-    const getCookie = (cookieName) => {
-      const cookie = document.cookie
-        .split('; ')
-        .find((row) => row.startsWith(`${cookieName}=`))
-      return cookie ? cookie.split('=')[1] : ''
-    }
-    setCookieValue(getCookie('twoState'))
-    if (sendOtp) {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get('/user/sendOtp', {
-            withCredentials: true,
-          });
-          console.log(response);
-        } catch (err) {
-          console.log(err.message);
-        }
-      };
-      fetchData();
-    }
-  }, [sendOtp, activateMethod]) // Re-run effect when OTP or activation method changes
-
-  const toggleDialogBox = (setter) => {
-    setter((prevState) => !prevState)
+  const handleScreen = (value) => {
+    setScreen(value)
   }
 
-  const form = useForm({
-    resolver: zodResolver(otpSchema),
-    defaultValues: { otp: '' },
-  })
+  const { currentUser, isLoading: isCurrentUserLoading } = useFrappeAuth()
 
-  const onSubmit = (data) => {
-    document.cookie = 'twoState=true'
-    console.log(data.otp);
+  const { updateDoc, loading } = useFrappeUpdateDoc()
 
-    const fetchData = async () => {
-      try {
-        const response = await axios.post('/user/validateOtp',
-          {
-            code:data.otp
-          },
-          {
-            withCredentials: true,
-          }
-        );
-        console.log(response.data.data);
-      } catch (err) {
-        console.log(err.message);
-      }
-    };
-    fetchData();
+  const { data: currentUserData, isLoading: currentUserDataLoading } =
+    useFrappeGetDoc('User', currentUser)
 
-    setCookieValue('true')
-    setSendOtp(false)
+  if (!currentUserDataLoading) {
+    console.log(currentUserData)
+  }
+
+  const disableMFA = () => {
+    updateDoc('User', currentUser, {
+      mfa: 0,
+    })
+  }
+
+  const enableMFA = () => {
+    updateDoc('User', currentUser, {
+      mfa: 1,
+    })
   }
 
   return (
@@ -115,7 +88,11 @@ const UserSecurityForm = () => {
             </p>
           </div>
           <div>
-            <ChangePasswordSection />
+            <ChangePasswordSection
+              currentUserData={currentUserData}
+              currentUserDataLoading={currentUserDataLoading}
+              currentUser={currentUser}
+            />
           </div>
         </div>
       </div>
@@ -129,145 +106,145 @@ const UserSecurityForm = () => {
           of security.
         </p>
 
-        <div>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button
-                variant="outline"
-                onClick={() =>
-                  cookieValue === 'true'
-                    ? toggleDialogBox(setTwoOffDialogBox)
-                    : toggleDialogBox(setTwoOnDialogBox)
-                }
-              >
-                {cookieValue === 'true'
-                  ? 'Turn off Two-Factor Authentication'
-                  : 'Turn on Two-Factor Authentication'}
-              </Button>
-            </AlertDialogTrigger>
-
-            {twoOffDialogBox && (
+        {currentUserData?.mfa ? (
+          <div>
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <Button variant="outline">Turn off 2 Step verification</Button>
+              </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    Turn off 2-Step Verification
-                  </AlertDialogTitle>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    Turning off 2-Step Verification will remove the extra
-                    security on your account.
+                    This action cannot be undone. This will disable two-step
+                    verification from your account, making it vulnerable to
+                    attackers.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => {
-                      document.cookie = 'twoState=false'
-                      setCookieValue('false')
-                      setTwoOffDialogBox(false)
-                    }}
-                  >
-                    Turn off
+                  <AlertDialogAction onClick={disableMFA}>
+                    Disable
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
-            )}
-
-            {twoOnDialogBox && (
+            </AlertDialog>
+          </div>
+        ) : null}
+        {!currentUserData?.mfa ? (
+          <div>
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <Button>Turn on 2 Step verification</Button>
+              </AlertDialogTrigger>
               <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    Select Two-Factor Authentication Method
-                  </AlertDialogTitle>
-                  <AlertDialogDescription className="flex justify-between">
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setActivateMethod('email')
-                        setTwoOnDialogBox(false)
-                        setSendOtp(true)
-                      }}
-                    >
-                      Email Based Authentication
-                    </Button>
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setActivateMethod('sms')
-                        setTwoOnDialogBox(false)
-                        setSendOtp(true)
-                      }}
-                    >
-                      SMS Based Authentication
-                    </Button>
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            )}
+                {screen === 'select-screen' && (
+                  <>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Select Authentication Method
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        You will receive an OTP on your selected method.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <div className="justify-between flex w-full">
+                      <Button
+                        onClick={() => {
+                          setScreen('email-based')
+                        }}
+                      >
+                        Email Based Authentication
+                      </Button>
 
-            {sendOtp && (
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    {activateMethod === 'email'
-                      ? 'Enter the otp sent on your email address'
-                      : 'Enter the otp sent on your mobile number'}
-                  </AlertDialogTitle>
-                </AlertDialogHeader>
-                <Form {...form}>
-                  <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-4"
-                  >
-                    <FormField
-                      name="otp"
-                      control={form.control}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>OTP</FormLabel>
-                          <FormControl>
-                            <InputOTP
-                              {...field}
-                              onChange={(value) => field.onChange(value)}
-                              value={field.value}
-                              length={6}
-                              maxLength={6}
-                            >
-                              <InputOTPGroup>
-                                <InputOTPSlot index={0} />
-                                <InputOTPSlot index={1} />
-                              </InputOTPGroup>
-                              <InputOTPSeparator />
-                              <InputOTPGroup>
-                                <InputOTPSlot index={2} />
-                                <InputOTPSlot index={3} />
-                              </InputOTPGroup>
-                            </InputOTP>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                      <Button
+                        onClick={() => {
+                          setScreen('mobile-based')
+                        }}
+                      >
+                        Mobile Based Authentication
+                      </Button>
+                    </div>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <Button type="submit">Verify OTP</Button>
                     </AlertDialogFooter>
-                  </form>
-                </Form>
+                  </>
+                )}
+                {screen === 'email-based' && (
+                  <>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Enter the OTP sent on your email address.
+                      </AlertDialogTitle>
+                    </AlertDialogHeader>
+
+                    <div className="w-full">
+                      <InputOTP maxLength={4}>
+                        <InputOTPGroup>
+                          <InputOTPSlot index={0} />
+                          <InputOTPSlot index={1} />
+                        </InputOTPGroup>
+                        <InputOTPSeparator />
+                        <InputOTPGroup>
+                          <InputOTPSlot index={2} />
+                          <InputOTPSlot index={3} />
+                        </InputOTPGroup>
+                      </InputOTP>
+                    </div>
+                    <AlertDialogFooter>
+                      <div className="flex justify-end gap-2 w-full">
+                        <AlertDialogCancel
+                          onClick={() => {
+                            setScreen('select-screen')
+                          }}
+                        >
+                          Cancel
+                        </AlertDialogCancel>
+                        <Button onClick={enableMFA}>Submit</Button>
+                      </div>
+                    </AlertDialogFooter>
+                  </>
+                )}
+                {screen === 'mobile-based' && (
+                  <>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Enter the OTP sent on your mobile number.
+                      </AlertDialogTitle>
+                    </AlertDialogHeader>
+
+                    <div className="w-full">
+                      <InputOTP maxLength={4}>
+                        <InputOTPGroup>
+                          <InputOTPSlot index={0} />
+                          <InputOTPSlot index={1} />
+                        </InputOTPGroup>
+                        <InputOTPSeparator />
+                        <InputOTPGroup>
+                          <InputOTPSlot index={2} />
+                          <InputOTPSlot index={3} />
+                        </InputOTPGroup>
+                      </InputOTP>
+                    </div>
+                    <AlertDialogFooter>
+                      <div className="flex justify-end gap-2 w-full">
+                        <AlertDialogCancel
+                          onClick={() => {
+                            setScreen('select-screen')
+                          }}
+                        >
+                          Cancel
+                        </AlertDialogCancel>
+                        <Button onClick={enableMFA}>Submit</Button>
+                      </div>
+                    </AlertDialogFooter>
+                  </>
+                )}
               </AlertDialogContent>
-            )}
-          </AlertDialog>
-        </div>
+            </AlertDialog>
+          </div>
+        ) : null}
       </div>
-      {/* <Separator />
-      <div className="flex flex-col gap-4">
-        <h3 className="font-bold">IP Whitelisting</h3>
-        <div className="grid grid-cols-1">
-          <IpWhitelistingTable />
-        </div>
-      </div> */}
     </div>
   )
 }

@@ -22,7 +22,7 @@ import {
 import { useToast } from '@/hooks/use-toast'
 import { useFrappeAuth } from 'frappe-react-sdk'
 
-import { Eye, EyeOff } from 'lucide-react'
+import { AlignVerticalDistributeStartIcon, Eye, EyeOff } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 //import {useAuth} from '../hooks/useAuth';
 
@@ -34,6 +34,7 @@ const formSchema = z.object({
 })
 
 export default function UserLoginForm({ setScreen }) {
+  const { toast } = useToast()
   const navigate = useNavigate()
   const { login, currentUser, updateCurrentUser } = useFrappeAuth()
   const form = useForm({
@@ -52,17 +53,26 @@ export default function UserLoginForm({ setScreen }) {
       password: data.password,
     })
       .then((response) => {
-        console.log(response)
+        console.log('then block:', response)
         if (response.message === 'Logged In') {
           updateCurrentUser()
           navigate('/business-dashboard')
+          toast({
+            title: 'Logged in successfully',
+            description: "You're logged in.",
+            variant: 'success',
+          })
         }
       })
       .catch((err) => {
-        console.error(
-          'Login failed:',
-          err?.response?.data || err?.message || err
-        )
+        if (err?.httpStatus === 401) {
+          toast({
+            title: 'Invalid Credentials',
+            description: "You've entered invalid credentials!",
+            variant: 'destructive',
+          })
+        }
+        console.log(err)
       })
   }
 

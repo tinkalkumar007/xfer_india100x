@@ -72,12 +72,24 @@ const CustomerDetails = () => {
   const { data: CustomerDetails, isLoading: customerDetailsLoading } =
     useFrappeGetDoc('Customers', id)
 
+  console.log('Customer details', CustomerDetails)
+
+  const {
+    data: customerTransactionLogs,
+    isLoading: customerTransactionLogsLoading,
+  } = useFrappeGetDocList('Transaction Logs', {
+    fields: ['*'],
+    filters: [['customer_mobile_number', '=', id]],
+  })
+
+  if (!customerTransactionLogsLoading) {
+    console.log('Customer Transaction Logs', customerTransactionLogs)
+  }
+
   const totalBalance = React.useMemo(() => {
     if (!customerCardsData) return null
     return customerCardsData.reduce((acc, current) => acc + current.balance, 0)
   }, [customerCardsData])
-
-  console.log(!customerCardsDataLoading && customerCardsData)
 
   return (
     <>
@@ -347,7 +359,10 @@ const CustomerDetails = () => {
               <Separator className="w-[96%]" />
             </div>
             <div>
-              <TransactionActivityLogs />
+              <TransactionActivityLogs
+                customerTransactionLogs={customerTransactionLogs}
+                customerTransactionLogsLoading={customerTransactionLogsLoading}
+              />
             </div>
             <div className="w-full flex justify-center">
               <Separator className="w-[96%]" />

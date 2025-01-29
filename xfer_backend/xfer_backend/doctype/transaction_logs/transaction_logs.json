@@ -15,6 +15,15 @@
   "from_account",
   "to_account",
   "exchange_rate",
+  "customer_details_section",
+  "customer_mobile_number",
+  "program_manager",
+  "column_break_kszo",
+  "customer_name",
+  "program_details_section",
+  "program_name",
+  "column_break_srlo",
+  "program_category",
   "response_section",
   "response_code",
   "column_break_wsmv",
@@ -162,11 +171,59 @@
    "fieldtype": "Link",
    "label": "Card Ref Id",
    "options": "Cards"
+  },
+  {
+   "fieldname": "customer_details_section",
+   "fieldtype": "Section Break",
+   "label": "Customer Details"
+  },
+  {
+   "fieldname": "customer_mobile_number",
+   "fieldtype": "Link",
+   "label": "Customer Mobile Number",
+   "options": "Customers"
+  },
+  {
+   "fetch_from": "customer_mobile_number.first_name",
+   "fieldname": "customer_name",
+   "fieldtype": "Read Only",
+   "label": "Customer Name"
+  },
+  {
+   "fieldname": "column_break_kszo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "customer_mobile_number.manager_name",
+   "fieldname": "program_manager",
+   "fieldtype": "Read Only",
+   "label": "Program Manager"
+  },
+  {
+   "fieldname": "program_details_section",
+   "fieldtype": "Section Break",
+   "label": "Program Details"
+  },
+  {
+   "fieldname": "program_name",
+   "fieldtype": "Link",
+   "label": "Program Name",
+   "options": "Program"
+  },
+  {
+   "fieldname": "column_break_srlo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "program_name.category",
+   "fieldname": "program_category",
+   "fieldtype": "Read Only",
+   "label": "Program Category"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-21 20:01:32.366048",
+ "modified": "2025-01-28 16:25:49.216817",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Transaction Logs",
