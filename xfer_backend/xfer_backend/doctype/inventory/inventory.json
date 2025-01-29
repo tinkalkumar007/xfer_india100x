@@ -1,0 +1,190 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:order_id",
+ "creation": "2025-01-29 11:12:31.625661",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "order_details_section",
+  "order_id",
+  "column_break_qlqn",
+  "status",
+  "program_detail_tab",
+  "program_detail_section",
+  "table_ccph",
+  "total_amount",
+  "billing_address_tab",
+  "billing_address_section",
+  "address_line_1",
+  "address_line_2",
+  "column_break_nmra",
+  "pin_code",
+  "city",
+  "column_break_bbwa",
+  "data_bsln",
+  "country",
+  "transaction_details_section",
+  "transaction_id",
+  "column_break_ojfj",
+  "transaction_status",
+  "column_break_gcrw",
+  "amount",
+  "column_break_gyud",
+  "mode"
+ ],
+ "fields": [
+  {
+   "fieldname": "order_details_section",
+   "fieldtype": "Section Break",
+   "label": "Order Details"
+  },
+  {
+   "fieldname": "order_id",
+   "fieldtype": "Data",
+   "label": "Order Id",
+   "unique": 1
+  },
+  {
+   "fieldname": "column_break_qlqn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "program_detail_section",
+   "fieldtype": "Section Break",
+   "label": "Program Detail"
+  },
+  {
+   "fieldname": "table_ccph",
+   "fieldtype": "Table",
+   "options": "Card Order Table"
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Total Amount"
+  },
+  {
+   "fieldname": "billing_address_section",
+   "fieldtype": "Section Break",
+   "label": "Billing Address"
+  },
+  {
+   "fieldname": "address_line_1",
+   "fieldtype": "Data",
+   "label": "Address Line 1"
+  },
+  {
+   "fieldname": "address_line_2",
+   "fieldtype": "Data",
+   "label": "Address Line 2"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "label": "City"
+  },
+  {
+   "fieldname": "data_bsln",
+   "fieldtype": "Data",
+   "label": "State"
+  },
+  {
+   "fieldname": "country",
+   "fieldtype": "Link",
+   "label": "Country",
+   "options": "Country"
+  },
+  {
+   "fieldname": "pin_code",
+   "fieldtype": "Int",
+   "label": "Pin Code"
+  },
+  {
+   "fieldname": "column_break_nmra",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_bbwa",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Link",
+   "label": "Status",
+   "options": "Order Status"
+  },
+  {
+   "fieldname": "program_detail_tab",
+   "fieldtype": "Tab Break",
+   "label": "Program Detail"
+  },
+  {
+   "fieldname": "billing_address_tab",
+   "fieldtype": "Tab Break",
+   "label": "Billing Detail"
+  },
+  {
+   "fieldname": "transaction_details_section",
+   "fieldtype": "Section Break",
+   "label": "Transaction Details"
+  },
+  {
+   "fieldname": "transaction_id",
+   "fieldtype": "Data",
+   "label": "Transaction Id"
+  },
+  {
+   "fieldname": "column_break_ojfj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "transaction_status",
+   "fieldtype": "Data",
+   "label": "Transaction Status"
+  },
+  {
+   "fieldname": "column_break_gcrw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount"
+  },
+  {
+   "fieldname": "column_break_gyud",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "mode",
+   "fieldtype": "Data",
+   "label": "Mode"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-01-29 12:54:26.517460",
+ "modified_by": "Administrator",
+ "module": "Xfer Backend",
+ "name": "Inventory",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,35 +1,27 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:channel",
- "creation": "2025-01-18 12:22:52.573308",
+ "autoname": "field:status",
+ "creation": "2025-01-29 12:44:49.153167",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "channel",
-  "is_enabled"
+  "status"
  ],
  "fields": [
   {
-   "fieldname": "channel",
+   "fieldname": "status",
    "fieldtype": "Data",
-   "label": "Channel",
+   "label": "Status",
    "unique": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "is_enabled",
-   "fieldtype": "Check",
-   "in_list_view": 1,
-   "label": "Is Enabled"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-29 12:17:14.858047",
+ "modified": "2025-01-29 12:45:40.829258",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
- "name": "Transaction Channel",
+ "name": "Order Status",
  "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
@@ -46,7 +38,7 @@
    "write": 1
   }
  ],
- "sort_field": "modified",
+ "sort_field": "creation",
  "sort_order": "DESC",
  "states": []
 }

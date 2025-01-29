@@ -11,12 +11,14 @@
   "mobile_no",
   "status",
   "date_of_birth",
+  "full_name",
   "column_break_wbhw",
   "last_name",
   "email",
   "lat_long",
   "channel",
   "selfie",
+  "kyc_status",
   "address_detail_section",
   "address_line_1",
   "address_line_2",
@@ -31,7 +33,6 @@
   "risk_category",
   "failed_login_attempts",
   "column_break_jzip",
-  "kyc_level",
   "account_locked",
   "manager_detail_section",
   "manager_name",
@@ -164,12 +165,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "kyc_level",
-   "fieldtype": "Link",
-   "label": "KYC Level",
-   "options": "KYC Level"
-  },
-  {
    "default": "0",
    "fieldname": "account_locked",
    "fieldtype": "Check",
@@ -192,7 +187,7 @@
   {
    "fetch_from": "manager_name.email_id",
    "fieldname": "manager_email",
-   "fieldtype": "Data",
+   "fieldtype": "Read Only",
    "in_filter": 1,
    "in_list_view": 1,
    "in_standard_filter": 1,
@@ -207,6 +202,20 @@
    "fieldname": "selfie",
    "fieldtype": "Attach Image",
    "label": "Selfie"
+  },
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Read Only",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "Full Name"
+  },
+  {
+   "fieldname": "kyc_status",
+   "fieldtype": "Link",
+   "label": "KYC Status",
+   "options": "KYC Status"
   }
  ],
  "image_field": "selfie",
@@ -217,7 +226,7 @@
    "link_fieldname": "mobile_number"
   }
  ],
- "modified": "2025-01-21 17:09:16.332675",
+ "modified": "2025-01-29 13:40:43.205460",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Customers",

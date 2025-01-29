@@ -35,6 +35,7 @@
   "table_zcnq",
   "whitelist_mcc_section",
   "mcc_code",
+  "bins",
   "column_break_iwuw",
   "tids",
   "mids",
@@ -313,11 +314,17 @@
   {
    "fieldname": "column_break_unsb",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "bins",
+   "fieldtype": "Table",
+   "label": "BINs",
+   "options": "BINs"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-29 11:34:45.549056",
+ "modified": "2025-01-29 12:15:31.398593",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Program",

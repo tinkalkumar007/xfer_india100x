@@ -15,6 +15,7 @@
   "card_number",
   "pin_type",
   "card_status",
+  "channel",
   "customer_detail_section",
   "mobile_number",
   "customer_name",
@@ -34,10 +35,8 @@
   "last_used_date",
   "section_break_hhys",
   "blocked_reason",
-  "column_break_ozvc",
-  "kyc_status",
-  "transaction_logs_section",
-  "table_bhql"
+  "column_break_sygi",
+  "kyc_status"
  ],
  "fields": [
   {
@@ -96,7 +95,8 @@
    "fieldname": "mobile_number",
    "fieldtype": "Link",
    "label": "Mobile Number",
-   "options": "Customers"
+   "options": "Customers",
+   "search_index": 1
   },
   {
    "fieldname": "column_break_zgwb",
@@ -178,8 +178,14 @@
    "label": "Balance"
   },
   {
-   "fieldname": "column_break_ozvc",
-   "fieldtype": "Column Break"
+   "fieldname": "blocked_reason",
+   "fieldtype": "Data",
+   "label": "Blocked Reason"
+  },
+  {
+   "fieldname": "channel",
+   "fieldtype": "Data",
+   "label": "Channel"
   },
   {
    "fieldname": "kyc_status",
@@ -188,19 +194,8 @@
    "options": "KYC Status"
   },
   {
-   "fieldname": "blocked_reason",
-   "fieldtype": "Data",
-   "label": "Blocked Reason"
-  },
-  {
-   "fieldname": "transaction_logs_section",
-   "fieldtype": "Section Break",
-   "label": "Transaction Logs"
-  },
-  {
-   "fieldname": "table_bhql",
-   "fieldtype": "Table",
-   "options": "Transaction Logs"
+   "fieldname": "column_break_sygi",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -210,7 +205,7 @@
    "link_fieldname": "card_reference_id"
   }
  ],
- "modified": "2025-01-28 16:02:37.297010",
+ "modified": "2025-01-29 12:59:45.034990",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Cards",
