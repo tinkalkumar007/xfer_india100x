@@ -11,9 +11,8 @@
  ],
  "fields": [
   {
-   "default": "0",
    "fieldname": "is_active",
-   "fieldtype": "Check",
+   "fieldtype": "Data",
    "label": "Is active"
   },
   {
@@ -25,7 +24,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-22 18:02:23.219272",
+ "modified": "2025-01-20 17:38:28.257252",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "KYC Level",

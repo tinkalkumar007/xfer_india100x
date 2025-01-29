@@ -20,12 +20,13 @@
    "default": "0",
    "fieldname": "is_enabled",
    "fieldtype": "Check",
+   "in_list_view": 1,
    "label": "Is Enabled"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 12:27:29.096323",
+ "modified": "2025-01-29 12:17:14.858047",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Transaction Channel",

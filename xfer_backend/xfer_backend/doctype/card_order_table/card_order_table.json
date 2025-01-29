@@ -1,0 +1,59 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-01-29 12:26:36.038888",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "program_name",
+  "program_category",
+  "column_break_loct",
+  "number_of_cards",
+  "price"
+ ],
+ "fields": [
+  {
+   "fieldname": "program_name",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Program Name",
+   "options": "Program"
+  },
+  {
+   "fetch_from": "program_name.category",
+   "fieldname": "program_category",
+   "fieldtype": "Read Only",
+   "in_list_view": 1,
+   "label": "Program Category"
+  },
+  {
+   "fieldname": "number_of_cards",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Number of Cards"
+  },
+  {
+   "fieldname": "price",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Price"
+  },
+  {
+   "fieldname": "column_break_loct",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-01-29 12:40:56.172049",
+ "modified_by": "Administrator",
+ "module": "Xfer Backend",
+ "name": "Card Order Table",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

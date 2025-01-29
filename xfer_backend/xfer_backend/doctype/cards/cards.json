@@ -15,7 +15,7 @@
   "card_number",
   "pin_type",
   "card_status",
-  "limit",
+  "channel",
   "customer_detail_section",
   "mobile_number",
   "customer_name",
@@ -35,7 +35,8 @@
   "last_used_date",
   "section_break_hhys",
   "blocked_reason",
-  "column_break_ozvc"
+  "column_break_sygi",
+  "kyc_status"
  ],
  "fields": [
   {
@@ -85,17 +86,17 @@
    "label": "Customer Detail"
   },
   {
-   "fetch_from": "mobile_number.first_name",
+   "fetch_from": "mobile_number.last_name",
    "fieldname": "customer_name",
    "fieldtype": "Read Only",
-   "in_list_view": 1,
    "label": "Customer Name"
   },
   {
    "fieldname": "mobile_number",
    "fieldtype": "Link",
    "label": "Mobile Number",
-   "options": "Customers"
+   "options": "Customers",
+   "search_index": 1
   },
   {
    "fieldname": "column_break_zgwb",
@@ -114,7 +115,6 @@
   {
    "fieldname": "program_name",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "label": "Program Name",
    "options": "Program"
   },
@@ -123,17 +123,16 @@
    "fieldtype": "Column Break"
   },
   {
-   "fetch_from": "program_name.program_manager",
    "fieldname": "program_manager",
-   "fieldtype": "Read Only",
-   "in_list_view": 1,
-   "label": "Program Manager"
+   "fieldtype": "Link",
+   "label": "Program Manager",
+   "options": "Program"
   },
   {
    "fieldname": "program_category",
    "fieldtype": "Link",
    "label": "Program Category",
-   "options": "Program Category"
+   "options": "Program"
   },
   {
    "fieldname": "column_break_rani",
@@ -147,7 +146,6 @@
   {
    "fieldname": "issue_date",
    "fieldtype": "Datetime",
-   "in_list_view": 1,
    "label": "Issue Date"
   },
   {
@@ -180,18 +178,24 @@
    "label": "Balance"
   },
   {
-   "fieldname": "column_break_ozvc",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "blocked_reason",
    "fieldtype": "Data",
    "label": "Blocked Reason"
   },
   {
-   "fieldname": "limit",
+   "fieldname": "channel",
    "fieldtype": "Data",
-   "label": "Limit"
+   "label": "Channel"
+  },
+  {
+   "fieldname": "kyc_status",
+   "fieldtype": "Link",
+   "label": "KYC Status",
+   "options": "KYC Status"
+  },
+  {
+   "fieldname": "column_break_sygi",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -201,7 +205,7 @@
    "link_fieldname": "card_reference_id"
   }
  ],
- "modified": "2025-01-28 17:05:06.175698",
+ "modified": "2025-01-29 12:59:45.034990",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Cards",

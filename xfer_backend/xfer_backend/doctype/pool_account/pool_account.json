@@ -1,0 +1,106 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:account_number",
+ "creation": "2025-01-29 13:41:12.719687",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "account_detail_section",
+  "account_number",
+  "account_balance",
+  "bank_name",
+  "column_break_eich",
+  "bin",
+  "status",
+  "program_manager_detail_section",
+  "program_manager",
+  "column_break_fwwg",
+  "contact_detail"
+ ],
+ "fields": [
+  {
+   "fieldname": "account_detail_section",
+   "fieldtype": "Section Break",
+   "label": "Account Detail"
+  },
+  {
+   "fieldname": "account_number",
+   "fieldtype": "Data",
+   "label": "Account Number",
+   "unique": 1
+  },
+  {
+   "fieldname": "account_balance",
+   "fieldtype": "Currency",
+   "label": "Account Balance"
+  },
+  {
+   "default": "Active",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Active\nInactive\nSuspended\nBlocked"
+  },
+  {
+   "fieldname": "column_break_eich",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "bin",
+   "fieldtype": "Data",
+   "label": "BIN"
+  },
+  {
+   "fieldname": "program_manager_detail_section",
+   "fieldtype": "Section Break",
+   "label": "Program Manager Detail"
+  },
+  {
+   "fieldname": "program_manager",
+   "fieldtype": "Link",
+   "label": "Program Manager",
+   "options": "Program Manager"
+  },
+  {
+   "fetch_from": "program_manager.email_id",
+   "fieldname": "contact_detail",
+   "fieldtype": "Read Only",
+   "label": "Contact Detail"
+  },
+  {
+   "fieldname": "column_break_fwwg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "bank_name",
+   "fieldtype": "Data",
+   "label": "Bank Name"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-01-29 14:54:13.085863",
+ "modified_by": "Administrator",
+ "module": "Xfer Backend",
+ "name": "Pool Account",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

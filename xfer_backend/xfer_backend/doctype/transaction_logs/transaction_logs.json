@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:transaction_id",
  "creation": "2025-01-18 15:58:05.033745",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -15,15 +16,6 @@
   "from_account",
   "to_account",
   "exchange_rate",
-  "customer_details_section",
-  "customer_mobile_number",
-  "program_manager",
-  "column_break_kszo",
-  "customer_name",
-  "program_details_section",
-  "program_name",
-  "column_break_srlo",
-  "program_category",
   "response_section",
   "response_code",
   "column_break_wsmv",
@@ -39,7 +31,8 @@
   "settlement_status",
   "settlement_date",
   "column_break_uqhq",
-  "lat_long"
+  "lat_long",
+  "amended_from"
  ],
  "fields": [
   {
@@ -50,7 +43,9 @@
   {
    "fieldname": "transaction_id",
    "fieldtype": "Data",
-   "label": "Transaction Id"
+   "in_list_view": 1,
+   "label": "Transaction Id",
+   "unique": 1
   },
   {
    "fieldname": "column_break_ibet",
@@ -64,6 +59,7 @@
   {
    "fieldname": "amount",
    "fieldtype": "Currency",
+   "in_list_view": 1,
    "label": "Amount",
    "non_negative": 1,
    "precision": "2"
@@ -71,6 +67,7 @@
   {
    "fieldname": "status",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Status"
   },
   {
@@ -170,63 +167,28 @@
    "fieldname": "card_reference_id",
    "fieldtype": "Link",
    "label": "Card Ref Id",
-   "options": "Cards"
+   "options": "Cards",
+   "search_index": 1
   },
   {
-   "fieldname": "customer_details_section",
-   "fieldtype": "Section Break",
-   "label": "Customer Details"
-  },
-  {
-   "fieldname": "customer_mobile_number",
+   "fieldname": "amended_from",
    "fieldtype": "Link",
-   "label": "Customer Mobile Number",
-   "options": "Customers"
-  },
-  {
-   "fetch_from": "customer_mobile_number.first_name",
-   "fieldname": "customer_name",
-   "fieldtype": "Read Only",
-   "label": "Customer Name"
-  },
-  {
-   "fieldname": "column_break_kszo",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fetch_from": "customer_mobile_number.manager_name",
-   "fieldname": "program_manager",
-   "fieldtype": "Read Only",
-   "label": "Program Manager"
-  },
-  {
-   "fieldname": "program_details_section",
-   "fieldtype": "Section Break",
-   "label": "Program Details"
-  },
-  {
-   "fieldname": "program_name",
-   "fieldtype": "Link",
-   "label": "Program Name",
-   "options": "Program"
-  },
-  {
-   "fieldname": "column_break_srlo",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fetch_from": "program_name.category",
-   "fieldname": "program_category",
-   "fieldtype": "Read Only",
-   "label": "Program Category"
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Transaction Logs",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "index_web_pages_for_search": 1,
+ "is_submittable": 1,
  "links": [],
- "modified": "2025-01-28 16:25:49.216817",
+ "modified": "2025-01-29 11:36:37.102074",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Transaction Logs",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

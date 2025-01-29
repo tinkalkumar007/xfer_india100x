@@ -1,43 +1,28 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-01-20 11:31:10.518848",
+ "autoname": "field:status",
+ "creation": "2025-01-29 12:44:49.153167",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "document_name",
-  "document_id",
-  "column_break_dfpn",
   "status"
  ],
  "fields": [
   {
-   "fieldname": "document_name",
-   "fieldtype": "Data",
-   "label": "Document Name"
-  },
-  {
-   "fieldname": "document_id",
-   "fieldtype": "Data",
-   "label": "Document Id"
-  },
-  {
-   "fieldname": "column_break_dfpn",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "status",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "label": "Status",
-   "options": "KYC Status"
+   "unique": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-20 11:31:59.875520",
+ "modified": "2025-01-29 12:45:40.829258",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
- "name": "KYC Document",
+ "name": "Order Status",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
@@ -53,7 +38,7 @@
    "write": 1
   }
  ],
- "sort_field": "modified",
+ "sort_field": "creation",
  "sort_order": "DESC",
  "states": []
 }
