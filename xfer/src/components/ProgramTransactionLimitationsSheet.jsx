@@ -47,7 +47,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const formSchema = z.object({
   atm: z.object({
@@ -101,7 +101,28 @@ const formSchema = z.object({
   }),
 })
 
-const ProgramTransactionLimitationsSheet = () => {
+const ProgramTransactionLimitationsSheet = ({
+  transactionLimitations,
+  programDetailsLoading,
+}) => {
+  console.log(transactionLimitations)
+  const limitations = React.useMemo(() => {
+    if (!transactionLimitations) return []
+    return transactionLimitations?.reduce((acc, current) => {
+      const channelKey = current.channel.replace(' ', '_').replace('-', '')
+      acc[channelKey] = {
+        status: current.is_enabled === 1,
+        max_limit: parseFloat(current.max_amount),
+      }
+      return acc
+    }, {})
+  }, [transactionLimitations])
+
+  const { ATM, POS, IMPS, ECommerce, Contactless, Offline, Load_Amount } =
+    limitations
+
+  console.log('Limitation: ', limitations)
+  console.log(!programDetailsLoading && transactionLimitations)
   const [data, setData] = useState({
     atm: {
       status: true,
@@ -133,508 +154,167 @@ const ProgramTransactionLimitationsSheet = () => {
     },
   })
 
-  const [editable, setEditable] = useState(false)
-  const [editFields, setEditFields] = useState(data)
-
-  const onSubmit = (values) => {
-    console.log(values)
-    setData(values)
-    setEditable(false)
-  }
-
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: data,
-    mode: 'onSubmit',
-  })
-
   return (
     <div className=" rounded-md bg-muted/50 border w-full space-y-2">
-      {editable ? (
-        <>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="flex justify-between gap-2 items-center py-2 px-4">
-                <h2 className="text-md font-medium ">
-                  Transaction Limitations
-                </h2>
-
-                <Button className="h-6" type="submit">
-                  Save
-                </Button>
-              </div>
-              <div className="w-full flex justify-center">
-                <Separator className="w-[96%] text-center" />
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 px-4 py-2">
-                <div className="flex flex-col gap-8 border rounded-md px-4 py-4">
-                  <div className="flex items-center justify-between space-x-4">
-                    <div className="flex items-center space-x-4">
-                      <div>
-                        <p className="text-sm font-medium">ATM</p>
-                        <p className="text-sm text-muted-foreground">
-                          {data.atm.status === true ? 'Enabled' : 'Disabled'}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-6 items-center">
-                      <FormField
-                        control={form.control}
-                        name="atm.max_limit"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input className="bg-muted/50" {...field} />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="atm.status"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between space-x-4">
-                    <div className="flex items-center space-x-4">
-                      <div>
-                        <p className="text-sm font-medium ">POS</p>
-                        <p className="text-sm text-muted-foreground">
-                          {data.pos.status === true ? 'Enabled' : 'Disabled'}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-6 items-center">
-                      <FormField
-                        control={form.control}
-                        name="pos.max_limit"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input className="bg-muted/50" {...field} />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="pos.status"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between space-x-4">
-                    <div className="flex items-center space-x-4">
-                      <div>
-                        <p className="text-sm font-medium">IMPS</p>
-                        <p className="text-sm text-muted-foreground">
-                          {data.imps.status === true ? 'Enabled' : 'Disabled'}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-6 items-center">
-                      <FormField
-                        control={form.control}
-                        name="imps.max_limit"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input className="bg-muted/50" {...field} />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="imps.status"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between space-x-4">
-                    <div className="flex items-center space-x-4">
-                      <div>
-                        <p className="text-sm font-medium leading-none">
-                          E-Commerce
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {data.ecommerce.status === true
-                            ? 'Enabled'
-                            : 'Disabled'}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-6 items-center">
-                      <FormField
-                        control={form.control}
-                        name="ecommerce.max_limit"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input className="bg-muted/50" {...field} />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="ecommerce.status"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-8 border rounded-md px-4 py-4">
-                  <div className="flex items-center justify-between space-x-4">
-                    <div className="flex items-center space-x-4">
-                      <div>
-                        <p className="text-sm font-medium">Contactless</p>
-                        <p className="text-sm text-muted-foreground">
-                          {data.contactless.status === true
-                            ? 'Enabled'
-                            : 'Disabled'}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-6 items-center">
-                      <FormField
-                        control={form.control}
-                        name="contactless.max_limit"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input className="bg-muted/50" {...field} />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="contactless.status"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between space-x-4">
-                    <div className="flex items-center space-x-4">
-                      <div>
-                        <p className="text-sm font-medium">Offline</p>
-                        <p className="text-sm text-muted-foreground">
-                          {data.contactless.status === true
-                            ? 'Enabled'
-                            : 'Disabled'}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-6 items-center">
-                      <FormField
-                        control={form.control}
-                        name="offline.max_limit"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input className="bg-muted/50" {...field} />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="offline.status"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between space-x-4">
-                    <div className="flex items-center space-x-4">
-                      <div>
-                        <p className="text-sm font-medium">Max Load Limit</p>
-                        <p className="text-sm text-muted-foreground">
-                          {data.load_max_limit.status === true
-                            ? 'Enabled'
-                            : 'Disabled'}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-6 items-center">
-                      <FormField
-                        control={form.control}
-                        name="load_max_limit.max_limit"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input className="bg-muted/50" {...field} />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="load_max_limit.status"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </Form>
-        </>
-      ) : (
-        <>
-          <div className="flex justify-between gap-2 items-center py-2 px-4">
-            <h2 className="text-md font-medium ">Transaction Limitations</h2>
-
-            <Button
-              className="h-6"
-              type="submit"
-              onClick={() => setEditable(true)}
-            >
-              Edit
-            </Button>
-          </div>
-          <div className="w-full flex justify-center">
-            <Separator className="w-[96%] text-center" />
-          </div>
-          <div className="grid grid-cols-2 gap-2 px-4 py-2">
-            <div className="flex flex-col gap-8 border rounded-md px-4 py-4">
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-4">
-                  <div>
-                    <p className="text-sm font-medium">ATM</p>
-                    <p className="text-sm text-muted-foreground">
-                      {data.atm.status === true ? 'Enabled' : 'Disabled'}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-6 items-center">
-                  <p
-                    className={`${
-                      data.atm.status ? '' : 'blur-sm'
-                    } text-sm font-medium tracking-wide`}
-                  >
-                    &#8377; {data.atm.max_limit}
-                  </p>
-                  <Switch disabled checked={data.atm.status} />
-                </div>
-              </div>
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-4">
-                  <div>
-                    <p className="text-sm font-medium ">POS</p>
-                    <p className="text-sm text-muted-foreground">
-                      {data.pos.status === true ? 'Enabled' : 'Disabled'}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-6 items-center">
-                  <p
-                    className={`${
-                      data.pos.status ? '' : 'blur-sm'
-                    } text-sm font-medium tracking-wide`}
-                  >
-                    &#8377; {data.pos.max_limit}
-                  </p>
-                  <Switch disabled checked={data.pos.status === true} />
-                </div>
-              </div>
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-4">
-                  <div>
-                    <p className="text-sm font-medium">IMPS</p>
-                    <p className="text-sm text-muted-foreground">
-                      {data.imps.status === true ? 'Enabled' : 'Disabled'}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-6 items-center">
-                  <p
-                    className={`${
-                      data.imps.status ? '' : 'blur-sm'
-                    } text-sm font-medium tracking-wide`}
-                  >
-                    &#8377; {data.imps.max_limit}
-                  </p>
-                  <Switch disabled checked={data.imps.status === true} />
-                </div>
-              </div>
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-4">
-                  <div>
-                    <p className="text-sm font-medium leading-none">
-                      E-Commerce
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {data.ecommerce.status === true ? 'Enabled' : 'Disabled'}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-6 items-center">
-                  <p
-                    className={`${
-                      data.ecommerce.status ? '' : 'blur-sm'
-                    } text-sm font-medium tracking-wide`}
-                  >
-                    &#8377; {data.ecommerce.max_limit}
-                  </p>
-                  <Switch disabled checked={data.ecommerce.status === true} />
-                </div>
+      <div className="flex justify-between gap-2 items-center py-2 px-4">
+        <h2 className="text-md font-medium ">Transaction Limitations</h2>
+      </div>
+      <div className="w-full flex justify-center">
+        <Separator className="w-[96%] text-center" />
+      </div>
+      <div className="grid grid-cols-2 gap-2 px-4 py-2">
+        <div className="flex flex-col gap-8 border rounded-md px-4 py-4">
+          <div className="flex items-center justify-between space-x-4">
+            <div className="flex items-center space-x-4">
+              <div>
+                <p className="text-sm font-medium">ATM</p>
+                <p className="text-sm text-muted-foreground">
+                  {ATM?.status === true ? 'Enabled' : 'Disabled'}
+                </p>
               </div>
             </div>
-            <div className="flex flex-col gap-8 border rounded-md px-4 py-4">
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-4">
-                  <div>
-                    <p className="text-sm font-medium">Contactless</p>
-                    <p className="text-sm text-muted-foreground">
-                      {data.contactless.status === true
-                        ? 'Enabled'
-                        : 'Disabled'}
-                    </p>
-                  </div>
-                </div>
 
-                <div className="flex gap-6 items-center">
-                  <p
-                    className={`${
-                      data.contactless.status ? '' : 'blur-sm'
-                    } text-sm font-medium tracking-wide`}
-                  >
-                    &#8377; {data.contactless.max_limit}
-                  </p>
-                  <Switch disabled checked={data.contactless.status === true} />
-                </div>
-              </div>
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-4">
-                  <div>
-                    <p className="text-sm font-medium">Offline</p>
-                    <p className="text-sm text-muted-foreground">
-                      {data.contactless.status === true
-                        ? 'Enabled'
-                        : 'Disabled'}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-6 items-center">
-                  <p
-                    className={`${
-                      data.offline.status ? '' : 'blur-sm'
-                    } text-sm font-medium tracking-wide`}
-                  >
-                    &#8377; {data.offline.max_limit}
-                  </p>
-                  <Switch disabled checked={data.offline.status === true} />
-                </div>
-              </div>
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-4">
-                  <div>
-                    <p className="text-sm font-medium">Max Load Limit</p>
-                    <p className="text-sm text-muted-foreground">
-                      {data.load_max_limit.status === true
-                        ? 'Enabled'
-                        : 'Disabled'}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-6 items-center">
-                  <p
-                    className={`${
-                      data.load_max_limit.status ? '' : 'blur-sm'
-                    } text-sm font-medium tracking-wide`}
-                  >
-                    &#8377; {data.load_max_limit.max_limit}
-                  </p>
-                  <Switch
-                    disabled
-                    checked={data.load_max_limit.status === true}
-                  />
-                </div>
-              </div>
+            <div className="flex gap-6 items-center">
+              <p
+                className={`${
+                  ATM?.status ? '' : 'blur-sm'
+                } text-sm font-medium tracking-wide`}
+              >
+                &#8377; {ATM?.max_limit}
+              </p>
+              <Switch disabled checked={ATM?.status} />
             </div>
           </div>
-        </>
-      )}
+          <div className="flex items-center justify-between space-x-4">
+            <div className="flex items-center space-x-4">
+              <div>
+                <p className="text-sm font-medium ">POS</p>
+                <p className="text-sm text-muted-foreground">
+                  {POS?.status === true ? 'Enabled' : 'Disabled'}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-6 items-center">
+              <p
+                className={`${
+                  POS?.status ? '' : 'blur-sm'
+                } text-sm font-medium tracking-wide`}
+              >
+                &#8377; {POS?.max_limit}
+              </p>
+              <Switch disabled checked={POS?.status === true} />
+            </div>
+          </div>
+          <div className="flex items-center justify-between space-x-4">
+            <div className="flex items-center space-x-4">
+              <div>
+                <p className="text-sm font-medium">IMPS</p>
+                <p className="text-sm text-muted-foreground">
+                  {IMPS?.status === true ? 'Enabled' : 'Disabled'}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-6 items-center">
+              <p
+                className={`${
+                  IMPS?.status ? '' : 'blur-sm'
+                } text-sm font-medium tracking-wide`}
+              >
+                &#8377; {IMPS?.max_limit}
+              </p>
+              <Switch disabled checked={IMPS?.status === true} />
+            </div>
+          </div>
+          <div className="flex items-center justify-between space-x-4">
+            <div className="flex items-center space-x-4">
+              <div>
+                <p className="text-sm font-medium leading-none">E-Commerce</p>
+                <p className="text-sm text-muted-foreground">
+                  {ECommerce?.status === true ? 'Enabled' : 'Disabled'}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-6 items-center">
+              <p
+                className={`${
+                  ECommerce?.status ? '' : 'blur-sm'
+                } text-sm font-medium tracking-wide`}
+              >
+                &#8377; {ECommerce?.max_limit}
+              </p>
+              <Switch disabled checked={ECommerce?.status === true} />
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col gap-8 border rounded-md px-4 py-4">
+          <div className="flex items-center justify-between space-x-4">
+            <div className="flex items-center space-x-4">
+              <div>
+                <p className="text-sm font-medium">Contactless</p>
+                <p className="text-sm text-muted-foreground">
+                  {Contactless?.status === true ? 'Enabled' : 'Disabled'}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-6 items-center">
+              <p
+                className={`${
+                  Contactless?.status ? '' : 'blur-sm'
+                } text-sm font-medium tracking-wide`}
+              >
+                &#8377; {Contactless?.max_limit}
+              </p>
+              <Switch disabled checked={Contactless?.status === true} />
+            </div>
+          </div>
+          <div className="flex items-center justify-between space-x-4">
+            <div className="flex items-center space-x-4">
+              <div>
+                <p className="text-sm font-medium">Offline</p>
+                <p className="text-sm text-muted-foreground">
+                  {Offline?.status === true ? 'Enabled' : 'Disabled'}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-6 items-center">
+              <p
+                className={`${
+                  Offline?.status ? '' : 'blur-sm'
+                } text-sm font-medium tracking-wide`}
+              >
+                &#8377; {Offline?.max_limit}
+              </p>
+              <Switch disabled checked={Offline?.status === true} />
+            </div>
+          </div>
+          <div className="flex items-center justify-between space-x-4">
+            <div className="flex items-center space-x-4">
+              <div>
+                <p className="text-sm font-medium">Max Load Limit</p>
+                <p className="text-sm text-muted-foreground">
+                  {Load_Amount?.status === true ? 'Enabled' : 'Disabled'}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-6 items-center">
+              <p
+                className={`${
+                  Load_Amount?.status ? '' : 'blur-sm'
+                } text-sm font-medium tracking-wide`}
+              >
+                &#8377; {Load_Amount?.max_limit}
+              </p>
+              <Switch disabled checked={Load_Amount?.status === true} />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

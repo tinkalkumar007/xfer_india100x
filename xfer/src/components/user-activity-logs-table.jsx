@@ -24,6 +24,7 @@ import {
   ChevronsLeft,
   ChevronRight,
   ChevronsRight,
+  ActivityIcon,
 } from 'lucide-react'
 
 import {
@@ -75,6 +76,7 @@ import {
 } from '@/components/ui/table'
 import DataTableViewOptions from './DataTableViewOptions'
 import DataTableToolbar from './DataTableToolbar'
+import { useFrappeGetDocList } from 'frappe-react-sdk'
 
 const data = [
   {
@@ -130,6 +132,20 @@ export function ActivityLogsTable() {
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const { data: activityLogsData, isLoading: activityLogsLoading } =
+    useFrappeGetDocList('Activity Log', {
+      fields: ['*'],
+    })
+
+  const tableData = React.useMemo(() => {
+    if (!activityLogsData) return []
+    return activityLogsData.map((log) => ({
+      user: log.full_name,
+      event: log.subject,
+      ip_address: log.ip_address,
+      date: log.modified,
+    }))
+  }, [activityLogsData])
 
   const columns = [
     {
@@ -174,11 +190,11 @@ export function ActivityLogsTable() {
     //   ),
     // },
     {
-      accessorKey: 'team_member',
-      header: 'Team Member',
+      accessorKey: 'user',
+      header: 'User',
       cell: ({ row }) => (
         <div className="capitalize cursor-pointer hover:underline">
-          {row.getValue('team_member')}
+          {row.original.user}
         </div>
       ),
     },
@@ -187,7 +203,7 @@ export function ActivityLogsTable() {
       accessorKey: 'event',
       header: 'Event',
       cell: ({ row }) => (
-        <div className="capitalize pl-4">{row.getValue('event')}</div>
+        <div className="capitalize pl-4">{row.original.event}</div>
       ),
     },
     // {
@@ -201,15 +217,23 @@ export function ActivityLogsTable() {
       accessorKey: 'ip_address',
       header: 'IP Address',
       cell: ({ row }) => (
-        <div className="lowercase">{row.getValue('ip_address')}</div>
+        <div className="lowercase">{row.original.ip_address}</div>
       ),
     },
     {
       accessorKey: 'date',
       header: 'Date',
-      cell: ({ row }) => (
-        <div className="lowercase pl-4">{row.getValue('date')}</div>
-      ),
+      cell: ({ row }) => {
+        const date_time = row.original?.date?.split('.')[0]
+        const date = date_time?.split(' ')[0].split('-').reverse().join('-')
+        const time = date_time?.split(' ')[1]
+        return (
+          <div className="lowercase pl-4 flex flex-col justify-center">
+            <span>{date}</span>
+            <span>{time}</span>
+          </div>
+        )
+      },
     },
     // {
     //   accessorKey: 'actions',
@@ -272,7 +296,7 @@ export function ActivityLogsTable() {
   ]
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -322,7 +346,7 @@ export function ActivityLogsTable() {
         <div className="w-full">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
             <div className="w-full">
-              <DataTableToolbar table={table} inputFilter="card_ref_id" />
+              {/* <DataTableToolbar table={table} inputFilter="card_ref_id" /> */}
             </div>
             <div className="flex gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>

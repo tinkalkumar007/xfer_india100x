@@ -60,12 +60,28 @@ const data = [
   },
 ]
 
-const ManagerProgramList = () => {
+const ManagerProgramList = ({
+  customerCardsData,
+  customerCardsDataLoading,
+}) => {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+
+  console.log('Customer Cards Data:', customerCardsData)
+
+  const tableData = React.useMemo(() => {
+    if (!customerCardsData) return []
+    return customerCardsData?.map((cardData) => ({
+      id: cardData.name, // Frappe's unique identifier
+      customer_name: cardData.customer_name,
+      limit: cardData.limit,
+      issued_date: cardData.issue_date,
+      card_status: cardData.card_status,
+    }))
+  }, [customerCardsData])
 
   const columns = [
     {
@@ -73,24 +89,10 @@ const ManagerProgramList = () => {
       header: 'Name',
       cell: ({ row }) => (
         <div className="capitalize text-center cursor-pointer hover:underline">
-          {row.getValue('name')}
+          {row.original.customer_name}
         </div>
       ),
     },
-    {
-      accessorKey: 'program_manager',
-      header: 'Manager',
-      cell: ({ row }) => (
-        <div className="capitalize text-center">{row.getValue('program_manager')}</div>
-      ),
-    },
-    // {
-    //   accessorKey: 'category',
-    //   header: 'Category',
-    //   cell: ({ row }) => (
-    //     <div className="capitalize text-center">{row.getValue('category')}</div>
-    //   ),
-    // },
 
     {
       accessorKey: 'limit',
@@ -107,7 +109,7 @@ const ManagerProgramList = () => {
       //   )
       // },
       cell: ({ row }) => (
-        <div className="text-center">{row.getValue('limit')}</div>
+        <div className="text-center">{row.original.limit}</div>
       ),
     },
 
@@ -126,23 +128,29 @@ const ManagerProgramList = () => {
       //   )
       // },
       cell: ({ row }) => (
-        <div className="text-center">{row.getValue('issued_date')}</div>
+        <div className="text-center">{row.original.issued_date}</div>
       ),
     },
     {
       accessorKey: 'status',
       header: 'Status',
       cell: ({ row }) => {
-        const status = row.original.status
+        const status = row.original.card_status
         return (
           <div className="text-center">
-            {status === 'true' ? (
+            {status === 'Active' && (
               <Badge className="bg-[#E4F5E9] text-[#16794C] cursor-pointer">
                 Active
               </Badge>
-            ) : (
+            )}
+            {status === 'KYC Pending' && (
+              <Badge className="bg-[#E4F5E9] text-[#16794C] cursor-pointer">
+                Pending
+              </Badge>
+            )}
+            {status === 'Blocked' && (
               <Badge className="bg-[#FFF0F0] text-[#B52A2A] cursor-pointer">
-                Inactive
+                Blocked
               </Badge>
             )}
           </div>
@@ -152,7 +160,7 @@ const ManagerProgramList = () => {
   ]
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

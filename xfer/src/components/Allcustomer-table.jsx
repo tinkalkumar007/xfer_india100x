@@ -9,6 +9,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
 import {
   ArrowUpDown,
   ChevronDown,
@@ -78,119 +79,120 @@ import DataTableToolbar from './DataTableToolbar'
 import { ProgramManager } from '../data/all-customer-data'
 import { DataTablePagination } from '@/components/DataTablePagination'
 import ProgramManagerDetails from '../pages/ProgramManagerDetails/ProgramManagerDetails'
+import { useFrappeAuth, useFrappeGetDocList } from 'frappe-react-sdk'
 
-const data = [
-  {
-    product_id: '1',
-    customerId: '123456789',
-    Name: 'John Doe',
-    ProgramManager: 'Privacy Card',
-    totalCards: '4',
-    totalTransactions: '120',
-    createdBy: 'Admin',
-    lastActive: '12-01-2023',
-  },
-  {
-    product_id: '2',
-    customerId: '123456789',
-    Name: 'Jane Smith',
-    ProgramManager: 'Business Card',
-    totalCards: '2',
-    totalTransactions: '85',
-    createdBy: 'Manager1',
-    lastActive: '11-05-2021',
-  },
-  {
-    product_id: '3',
-    customerId: '123456789',
-    Name: 'Robert Brown',
-    ProgramManager: 'Travel Card',
-    totalCards: '3',
-    totalTransactions: '140',
-    createdBy: 'SupervisorX',
-    lastActive: '11-05-2021',
-  },
-  {
-    product_id: '4',
-    customerId: '123456789',
-    Name: 'Emily Davis',
-    ProgramManager: 'Gift Card',
-    totalCards: '1',
-    totalTransactions: '15',
-    createdBy: 'Admin',
-    lastActive: '12-05-2021',
-  },
-  {
-    product_id: '5',
-    customerId: '123456789',
-    Name: 'Michael Wilson',
-    ProgramManager: 'Virtual Card',
-    totalCards: '5',
-    totalTransactions: '200',
-    createdBy: 'AdminAssistant',
-    lastActive: '11-05-2021',
-  },
-  {
-    product_id: '6',
-    customerId: '123456789',
-    Name: 'Olivia Johnson',
-    ProgramManager: 'Platinum Card',
-    totalCards: '2',
-    totalTransactions: '95',
-    createdBy: 'Manager3',
-    lastActive: '12-05-2021',
-  },
-  {
-    product_id: '7',
-    customerId: '123456789',
-    Name: 'James White',
-    ProgramManager: 'Student Card',
-    totalCards: '1',
-    totalTransactions: '45',
-    createdBy: 'SupervisorY',
-    lastActive: '11-05-2021',
-  },
-  {
-    product_id: '8',
-    customerId: '123456789',
-    Name: 'Sophia Martinez',
-    ProgramManager: 'Savings Card',
-    totalCards: '3',
-    totalTransactions: '130',
-    createdBy: 'Admin',
-    lastActive: '11-05-2021',
-  },
-  {
-    product_id: '9',
-    customerId: '123456789',
-    Name: 'Ethan Taylor',
-    ProgramManager: 'Cashback Card',
-    totalCards: '2',
-    totalTransactions: '70',
-    createdBy: 'Manager2',
-    lastActive: '11-05-2021',
-  },
-  {
-    product_id: '10',
-    customerId: '123456789',
-    Name: 'Isabella Hernandez',
-    ProgramManager: 'Corporate Card',
-    totalCards: '6',
-    totalTransactions: '300',
-    createdBy: 'SupervisorZ',
-    lastActive: '12-05-2021',
-  },
-  {
-    product_id: '11',
-    customerId: '123456789',
-    Name: 'Liam Garcia',
-    ProgramManager: 'Premium Card',
-    totalCards: '4',
-    totalTransactions: '190',
-    createdBy: 'Admin',
-    lastActive: '12-05-2021',
-  },
-]
+// const data = [
+//   {
+//     product_id: '1',
+//     customerId: '123456789',
+//     Name: 'John Doe',
+//     ProgramManager: 'Privacy Card',
+//     totalCards: '4',
+//     totalTransactions: '120',
+//     createdBy: 'Admin',
+//     lastActive: '12-01-2023',
+//   },
+//   {
+//     product_id: '2',
+//     customerId: '123456789',
+//     Name: 'Jane Smith',
+//     ProgramManager: 'Business Card',
+//     totalCards: '2',
+//     totalTransactions: '85',
+//     createdBy: 'Manager1',
+//     lastActive: '11-05-2021',
+//   },
+//   {
+//     product_id: '3',
+//     customerId: '123456789',
+//     Name: 'Robert Brown',
+//     ProgramManager: 'Travel Card',
+//     totalCards: '3',
+//     totalTransactions: '140',
+//     createdBy: 'SupervisorX',
+//     lastActive: '11-05-2021',
+//   },
+//   {
+//     product_id: '4',
+//     customerId: '123456789',
+//     Name: 'Emily Davis',
+//     ProgramManager: 'Gift Card',
+//     totalCards: '1',
+//     totalTransactions: '15',
+//     createdBy: 'Admin',
+//     lastActive: '12-05-2021',
+//   },
+//   {
+//     product_id: '5',
+//     customerId: '123456789',
+//     Name: 'Michael Wilson',
+//     ProgramManager: 'Virtual Card',
+//     totalCards: '5',
+//     totalTransactions: '200',
+//     createdBy: 'AdminAssistant',
+//     lastActive: '11-05-2021',
+//   },
+//   {
+//     product_id: '6',
+//     customerId: '123456789',
+//     Name: 'Olivia Johnson',
+//     ProgramManager: 'Platinum Card',
+//     totalCards: '2',
+//     totalTransactions: '95',
+//     createdBy: 'Manager3',
+//     lastActive: '12-05-2021',
+//   },
+//   {
+//     product_id: '7',
+//     customerId: '123456789',
+//     Name: 'James White',
+//     ProgramManager: 'Student Card',
+//     totalCards: '1',
+//     totalTransactions: '45',
+//     createdBy: 'SupervisorY',
+//     lastActive: '11-05-2021',
+//   },
+//   {
+//     product_id: '8',
+//     customerId: '123456789',
+//     Name: 'Sophia Martinez',
+//     ProgramManager: 'Savings Card',
+//     totalCards: '3',
+//     totalTransactions: '130',
+//     createdBy: 'Admin',
+//     lastActive: '11-05-2021',
+//   },
+//   {
+//     product_id: '9',
+//     customerId: '123456789',
+//     Name: 'Ethan Taylor',
+//     ProgramManager: 'Cashback Card',
+//     totalCards: '2',
+//     totalTransactions: '70',
+//     createdBy: 'Manager2',
+//     lastActive: '11-05-2021',
+//   },
+//   {
+//     product_id: '10',
+//     customerId: '123456789',
+//     Name: 'Isabella Hernandez',
+//     ProgramManager: 'Corporate Card',
+//     totalCards: '6',
+//     totalTransactions: '300',
+//     createdBy: 'SupervisorZ',
+//     lastActive: '12-05-2021',
+//   },
+//   {
+//     product_id: '11',
+//     customerId: '123456789',
+//     Name: 'Liam Garcia',
+//     ProgramManager: 'Premium Card',
+//     totalCards: '4',
+//     totalTransactions: '190',
+//     createdBy: 'Admin',
+//     lastActive: '12-05-2021',
+//   },
+// ]
 
 export function AllCustomerTable() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
@@ -199,41 +201,28 @@ export function AllCustomerTable() {
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  // const [data, setData] = React.useState([]) 
-  const [loading, setLoading] = React.useState(true) // State for loading
-  const [error, setError] = React.useState(null) // State for error handling
+  const { currentUser } = useFrappeAuth()
 
-  // React.useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       setLoading(true)
-  //       //const token=Cookies.get("auth_token");
-  //       //console.log(token);
-  //       //axios.default.withCredentials=true;
-  //       const response = await axios.get('/customer/allCustomers', {
-  //         withCredentials: true,
-  //       }) // Replace with your API endpoint
-  //       //setData(response.data.data); // Assuming the response is an array of pool accounts
-  //       console.log(response.data.data)
+  const { data: customersData, isLoading: customersDataLoading } =
+    useFrappeGetDocList('Customers', {
+      fields: ['*'],
+      filters: [['owner', '=', currentUser]],
+    })
 
-  //       const transformedData = response.data.data.map((item, index) => ({
-  //         customerId: index + 1, // Generate a unique ID
-  //         Name: `${item.firstName} ${item.lastName}`, // Combine firstName and lastName
-  //         ProgramManager: `${item.user.firstName} ${item.user.lastName}`, // Access nested user details
-  //         totalCards: item.totalCards || 0, // Default value if undefined
-  //         totalTransactions: item.totalTransactions || 0, // Default value if undefined
-  //         lastActive: item.updatedAt, // Format the date
-  //       }))
-  //       setData(transformedData)
-  //     } catch (err) {
-  //       console.error('Error fetching data:', err)
-  //       setError('Failed to fetch data. Please try again later.')
-  //     } finally {
-  //       setLoading(false)
-  //     }
-  //   }
-  //   fetchData()
-  // }, [])
+  if (!customersDataLoading) {
+    console.log(customersData)
+  }
+
+  const tableData = React.useMemo(() => {
+    if (!customersData) return []
+    return customersData.map((customer) => ({
+      id: customer.name,
+      first_name: customer.first_name,
+      last_name: customer.last_name,
+      last_active: customer.modified,
+      status: customer.status,
+    }))
+  }, [customersData])
 
   const columns = [
     {
@@ -259,14 +248,14 @@ export function AllCustomerTable() {
       enableHiding: false,
     },
     {
-      accessorKey: 'customerId',
+      accessorKey: 'id',
       header: 'Customer ID',
       cell: ({ row }) => {
-        const id = row.original.customerId
+        const id = row.original.id
         return (
-          <Link to={`/all-customers/customer/${id}`}>
+          <Link to={`/customers/customer/${id}`}>
             <div className="capitalize text-center hover:underline">
-              {row.getValue('customerId')}
+              {row.original?.id}
             </div>
           </Link>
         )
@@ -277,23 +266,14 @@ export function AllCustomerTable() {
       accessorKey: 'Name',
       header: 'Name',
       cell: ({ row }) => (
-        <div className="capitalize text-center">{row.getValue('Name')}</div>
+        <div className="capitalize text-center">
+          {row.original.first_name} {row.original.last_name}
+        </div>
       ),
     },
+
     {
-      accessorKey: 'ProgramManager',
-      header: 'Program Manager',
-      cell: ({ row }) => {
-        const ProgramManager = row.original.ProgramManager
-        return (
-          <div className="text-center cursor-pointer hover:underline">
-            {ProgramManager}
-          </div>
-        )
-      },
-    },
-    {
-      accessorKey: 'totalCards',
+      accessorKey: 'total_cards',
       header: ({ column }) => {
         return (
           <Button
@@ -307,12 +287,12 @@ export function AllCustomerTable() {
       },
       cell: ({ row }) => (
         <div className="text-center">
-          {row.getValue('totalCards') ? row.getValue('totalCards') : '0'}
+          {row.original.total_cards ? row.original.total_cards : '-'}
         </div>
       ),
     },
     {
-      accessorKey: 'totalTransactions',
+      accessorKey: 'total_transactions',
       header: ({ column }) => {
         return (
           <Button
@@ -326,24 +306,36 @@ export function AllCustomerTable() {
       },
       cell: ({ row }) => (
         <div className="text-center">
-          {row.getValue('totalTransactions')
-            ? row.getValue('totalTransactions')
-            : '0'}
+          {row.original.total_transactions
+            ? row.original.total_transactions
+            : '-'}
         </div>
       ),
     },
     {
-      accessorKey: 'lastActive',
+      accessorKey: 'status',
+      header: 'Status',
+
+      cell: ({ row }) => (
+        <div className="text-center">
+          <Badge>{row.original?.status}</Badge>
+        </div>
+      ),
+    },
+    {
+      accessorKey: 'last_active',
       header: 'Last Active',
       cell: ({ row }) => {
-        const date = row.original.lastActive
-        // const time1 = row.original.lastActive.split('T')[1]
-        // const time2 = time1.split('.')[0]
-        //const
+        const dateTime = row.original?.last_active?.split('.')[0]
+        console.log(dateTime)
+        const date = dateTime?.split(' ')[0].split('-').reverse().join('-')
+
+        const time = dateTime.split(' ')[1]
 
         return (
           <div className="flex flex-col items-center text-center">
             <span>{date}</span>
+            <span>{time}</span>
           </div>
         )
       },
@@ -382,7 +374,7 @@ export function AllCustomerTable() {
   ]
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -431,11 +423,11 @@ export function AllCustomerTable() {
         <div className="w-full">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
             <div className="w-full">
-              <DataTableToolbar
+              {/* <DataTableToolbar
                 table={table}
                 inputFilter="Name"
                 ProgramManager={ProgramManager}
-              />
+              /> */}
             </div>
             <div className="flex gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>

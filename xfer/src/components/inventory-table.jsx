@@ -93,6 +93,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import DataTableToolbar from './DataTableToolbar'
 import CreateOrder from '../pages/CreateOrder/CreateOrder'
+import { useFrappeGetDocList } from 'frappe-react-sdk'
 
 const fieldIconMap = {
   approved: {
@@ -218,6 +219,25 @@ export function InventoryTable() {
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+
+  const { data: inventoryData, isLoading: inventoryDataLoading } =
+    useFrappeGetDocList('Inventory', {
+      fields: ['*'],
+    })
+
+  console.log(inventoryData)
+
+  const tableData = React.useMemo(() => {
+    if (!inventoryData) return []
+    return inventoryData?.map((program) => ({
+      id: program.name, // Frappe's unique identifier
+      program_name: program.program_name,
+      category: program.category,
+      description: program.description,
+      status: inventoryData.status,
+      date: inventoryData.creation,
+    }))
+  }, [inventoryData])
 
   const columns = [
     {

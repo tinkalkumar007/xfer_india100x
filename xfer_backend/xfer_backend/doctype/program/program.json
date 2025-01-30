@@ -28,6 +28,8 @@
   "reward_points",
   "controls_section",
   "allow_kit_to_kit",
+  "column_break_kwoe",
+  "allow_reload",
   "column_break_duua",
   "allow_jit",
   "column_break_unsb",
@@ -289,10 +291,6 @@
   },
   {
    "fieldname": "column_break_duua",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "column_break_unsb",
    "fieldtype": "Column Break"
   },
   {

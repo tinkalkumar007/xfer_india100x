@@ -80,6 +80,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import DataTableViewOptions from './DataTableViewOptions'
 import DataTableToolbar from './DataTableToolbar'
+import { useFrappeGetDocList } from 'frappe-react-sdk'
 
 const fieldIconMap = {
   Success: {
@@ -169,27 +170,29 @@ export function FundingTransactionTable() {
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  const columns = [
-    // {
-    //     accessorKey: 'product_id',
-    //     header: ({ column }) => {
-    //         return (
-    //           <Button
-    //             variant="ghost"
-    //             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-    //           >
-    //             Sr No
-    //             <ArrowUpDown />
-    //           </Button>
+  const {
+    data: fundingTransactionsData,
+    isLoading: fundingTransactionsDataLoading,
+  } = useFrappeGetDocList('Funding Transactions', {
+    fields: ['*'],
+  })
 
-    //         )
-    //       },
-    //     cell: ({ row }) => (
-    //       <div className="capitalize text-center">
-    //         {row.getValue('product_id')}
-    //       </div>
-    //     ),
-    //   },
+  console.log(fundingTransactionsData)
+
+  const tableData = React.useMemo(() => {
+    if (!fundingTransactionsData) return []
+    return fundingTransactionsData?.map((fundingTransaction) => ({
+      id: fundingTransaction.name, // Frappe's unique identifier
+      bank_name: fundingTransaction.bank_name,
+      from: fundingTransaction.from_account,
+      to: fundingTransaction.to_account,
+      amount: fundingTransaction.amount,
+      date: fundingTransaction.creation,
+      status: fundingTransaction.status,
+    }))
+  }, [fundingTransactionsData])
+
+  const columns = [
     {
       id: 'select',
       header: ({ table }) => (
@@ -213,13 +216,13 @@ export function FundingTransactionTable() {
       enableHiding: false,
     },
     {
-      accessorKey: 'cardRefId',
-      header: 'Reference ID',
+      accessorKey: 'id',
+      header: 'Transaction ID',
       cell: ({ row }) => (
         <Sheet>
           <SheetTrigger>
             <div className="text-center hover:underline">
-              {row.getValue('cardRefId')}
+              {row.original?.id}
             </div>
           </SheetTrigger>
           <SheetContent className="w-full sm:max-w-md">
@@ -340,12 +343,12 @@ export function FundingTransactionTable() {
       ),
     },
     {
-      accessorKey: 'bankName',
-      header: 'Bank',
-      cell: ({ row }) => <div>{row.getValue('bankName')}</div>,
+      accessorKey: 'bank_name',
+      header: 'Bank Name',
+      cell: ({ row }) => <div>{row.original?.bank_name}</div>,
     },
     {
-      accessorKey: 'FromAccount',
+      accessorKey: 'from',
       header: ({ column }) => {
         return (
           <Button
@@ -357,10 +360,10 @@ export function FundingTransactionTable() {
           </Button>
         )
       },
-      cell: ({ row }) => <div>{row.getValue('FromAccount')}</div>,
+      cell: ({ row }) => <div>{row.original?.from}</div>,
     },
     {
-      accessorKey: 'ToAccount',
+      accessorKey: 'to',
       header: ({ column }) => {
         return (
           <Button
@@ -372,7 +375,7 @@ export function FundingTransactionTable() {
           </Button>
         )
       },
-      cell: ({ row }) => <div>{row.getValue('ToAccount')}</div>,
+      cell: ({ row }) => <div>{row.original?.to}</div>,
     },
 
     {
@@ -389,7 +392,7 @@ export function FundingTransactionTable() {
         )
       },
       cell: ({ row }) => {
-        const amount = row.original.Amount // Access the raw data directly
+        const amount = row.original?.amount // Access the raw data directly
         // const type = row.original.Type // Access the Type from raw data
         // const colorClass = type === 'Credit' ? 'text-green-500' : 'text-red-500'
         const [whole, decimal] = amount.toFixed(2).split('.') // Split the amount into whole and decimal parts
@@ -406,8 +409,9 @@ export function FundingTransactionTable() {
       accessorKey: 'Date',
       header: 'Date',
       cell: ({ row }) => {
-        const date = row.getValue('Date').split(' ')[0]
-        const time = row.getValue('Date').split(' ')[1]
+        const dateTime = row.original?.date?.split('.')[0]
+        const date = dateTime?.split(' ')[0].split('-').reverse().join('-')
+        const time = dateTime?.split(' ')[1]
 
         return (
           <div className="flex flex-col items-center text-center">
@@ -441,7 +445,7 @@ export function FundingTransactionTable() {
   ]
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -491,7 +495,7 @@ export function FundingTransactionTable() {
             <div className="w-full">
               <DataTableToolbar
                 table={table}
-                inputFilter="cardRefId"
+                inputFilter="id"
                 status={status}
               />
             </div>

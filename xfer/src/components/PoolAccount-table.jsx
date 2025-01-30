@@ -75,138 +75,38 @@ import {
 } from '@/components/ui/select'
 import DataTableViewOptions from './DataTableViewOptions'
 import DataTableToolbar from './DataTableToolbar'
-//import ApiConfig from '@/config/ApiConfig'
+import { useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk'
 
-//import Cookies from 'js-cookie'
-
-const fieldIconMap = {
-  Active: {
-    icon: <Badge className="bg-[#e4f5e9] text-[#16794c]">Active</Badge>,
-    label: 'Successful transaction',
-  },
-  Inactive: {
-    icon: <Badge className="bg-[#fff0f0] text-[#b52a2a]">Inactive</Badge>,
-    label: 'Failed transaction',
-  },
-}
-
-const data = [
-  {
-    product_id: '1',
-    accountNumber: '53264738991022',
-    bankName: 'Dummy Bank',
-    bin: '98287',
-    totalAmount: '569234432.23',
-    status: 'Active',
-  },
-  {
-    product_id: '2',
-    accountNumber: '42367853401234',
-    bankName: 'Global Trust Bank',
-    bin: '98279',
-    totalAmount: '123456789.50',
-    status: 'Active',
-  },
-  {
-    product_id: '3',
-    accountNumber: '28763495023871',
-    bankName: 'Techno Bank',
-    bin: '98290',
-    totalAmount: '87945632.75',
-    status: 'Inactive',
-  },
-  {
-    product_id: '4',
-    accountNumber: '94857629385016',
-    bankName: 'Sunrise Financial',
-    bin: '98301',
-    totalAmount: '23456789.30',
-    status: 'Active',
-  },
-  {
-    product_id: '5',
-    accountNumber: '76834599023840',
-    bankName: 'Prime Capital Bank',
-    bin: '98288',
-    totalAmount: '987654321.10',
-    status: 'Active',
-  },
-  {
-    product_id: '6',
-    accountNumber: '65873498126754',
-    bankName: 'Standard Bank',
-    bin: '98299',
-    totalAmount: '52347645.55',
-    status: 'Inactive',
-  },
-  {
-    product_id: '7',
-    accountNumber: '34267192375631',
-    bankName: 'Citywide Bank',
-    bin: '98285',
-    totalAmount: '102345678.90',
-    status: 'Active',
-  },
-  {
-    product_id: '8',
-    accountNumber: '84723659802142',
-    bankName: 'BlueOcean Bank',
-    bin: '98305',
-    totalAmount: '39456780.40',
-    status: 'Active',
-  },
-  {
-    product_id: '9',
-    accountNumber: '92737463501728',
-    bankName: 'Innovative Financial Group',
-    bin: '98291',
-    totalAmount: '76543210.20',
-    status: 'Active',
-  },
-  {
-    product_id: '10',
-    accountNumber: '65839276293715',
-    bankName: 'MetroBank',
-    bin: '98302',
-    totalAmount: '34567890.60',
-    status: 'Inactive',
-  },
-]
-//const data=[];
 export function PoolAccountsTable() {
-  //const [isDialogOpen, setIsDialogOpen] = React.useState(false)
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
-  //const data= await axios.get(ApiConfig.poolAccount);
-  //console.log(data);
-  // const [data, setData] = React.useState([])
-  const [loading, setLoading] = React.useState(true) // State for loading
-  const [error, setError] = React.useState(null) // State for error handling
 
-  // React.useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       setLoading(true)
-  //       //const token=Cookies.get("auth_token");
-  //       //console.log(token);
-  //       //axios.default.withCredentials=true;
-  //       const response = await axios.get('/wallet/get_balance', {
-  //         withCredentials: true,
-  //       }) // Replace with your API endpoint
-  //       console.log(response)
-  //       setData(response.data.data) // Assuming the response is an array of pool accounts
-  //       console.log(response.data)
-  //     } catch (err) {
-  //       console.error(error)
-  //       setError(err)
-  //     } finally {
-  //       setLoading(false)
-  //     }
-  //   }
-  //   fetchData()
-  // }, [])
+  const [accountID, setAccountID] = React.useState('')
+
+  const { data: PoolAccountsData, isLoading: poolAccountsDataLoading } =
+    useFrappeGetDocList('Pool Account', {
+      fields: ['*'],
+    })
+
+  const { data: accountDetails, isLoading: accountDetailsLoading } =
+    useFrappeGetDoc('Pool Account', accountID)
+
+  console.log('Account Details: ', accountDetails)
+
+  const tableData = React.useMemo(() => {
+    if (!PoolAccountsData) return []
+    return PoolAccountsData?.map((poolAccount) => ({
+      id: poolAccount.name, // Frappe's unique identifier
+      account_number: poolAccount.account_number,
+      account_balance: poolAccount.account_balance,
+      bank_name: poolAccount.bank_name,
+      bin: poolAccount.bin,
+      status: poolAccount.status,
+    }))
+  }, [PoolAccountsData])
+
   const columns = [
     // {
     //   accessorKey: 'product_id',
@@ -250,13 +150,18 @@ export function PoolAccountsTable() {
       enableHiding: false,
     },
     {
-      accessorKey: 'accountNumber',
+      accessorKey: 'account_number',
       header: 'Account Number',
       cell: ({ row }) => (
         <Sheet>
           <SheetTrigger>
-            <div className="text-center hover:underline">
-              {row.getValue('accountNumber')}
+            <div
+              className="text-center hover:underline"
+              onClick={() => {
+                setAccountID(row.original.account_number)
+              }}
+            >
+              {row.original.account_number}
             </div>
           </SheetTrigger>
           <SheetContent className="w-full sm:max-w-md">
@@ -265,28 +170,6 @@ export function PoolAccountsTable() {
             </SheetHeader>
             <Separator className="mt-2" />
             <div className="flex flex-col gap-4 mt-4">
-              {/* <div className="border rounded-md flex gap-2 justify-between items-center px-4 py-4 mt-6">
-                <div className="flex gap-2 items-center ">
-                  <div className="rounded-full p-2 bg-[#e4f5e9] text-[#16794c]">
-                    <ArrowUp strokeWidth={1.5} className=" rounded-full" />
-                  </div>
-                  <div className="flex flex-col">
-                    <p className="font-medium text-md">
-                      Sending money to Harshit
-                    </p>
-                    <p className="font-medium text-md text-muted-foreground">
-                      Sent
-                    </p>
-                  </div>
-                </div>
-                <div className="flex flex-col items-end">
-                  <p className="font-medium text-md">- &#8377; 200</p>
-                  <p className="font-medium text-md text-muted-foreground">
-                    &#8377; 20
-                  </p>
-                </div>
-              </div> */}
-
               <div className="flex flex-col gap-8">
                 <div className="flex flex-col gap-4">
                   <h2 className="text-lg font-medium">Account Details</h2>
@@ -394,11 +277,11 @@ export function PoolAccountsTable() {
       ),
     },
     {
-      accessorKey: 'bankName',
+      accessorKey: 'bank_name',
       header: 'Bank Name',
       cell: ({ row }) => (
         <div className="text-center cursor-pointer hover:underline">
-          {row.getValue('bankName')}
+          {row.original.bank_name}
         </div>
       ),
     },
@@ -415,25 +298,23 @@ export function PoolAccountsTable() {
           </Button>
         )
       },
-      cell: ({ row }) => (
-        <div className="text-center">{row.getValue('bin')}</div>
-      ),
+      cell: ({ row }) => <div className="text-center">{row.original.bin}</div>,
     },
     {
-      accessorKey: 'totalAmount',
+      accessorKey: 'account_balance',
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
-            Amount
+            Account Balance
             <ArrowUpDown />
           </Button>
         )
       },
       cell: ({ row }) => {
-        const amount = Number(row.original.totalAmount) // Access the raw data directly
+        const amount = Number(row.original.account_balance) // Access the raw data directly
         const [whole, decimal] = amount.toFixed(2).split('.') // Split the amount into whole and decimal parts
         return (
           <div className="text-center flex items-center justify-center">
@@ -447,10 +328,15 @@ export function PoolAccountsTable() {
       header: `Status`,
       cell: ({ row }) => {
         const status = row.original.status
-        return status === true ? (
-          <Badge className="bg-[#e4f5e9] text-[#16794c]">Active</Badge>
-        ) : (
-          <Badge className="bg-[#fff0f0] text-[#b52a2a]">Inactive</Badge>
+        return (
+          <>
+            {status === 'Active' && (
+              <Badge className="bg-[#e4f5e9] text-[#16794c]">Active</Badge>
+            )}
+            {status === 'Inactive' && (
+              <Badge className="bg-[#fff0f0] text-[#b52a2a]">Inactive</Badge>
+            )}
+          </>
         )
       },
     },
@@ -488,7 +374,7 @@ export function PoolAccountsTable() {
   ]
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -538,7 +424,7 @@ export function PoolAccountsTable() {
         <div className="w-full">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
             <div className="w-full">
-              <DataTableToolbar table={table} inputFilter="accountNumber" />
+              <DataTableToolbar table={table} inputFilter="account_number" />
             </div>
             <div className="flex gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>
