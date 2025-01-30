@@ -2,129 +2,129 @@ import {
   SidebarProvider,
   SidebarInset,
   SidebarTrigger,
-} from "@/components/ui/sidebar";
+} from '@/components/ui/sidebar'
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 
-import { Separator } from "@/components/ui/separator";
+import { Separator } from '@/components/ui/separator'
 import {
   Breadcrumb,
   BreadcrumbList,
   BreadcrumbItem,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+} from '@/components/ui/breadcrumb'
 
-import { ArrowUp } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowUp } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation } from 'react-router-dom'
 
-import { AppSidebar } from "./app-sidebar";
-import { ModeToggle } from "./mode-toggle";
+import { AppSidebar } from './app-sidebar'
+import { ModeToggle } from './mode-toggle'
 
 const sidebarData = [
   {
-    items: [{ url: "/business-dashboard" }, { url: "/system-dashboard" }],
+    items: [{ url: '/business-dashboard' }, { url: '/system-dashboard' }],
   },
   {
-    items: [{ url: "/programs" }, { url: "/program-managers" }],
+    items: [{ url: '/programs' }, { url: '/program-managers' }],
   },
   {
-    items: [{ url: "/inventory" }, { url: "/issued-cards" }],
-  },
-  {
-    items: [
-      { url: "/all-customers" },
-      { url: "/flagged-customers" },
-      { url: "/pending-for-kyc" },
-    ],
-  },
-  {
-    items: [{ url: "/pool-accounts" }, { url: "/funding-transactions" }],
-  },
-  {
-    items: [{ url: "/system-users" }, { url: "/user-activity-logs" }],
+    items: [{ url: '/inventory' }, { url: '/issued-cards' }],
   },
   {
     items: [
-      { url: "/security-settings" },
-      { url: "/api-settings" },
-      { url: "/default-configs" },
+      { url: '/all-customers' },
+      { url: '/flagged-customers' },
+      { url: '/pending-for-kyc' },
+    ],
+  },
+  {
+    items: [{ url: '/pool-accounts' }, { url: '/funding-transactions' }],
+  },
+  {
+    items: [{ url: '/system-users' }, { url: '/user-activity-logs' }],
+  },
+  {
+    items: [
+      { url: '/security-settings' },
+      { url: '/api-settings' },
+      { url: '/default-configs' },
     ],
   },
   {
     items: [
-      { url: "/account/profile" },
-      { url: "/account/appearance" },
-      { url: "/account/notifications" },
-      { url: "/account/security" },
-      { url: "/developer/api-keys" },
-      { url: "/developer/webhooks" },
-      { url: "/developer/ip-whitelisting" },
-      { url: "/team/users" },
-      { url: "/team/logs" },
+      { url: '/account/profile' },
+      { url: '/account/appearance' },
+      { url: '/account/notifications' },
+      { url: '/account/security' },
+      { url: '/developer/api-keys' },
+      { url: '/developer/webhooks' },
+      { url: '/developer/ip-whitelisting' },
+      { url: '/team/users' },
+      { url: '/team/logs' },
     ],
   },
-];
+]
 const flattenSidebarData = (data) => {
-  const flattened = [];
+  const flattened = []
   data.forEach((group) => {
     group.items.forEach((item) => {
-      flattened.push(item);
-    });
-  });
-  return flattened;
-};
+      flattened.push(item)
+    })
+  })
+  return flattened
+}
 
 const toPascalCaseWithSpaces = (str) => {
   return str
-    .replace(/([^\w-])/g, " ") // Replace non-alphanumeric characters with spaces
-    .split("-") // Split by dash
+    .replace(/([^\w-])/g, ' ') // Replace non-alphanumeric characters with spaces
+    .split('-') // Split by dash
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
-    .join(" "); // Join words with spaces
-};
+    .join(' ') // Join words with spaces
+}
 
 // Generate breadcrumbs
 
 const Layout = () => {
-  const location = useLocation();
-  const flattenedSidebarData = flattenSidebarData(sidebarData);
+  const location = useLocation()
+  const flattenedSidebarData = flattenSidebarData(sidebarData)
 
   // Generate breadcrumbs
   const breadcrumbs = location.pathname
-    .split("/")
+    .split('/')
     .filter(Boolean) // Remove empty strings
     .map((segment, index, arr) => {
-      const url = "/" + arr.slice(0, index + 1).join("/");
-      const matchedItem = flattenedSidebarData.find((item) => item.url === url);
+      const url = '/' + arr.slice(0, index + 1).join('/')
+      const matchedItem = flattenedSidebarData.find((item) => item.url === url)
       if (matchedItem) {
         return {
-          title: toPascalCaseWithSpaces(matchedItem.url.split("/").pop()),
-        }; // Convert to Pascal case with spaces
+          title: toPascalCaseWithSpaces(matchedItem.url.split('/').pop()),
+        } // Convert to Pascal case with spaces
       }
-      return { title: toPascalCaseWithSpaces(segment) }; // Convert to Pascal case with spaces
-    });
+      return { title: toPascalCaseWithSpaces(segment) } // Convert to Pascal case with spaces
+    })
 
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false)
 
   // Function to handle scroll behavior
   const handleScroll = () => {
-    setIsVisible(window.scrollY > 0);
-  };
+    setIsVisible(window.scrollY > 0)
+  }
 
   // Scroll to top functionality
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
-    });
-  };
+      behavior: 'smooth',
+    })
+  }
 
   // Add scroll event listener
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -133,7 +133,7 @@ const Layout = () => {
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
-            <Breadcrumb>
+            {/* <Breadcrumb>
               <BreadcrumbList>
                 {breadcrumbs.map((crumb, index) => (
                   <BreadcrumbItem key={index}>
@@ -142,7 +142,7 @@ const Layout = () => {
                   </BreadcrumbItem>
                 ))}
               </BreadcrumbList>
-            </Breadcrumb>
+            </Breadcrumb> */}
           </div>
           <div className="mr-4">
             <ModeToggle />
@@ -163,7 +163,7 @@ const Layout = () => {
         </footer>
       </SidebarInset>
     </SidebarProvider>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

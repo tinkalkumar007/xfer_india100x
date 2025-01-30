@@ -13,9 +13,10 @@
  "fields": [
   {
    "fieldname": "fee_type",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Fee Type"
+   "label": "Fee Type",
+   "options": "Fee Types"
   },
   {
    "fieldname": "column_break_tqjy",
@@ -32,7 +33,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-01-18 12:35:55.635810",
+ "modified": "2025-01-30 13:42:45.491312",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Program Fees Structure",

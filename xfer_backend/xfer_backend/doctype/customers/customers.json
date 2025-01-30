@@ -11,6 +11,7 @@
   "mobile_no",
   "status",
   "date_of_birth",
+  "full_name",
   "column_break_wbhw",
   "last_name",
   "email",
@@ -31,12 +32,14 @@
   "risk_category",
   "failed_login_attempts",
   "column_break_jzip",
-  "kyc_level",
   "account_locked",
   "manager_detail_section",
   "manager_name",
   "column_break_hfan",
-  "manager_email"
+  "manager_email",
+  "kyc_status_section",
+  "table_ylxb",
+  "kyc_level"
  ],
  "fields": [
   {
@@ -145,7 +148,8 @@
   },
   {
    "fieldname": "section_break_myhj",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "Activities"
   },
   {
    "fieldname": "risk_category",
@@ -162,12 +166,6 @@
   {
    "fieldname": "column_break_jzip",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "kyc_level",
-   "fieldtype": "Link",
-   "label": "KYC Level",
-   "options": "KYC Level"
   },
   {
    "default": "0",
@@ -192,7 +190,7 @@
   {
    "fetch_from": "manager_name.email_id",
    "fieldname": "manager_email",
-   "fieldtype": "Data",
+   "fieldtype": "Read Only",
    "in_filter": 1,
    "in_list_view": 1,
    "in_standard_filter": 1,
@@ -207,6 +205,30 @@
    "fieldname": "selfie",
    "fieldtype": "Attach Image",
    "label": "Selfie"
+  },
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Read Only",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "Full Name"
+  },
+  {
+   "fieldname": "kyc_status_section",
+   "fieldtype": "Section Break",
+   "label": "KYC Status"
+  },
+  {
+   "fieldname": "table_ylxb",
+   "fieldtype": "Table",
+   "options": "Customer KYC Table"
+  },
+  {
+   "fieldname": "kyc_level",
+   "fieldtype": "Link",
+   "label": "KYC Level",
+   "options": "KYC Level"
   }
  ],
  "image_field": "selfie",
@@ -217,7 +239,7 @@
    "link_fieldname": "mobile_number"
   }
  ],
- "modified": "2025-01-21 17:09:16.332675",
+ "modified": "2025-01-30 14:01:01.599724",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Customers",

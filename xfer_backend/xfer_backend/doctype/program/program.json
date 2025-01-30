@@ -13,6 +13,7 @@
   "program_name",
   "category",
   "terms_conditions",
+  "card_type",
   "column_break_trnb",
   "status",
   "risk_score",
@@ -25,17 +26,27 @@
   "lounge_access",
   "column_break_hcat",
   "reward_points",
+  "controls_section",
+  "allow_kit_to_kit",
+  "column_break_kwoe",
+  "allow_reload",
+  "column_break_duua",
+  "allow_jit",
+  "column_break_unsb",
+  "allow_add_on",
+  "add_on_value",
+  "column_break_yzdp",
+  "allow_reload",
   "notifications_section",
   "table_zcnq",
   "whitelist_mcc_section",
   "mcc_code",
+  "bins",
   "column_break_iwuw",
   "tids",
   "mids",
   "kyc_requirements_section",
-  "document_name",
-  "column_break_ydle",
-  "is_enabled",
+  "table_knkp",
   "compliance_tab",
   "compliance_section",
   "compliance_level",
@@ -250,22 +261,6 @@
    "label": "KYC Requirements"
   },
   {
-   "fieldname": "document_name",
-   "fieldtype": "Link",
-   "label": "Document Name",
-   "options": "KYC Document"
-  },
-  {
-   "default": "0",
-   "fieldname": "is_enabled",
-   "fieldtype": "Check",
-   "label": "Is Enabled"
-  },
-  {
-   "fieldname": "column_break_ydle",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "tids",
    "fieldtype": "Table",
    "label": "TIDs",
@@ -276,11 +271,72 @@
    "fieldtype": "Table",
    "label": "MIDs",
    "options": "MIDs"
+  },
+  {
+   "fieldname": "controls_section",
+   "fieldtype": "Section Break",
+   "label": "Controls"
+  },
+  {
+   "default": "0",
+   "fieldname": "allow_kit_to_kit",
+   "fieldtype": "Check",
+   "label": "Allow KIT to KIT"
+  },
+  {
+   "default": "0",
+   "fieldname": "allow_add_on",
+   "fieldtype": "Check",
+   "label": "Allow ADD ON"
+  },
+  {
+   "fieldname": "column_break_duua",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "bins",
+   "fieldtype": "Table",
+   "label": "BINs",
+   "options": "BINs"
+  },
+  {
+   "fieldname": "table_knkp",
+   "fieldtype": "Table",
+   "options": "Program KYC Table"
+  },
+  {
+   "fieldname": "column_break_yzdp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "allow_reload",
+   "fieldtype": "Check",
+   "label": "Allow Reload"
+  },
+  {
+   "default": "0",
+   "fieldname": "allow_jit",
+   "fieldtype": "Check",
+   "label": "Allow JIT"
+  },
+  {
+   "depends_on": "eval:doc.allow_add_on == 1",
+   "fieldname": "add_on_value",
+   "fieldtype": "Int",
+   "label": "ADD On Value"
+  },
+  {
+   "default": "Virtual",
+   "fieldname": "card_type",
+   "fieldtype": "Select",
+   "label": "Card Type",
+   "options": "Virtual\nPhysical\nVirtual and Physical"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-20 17:49:15.869758",
+ "modified": "2025-01-30 13:26:30.815952",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Program",

@@ -93,6 +93,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import DataTableToolbar from './DataTableToolbar'
 import CreateOrder from '../pages/CreateOrder/CreateOrder'
+import { useFrappeGetDocList } from 'frappe-react-sdk'
 
 const fieldIconMap = {
   approved: {
@@ -219,6 +220,25 @@ export function InventoryTable() {
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
 
+  const { data: inventoryData, isLoading: inventoryDataLoading } =
+    useFrappeGetDocList('Inventory', {
+      fields: ['*'],
+    })
+
+  console.log(inventoryData)
+
+  const tableData = React.useMemo(() => {
+    if (!inventoryData) return []
+    return inventoryData?.map((program) => ({
+      id: program.name, // Frappe's unique identifier
+      program_name: program.program_name,
+      category: program.category,
+      description: program.description,
+      status: inventoryData.status,
+      date: inventoryData.creation,
+    }))
+  }, [inventoryData])
+
   const columns = [
     {
       id: 'select',
@@ -323,37 +343,37 @@ export function InventoryTable() {
         </div>
       ),
     },
-    {
-      accessorKey: 'actions',
-      header: '',
-      cell: ({ row }) => {
-        const rowData = row.original // Get the entire row's data for actions
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => navigator.clipboard.writeText(payment.id)}
-              >
-                Approve
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => navigator.clipboard.writeText(payment.id)}
-              >
-                Reject
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )
-      },
-    },
+    // {
+    //   accessorKey: 'actions',
+    //   header: '',
+    //   cell: ({ row }) => {
+    //     const rowData = row.original // Get the entire row's data for actions
+    //     return (
+    //       <DropdownMenu>
+    //         <DropdownMenuTrigger asChild>
+    //           <Button variant="ghost" className="h-8 w-8 p-0">
+    //             <span className="sr-only">Open menu</span>
+    //             <MoreHorizontal />
+    //           </Button>
+    //         </DropdownMenuTrigger>
+    //         <DropdownMenuContent align="end">
+    //           <DropdownMenuItem
+    //             className="cursor-pointer"
+    //             onClick={() => navigator.clipboard.writeText(payment.id)}
+    //           >
+    //             Approve
+    //           </DropdownMenuItem>
+    //           <DropdownMenuItem
+    //             className="cursor-pointer"
+    //             onClick={() => navigator.clipboard.writeText(payment.id)}
+    //           >
+    //             Reject
+    //           </DropdownMenuItem>
+    //         </DropdownMenuContent>
+    //       </DropdownMenu>
+    //     )
+    //   },
+    // },
   ]
 
   const table = useReactTable({

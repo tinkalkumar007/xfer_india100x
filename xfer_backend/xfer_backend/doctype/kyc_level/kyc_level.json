@@ -7,24 +7,30 @@
  "engine": "InnoDB",
  "field_order": [
   "level",
-  "is_active"
+  "column_break_pccz",
+  "is_enabled"
  ],
  "fields": [
-  {
-   "fieldname": "is_active",
-   "fieldtype": "Data",
-   "label": "Is active"
-  },
   {
    "fieldname": "level",
    "fieldtype": "Data",
    "label": "Level",
    "unique": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_enabled",
+   "fieldtype": "Check",
+   "label": "Is Enabled"
+  },
+  {
+   "fieldname": "column_break_pccz",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-20 17:38:28.257252",
+ "modified": "2025-01-30 13:51:40.924359",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "KYC Level",

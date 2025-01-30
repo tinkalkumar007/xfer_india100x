@@ -2,9 +2,25 @@
  {
   "docstatus": 0,
   "doctype": "KYC Level",
-  "is_active": "True",
-  "level": "Level 1",
-  "modified": "2025-01-20 17:23:56.047123",
-  "name": "0cku9kqt6o"
+  "is_enabled": 0,
+  "level": "Basic",
+  "modified": "2025-01-30 13:51:56.415820",
+  "name": "Basic"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "KYC Level",
+  "is_enabled": 1,
+  "level": "Intermediate",
+  "modified": "2025-01-30 13:59:36.803359",
+  "name": "Intermediate"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "KYC Level",
+  "is_enabled": 0,
+  "level": "No KYC",
+  "modified": "2025-01-30 17:51:49.854806",
+  "name": "No KYC"
  }
 ]

@@ -64,14 +64,6 @@
   "name": "7999"
  },
  {
-  "description": "Aquariums, Sea-aquariums, Dolphinariums",
-  "docstatus": 0,
-  "doctype": "MCC Codes",
-  "mcc": "7998",
-  "modified": "2025-01-20 14:41:07.726649",
-  "name": "7998"
- },
- {
   "description": "Membership Clubs (Sports, Recreation, Athletic), Country Clubs, and Private Golf Courses",
   "docstatus": 0,
   "doctype": "MCC Codes",
@@ -190,14 +182,6 @@
   "mcc": "7631",
   "modified": "2025-01-20 14:41:07.884875",
   "name": "7631"
- },
- {
-  "description": "Air Conditioning and Refrigeration Repair Shops",
-  "docstatus": 0,
-  "doctype": "MCC Codes",
-  "mcc": "7623",
-  "modified": "2025-01-20 14:41:07.894295",
-  "name": "7623"
  },
  {
   "description": "Radio Repair Shops",
@@ -528,14 +512,6 @@
   "name": "5944"
  },
  {
-  "description": "Stationery Stores, Office and School Supply Stores",
-  "docstatus": 0,
-  "doctype": "MCC Codes",
-  "mcc": "5943",
-  "modified": "2025-01-20 14:41:08.328594",
-  "name": "5943"
- },
- {
   "description": "Book Stores",
   "docstatus": 0,
   "doctype": "MCC Codes",
@@ -816,14 +792,6 @@
   "name": "5533"
  },
  {
-  "description": "Automotive Tire Stores",
-  "docstatus": 0,
-  "doctype": "MCC Codes",
-  "mcc": "5532",
-  "modified": "2025-01-20 14:41:08.706960",
-  "name": "5532"
- },
- {
   "description": "Automobile and Truck Dealers (Used Only)",
   "docstatus": 0,
   "doctype": "MCC Codes",
@@ -1024,14 +992,6 @@
   "name": "4225"
  },
  {
-  "description": "Courier Services – Air or Ground, Freight forwarders",
-  "docstatus": 0,
-  "doctype": "MCC Codes",
-  "mcc": "4215",
-  "modified": "2025-01-20 14:41:08.977736",
-  "name": "4215"
- },
- {
   "description": "Motor Freight Carriers, Moving and Storage Companies, Trucking – Local/Long Distance, Delivery Services – Local",
   "docstatus": 0,
   "doctype": "MCC Codes",
@@ -1048,28 +1008,12 @@
   "name": "4121"
  },
  {
-  "description": "Passenger Railways",
-  "docstatus": 0,
-  "doctype": "MCC Codes",
-  "mcc": "4112",
-  "modified": "2025-01-20 14:41:09.010129",
-  "name": "4112"
- },
- {
   "description": "Local/Suburban Commuter Passenger Transportation – Railroads, Feries, Local Water Transportation.",
   "docstatus": 0,
   "doctype": "MCC Codes",
   "mcc": "4111",
   "modified": "2025-01-20 14:41:09.019157",
   "name": "4111"
- },
- {
-  "description": "Digital Goods: Large Digital Goods Merchant",
-  "docstatus": 0,
-  "doctype": "MCC Codes",
-  "mcc": "5818",
-  "modified": "2025-01-20 14:41:09.030770",
-  "name": "5818"
  },
  {
   "description": "Travel Agencies and Tour Operations",
@@ -1102,5 +1046,61 @@
   "mcc": "5999",
   "modified": "2025-01-20 14:41:09.068906",
   "name": "5999"
+ },
+ {
+  "description": "Aquariums, Sea-aquariums, Dolphinariums",
+  "docstatus": 0,
+  "doctype": "MCC Codes",
+  "mcc": "7998",
+  "modified": "2025-01-20 14:41:07.726649",
+  "name": "7998"
+ },
+ {
+  "description": "Digital Goods: Large Digital Goods Merchant",
+  "docstatus": 0,
+  "doctype": "MCC Codes",
+  "mcc": "5818",
+  "modified": "2025-01-20 14:41:09.030770",
+  "name": "5818"
+ },
+ {
+  "description": "Stationery Stores, Office and School Supply Stores",
+  "docstatus": 0,
+  "doctype": "MCC Codes",
+  "mcc": "5943",
+  "modified": "2025-01-20 14:41:08.328594",
+  "name": "5943"
+ },
+ {
+  "description": "Air Conditioning and Refrigeration Repair Shops",
+  "docstatus": 0,
+  "doctype": "MCC Codes",
+  "mcc": "7623",
+  "modified": "2025-01-20 14:41:07.894295",
+  "name": "7623"
+ },
+ {
+  "description": "Automotive Tire Stores",
+  "docstatus": 0,
+  "doctype": "MCC Codes",
+  "mcc": "5532",
+  "modified": "2025-01-20 14:41:08.706960",
+  "name": "5532"
+ },
+ {
+  "description": "Courier Services – Air or Ground, Freight forwarders",
+  "docstatus": 0,
+  "doctype": "MCC Codes",
+  "mcc": "4215",
+  "modified": "2025-01-20 14:41:08.977736",
+  "name": "4215"
+ },
+ {
+  "description": "Passenger Railways",
+  "docstatus": 0,
+  "doctype": "MCC Codes",
+  "mcc": "4112",
+  "modified": "2025-01-20 14:41:09.010129",
+  "name": "4112"
  }
 ]

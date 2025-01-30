@@ -1,1 +1,233 @@
-[]
+[
+ {
+  "add_on_value": 10,
+  "allow_add_on": 1,
+  "allow_jit": 0,
+  "allow_kit_to_kit": 0,
+  "allow_reload": 0,
+  "bins": [
+   {
+    "bank_name": "SBI ",
+    "bin_number": "965132",
+    "is_enabled": 0
+   },
+   {
+    "bank_name": "Axis Bank",
+    "bin_number": "644521",
+    "is_enabled": 0
+   }
+  ],
+  "card_type": "Virtual and Physical",
+  "category": "Entertainment",
+  "compliance_level": "",
+  "description": null,
+  "docstatus": 0,
+  "doctype": "Program",
+  "insurance__travel": 0,
+  "insurance_card": 0,
+  "lounge_access": 0,
+  "mcc_code": [
+   {
+    "is_enabled": 0,
+    "mcc": "5943",
+    "title": null
+   },
+   {
+    "is_enabled": 0,
+    "mcc": "7623",
+    "title": null
+   }
+  ],
+  "mids": [
+   {
+    "is_enabled": 0,
+    "merchant_id": "64521"
+   },
+   {
+    "is_enabled": 0,
+    "merchant_id": "44265"
+   }
+  ],
+  "modified": "2025-01-30 13:44:47.468215",
+  "name": "Privacy Card-0001",
+  "policy_url": null,
+  "program_manager": "Privacy Card",
+  "program_name": "OTT",
+  "remark": "",
+  "reward_points": 1,
+  "risk_score": 0,
+  "score": "",
+  "status": "Draft",
+  "table_eosn": [
+   {
+    "channel": "ATM",
+    "is_enabled": 0,
+    "max_amount": "56235",
+    "min_amount": "145"
+   },
+   {
+    "channel": "IMPS",
+    "is_enabled": 0,
+    "max_amount": "85296",
+    "min_amount": "184"
+   },
+   {
+    "channel": "POS",
+    "is_enabled": 0,
+    "max_amount": "54259",
+    "min_amount": "152"
+   }
+  ],
+  "table_knkp": [
+   {
+    "is_enabled": 1,
+    "kyc_document": "Adhar Card"
+   },
+   {
+    "is_enabled": 1,
+    "kyc_document": "Pan Card"
+   }
+  ],
+  "table_ujtz": [
+   {
+    "amount": 23.0,
+    "fee_type": "Issuing Fee"
+   },
+   {
+    "amount": 2.0,
+    "fee_type": "Reload Fee"
+   },
+   {
+    "amount": 4.0,
+    "fee_type": "Transaction Fee"
+   }
+  ],
+  "table_zcnq": [],
+  "terms_conditions": null,
+  "tids": [
+   {
+    "is_enabled": 0,
+    "terminal_id": "6316"
+   },
+   {
+    "is_enabled": 0,
+    "terminal_id": "9865"
+   },
+   {
+    "is_enabled": 0,
+    "terminal_id": "7542"
+   }
+  ]
+ },
+ {
+  "add_on_value": 2,
+  "allow_add_on": 1,
+  "allow_jit": 0,
+  "allow_kit_to_kit": 1,
+  "allow_reload": 1,
+  "bins": [
+   {
+    "bank_name": "Axis",
+    "bin_number": "653165",
+    "is_enabled": 0
+   },
+   {
+    "bank_name": "HDFC",
+    "bin_number": "986532",
+    "is_enabled": 0
+   }
+  ],
+  "card_type": "Virtual",
+  "category": "Business",
+  "compliance_level": null,
+  "description": null,
+  "docstatus": 0,
+  "doctype": "Program",
+  "insurance__travel": 0,
+  "insurance_card": 0,
+  "lounge_access": 1,
+  "mcc_code": [
+   {
+    "is_enabled": 0,
+    "mcc": "4112",
+    "title": "Passenger Railways"
+   },
+   {
+    "is_enabled": 0,
+    "mcc": "4215",
+    "title": "Courier Services – Air or Ground, Freight forwarders"
+   },
+   {
+    "is_enabled": 0,
+    "mcc": "5532",
+    "title": "Automotive Tire Stores"
+   }
+  ],
+  "mids": [
+   {
+    "is_enabled": 0,
+    "merchant_id": "45612"
+   },
+   {
+    "is_enabled": 0,
+    "merchant_id": "46455"
+   }
+  ],
+  "modified": "2025-01-30 16:53:59.087976",
+  "name": "ONO-0001",
+  "policy_url": null,
+  "program_manager": "ONO",
+  "program_name": "Shopping Card",
+  "remark": null,
+  "reward_points": 1,
+  "risk_score": 0,
+  "score": null,
+  "status": "Draft",
+  "table_eosn": [
+   {
+    "channel": "POS",
+    "is_enabled": 1,
+    "max_amount": "8956",
+    "min_amount": "146"
+   },
+   {
+    "channel": "ATM",
+    "is_enabled": 1,
+    "max_amount": "45141",
+    "min_amount": "134"
+   }
+  ],
+  "table_knkp": [
+   {
+    "is_enabled": 0,
+    "kyc_document": "License"
+   }
+  ],
+  "table_ujtz": [
+   {
+    "amount": 3.0,
+    "fee_type": "Reload Fee"
+   },
+   {
+    "amount": 2.0,
+    "fee_type": "Transaction Fee"
+   }
+  ],
+  "table_zcnq": [],
+  "terms_conditions": null,
+  "tids": [
+   {
+    "is_enabled": 0,
+    "terminal_id": "5286"
+   },
+   {
+    "is_enabled": 0,
+    "terminal_id": "5568"
+   },
+   {
+    "is_enabled": 0,
+    "terminal_id": "6323"
+   }
+  ]
+ }
+]

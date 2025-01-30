@@ -1,6 +1,6 @@
-import * as React from "react";
-import { Link } from "react-router-dom";
-import axios from "@/api/axios";
+import * as React from 'react'
+import { Link } from 'react-router-dom'
+import axios from '@/api/axios'
 import {
   flexRender,
   getCoreRowModel,
@@ -10,11 +10,11 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { CalendarDateRangePicker } from "./CalendarDateRangePicker";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import DataTableToolbar from "@/components/DataTableToolbar";
+} from '@tanstack/react-table'
+import { CalendarDateRangePicker } from './CalendarDateRangePicker'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import DataTableToolbar from '@/components/DataTableToolbar'
 import {
   Form,
   FormControl,
@@ -23,7 +23,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form'
 import {
   ArrowUpDown,
   ChevronDown,
@@ -40,9 +40,9 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-} from "lucide-react";
-import { saveAs } from "file-saver";
-import * as Papa from "papaparse";
+} from 'lucide-react'
+import { saveAs } from 'file-saver'
+import * as Papa from 'papaparse'
 import {
   AlertDialog,
   AlertDialogTitle,
@@ -51,18 +51,18 @@ import {
   AlertDialogHeader,
   AlertDialogFooter,
   AlertDialogDescription,
-} from "@/components/ui/alert-dialog";
+} from '@/components/ui/alert-dialog'
 
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card";
-import { DataTablePagination } from "@/components/DataTablePagination";
+} from '@/components/ui/card'
+import { DataTablePagination } from '@/components/DataTablePagination'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -71,7 +71,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu'
 import {
   Sheet,
   SheetClose,
@@ -81,7 +81,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from '@/components/ui/sheet'
 import {
   Select,
   SelectContent,
@@ -90,8 +90,8 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
 import {
   Table,
   TableBody,
@@ -99,21 +99,26 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import DataTableViewOptions from "./DataTableViewOptions";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import  { useFrappeGetDocList, useFrappeCreateDoc, useFrappeUpdateDoc } from "frappe-react-sdk";
+} from '@/components/ui/table'
+import { Badge } from '@/components/ui/badge'
+import DataTableViewOptions from './DataTableViewOptions'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import {
+  useFrappeGetDocList,
+  useFrappeCreateDoc,
+  useFrappeUpdateDoc,
+  useFrappeGetDoc,
+} from 'frappe-react-sdk'
 
 const fieldIconMap = {
   kycRequired: {
     icon: (
       <Badge className="bg-[#e4f5e9] text-[#16794c] cursor-pointer">KYC</Badge>
     ),
-    label: "KYC Required",
+    label: 'KYC Required',
   },
   contactlessAllowed: {
     icon: (
@@ -121,7 +126,7 @@ const fieldIconMap = {
         Contactless
       </Badge>
     ),
-    label: "Contactless Allowed",
+    label: 'Contactless Allowed',
   },
   isPhysical: {
     icon: (
@@ -129,7 +134,7 @@ const fieldIconMap = {
         Physical
       </Badge>
     ),
-    label: "Physical Not Allowed",
+    label: 'Physical Not Allowed',
   },
   isRewardsApplicable: {
     icon: (
@@ -137,9 +142,9 @@ const fieldIconMap = {
         Reward
       </Badge>
     ),
-    label: "Rewards Applicable",
+    label: 'Rewards Applicable',
   },
-};
+}
 
 // const data = [
 //   {
@@ -193,102 +198,111 @@ const fieldIconMap = {
 // ];
 
 const filters = [
-  "Today",
-  "Last 7 days",
-  "Last 30 days",
-  "Last 3 months",
-  "Last 6 months",
-];
+  'Today',
+  'Last 7 days',
+  'Last 30 days',
+  'Last 3 months',
+  'Last 6 months',
+]
 
 const productSchema = z.object({
-  program_name: z.string().min(1, "Program name is required"),
+  program_name: z.string().min(1, 'Program name is required'),
   description: z.string().optional(),
   category: z.string().optional(),
   terms_conditions: z.string().optional(),
-});
+})
 
 export function ProgramTableDemo() {
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false)
 
   const onSubmit = (data) => {
-
     console.log(data)
-   
-      createDoc('Program', {
-        program_name: data.program_name,
-        category: data.category, 
-        description: data.description,
-        status: "Pending For Approval",
-        terms_conditions: data.terms_conditions
-      });
-      
-     
-      form.reset(); // Reset form fields
-      // Close the sheet after successful submission
-      
-    } 
+
+    createDoc('Program', {
+      program_name: data.program_name,
+      category: data.category,
+      description: data.description,
+      status: 'Pending For Approval',
+      terms_conditions: data.terms_conditions,
+    })
+
+    form.reset() // Reset form fields
+    // Close the sheet after successful submission
+  }
 
   const form = useForm({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      program_name: "",
-      description: "",
-      category: "",
-      terms_conditions: "",
+      program_name: '',
+      description: '',
+      category: '',
+      terms_conditions: '',
     },
-  });
-
-  const [sorting, setSorting] = React.useState([]);
-  const [columnFilters, setColumnFilters] = React.useState([]);
-  const [columnVisibility, setColumnVisibility] = React.useState({});
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [selectedFilter, setSelectedFilter] = React.useState("Today");
-
-  // const [data, setData] = React.useState([])
-  const [loading, setLoading] = React.useState(true); // State for loading
-  const [error, setError] = React.useState(null); // State for error handling
-
-  const { data: programData } = useFrappeGetDocList('Program', {
-    fields: ["name", "program_name", "status", "description", "category"]
   })
 
-  const { createDoc } = useFrappeCreateDoc();
-  const { updateDoc } = useFrappeUpdateDoc();
+  const [sorting, setSorting] = React.useState([])
+  const [columnFilters, setColumnFilters] = React.useState([])
+  const [columnVisibility, setColumnVisibility] = React.useState({})
+  const [rowSelection, setRowSelection] = React.useState({})
+  const [selectedFilter, setSelectedFilter] = React.useState('Today')
+
+  // const [data, setData] = React.useState([])
+  const [loading, setLoading] = React.useState(true) // State for loading
+  const [error, setError] = React.useState(null) // State for error handling
+
+  const { data: programData, isLoading: programDataLoading } =
+    useFrappeGetDocList('Program', {
+      fields: [
+        '_user_tags',
+        'name',
+        'program_name',
+        'category',
+        'description',
+        'status',
+      ],
+    })
+
+  if (!programDataLoading) {
+    console.log('Program Data:', programData)
+  }
+
+  const { createDoc } = useFrappeCreateDoc()
+  const { updateDoc } = useFrappeUpdateDoc()
 
   const tableData = React.useMemo(() => {
-    if (!programData) return [];
-    return programData.map(program => ({
+    if (!programData) return []
+    return programData.map((program) => ({
       id: program.name, // Frappe's unique identifier
-      product_name: program.program_name,
+      program_name: program.program_name,
       category: program.category,
       description: program.description,
-      status: program.status
-    }));
-  }, [programData]);
+      status: program.status,
+      tags: program._user_tags,
+    }))
+  }, [programData])
 
   function handleBlock(id) {
-  
-  
-      updateDoc('Program', id, {
-        status: 'Blocked'  // or whatever status you want to set
-      });
-      // Optionally refresh your data here
-    
+    updateDoc('Program', id, {
+      status: 'Blocked',
+    })
   }
-  
 
   const columns = [
     {
-      id: "select",
+      id: 'select',
       header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
+        <div className="flex justify-start">
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && 'indeterminate')
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
+          />
+        </div>
       ),
       cell: ({ row }) => (
         <Checkbox
@@ -302,57 +316,52 @@ export function ProgramTableDemo() {
       enableHiding: false,
     },
     {
-      accessorKey: "product_name",
-      header: "Name",
+      accessorKey: 'program_name',
+      header: 'Name',
       cell: ({ row }) => {
-        
         return (
-          <Link to={`/programs/program/${row.original.name}`}>
+          <Link to={`/programs/program/${row.original.id}`}>
             <div className="capitalize text-center cursor-pointer hover:underline">
-              {row.original.product_name || ""}  
+              {row.original.program_name || '-'}
             </div>
           </Link>
-        );
+        )
       },
     },
     {
-      accessorKey: "category",
-      header: "Category",
+      accessorKey: 'category',
+      header: 'Category',
       cell: ({ row }) => (
         <div className="capitalize text-center">
-          {row.original.category || ""}
+          {row.original.category || '-'}
         </div>
       ),
     },
     {
-      accessorKey: "description",
-      header: "Description",
+      accessorKey: 'description',
+      header: 'Description',
       cell: ({ row }) => (
         <div className="capitalize text-center">
-          {row.original.description || ""}
+          {row.original.description || '-'}
         </div>
       ),
     },
     {
-      accessorKey: "status",
-      header: "Status",
+      accessorKey: 'status',
+      header: 'Status',
       cell: ({ row }) => {
-        const status = row.original.status || "";
+        const status = row.original.status || '-'
         return (
-   
-  
           <div className="text-center">
+            {status === '' && ''}
+            {status === 'Draft' && <Badge>Draft</Badge>}
 
-            {
-              status === "" && ""
-            }
-            
             {status === 'Active' && (
               <Badge className="bg-[#e4f5e9] text-[#16794c]">Active</Badge>
-            )} 
-             {status === 'Suspended' && (
+            )}
+            {status === 'Suspended' && (
               <Badge className="bg-[#fff7d3] text-[#ab6e05]">Suspended</Badge>
-            )} 
+            )}
             {status === 'Inactive' && (
               <Badge className="bg-[#fff0f0] text-[#b52a2a]">Inactive</Badge>
             )}
@@ -363,8 +372,8 @@ export function ProgramTableDemo() {
               <Badge className="bg-[#fff0f0] text-[#b52a2a]">Blocked</Badge>
             )}
           </div>
-      
-      )},
+        )
+      },
     },
     // {
     //   accessorKey: "programManager",
@@ -434,91 +443,79 @@ export function ProgramTableDemo() {
     //     );
     //   },
     // },
-    // {
-    //   accessorKey: "tags",
-    //   header: "Tags",
-    //   cell: ({ row }) => (
-    //     <div className="flex items-center justify-left gap-2">
-    //       {Object.keys(fieldIconMap).map((field) => {
-    //         if (row.original[field]) {
-    //           return (
-    //             <span
-    //               key={field}
-    //               className={`flex items-center gap-1`}
-    //               title={fieldIconMap[field].label}
-    //             >
-    //               {fieldIconMap[field].icon}
-    //             </span>
-    //           );
-    //         }
-    //         return null;
-    //       })}
-    //     </div>
-    //   ),
-    // },
     {
-      accessorKey: "actions",
-      header: "",
+      accessorKey: 'tags',
+      header: 'Tags',
       cell: ({ row }) => {
-        const id = row.original.id; // Get the entire row's data for actions
-        console.log("Print console id:",id)
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                className="cursor-pointer"
+        const tags = row.original?.tags?.slice(1).split(',')
 
-              >
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => handleBlock(id)}
-              >
-                Block
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
+        console.log('User tags:', row.original?.tags)
+        return (
+          <div className="flex items-center justify-center gap-2">
+            {tags?.map((tag) => {
+              switch (tag) {
+                case 'KYC':
+                  return (
+                    <Badge variant="outline" className="">
+                      {tag}
+                    </Badge>
+                  )
+                case 'Reward':
+                  return (
+                    <Badge variant="outline" className="">
+                      {tag}
+                    </Badge>
+                  )
+                case 'Contactless':
+                  return (
+                    <Badge variant="outline" className="">
+                      {tag}
+                    </Badge>
+                  )
+                case 'Physical':
+                  return (
+                    <Badge variant="outline" className="">
+                      {tag}
+                    </Badge>
+                  )
+              }
+            })}
+          </div>
+        )
       },
     },
     // {
-    //   id: 'actions',
-    //   enableHiding: false,
+    //   accessorKey: 'actions',
+    //   header: '',
     //   cell: ({ row }) => {
-    //     const payment = row.original;
-
+    //     const id = row.original.id // Get the entire row's data for actions
+    //     console.log('Print console id:', id)
     //     return (
-    //       <DropdownMenu>
-    //         <DropdownMenuTrigger asChild>
-    //           <Button variant="ghost" className="h-8 w-8 p-0">
-    //             <span className="sr-only">Open menu</span>
-    //             <MoreHorizontal />
-    //           </Button>
-    //         </DropdownMenuTrigger>
-    //         <DropdownMenuContent align="end">
-    //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-    //           <DropdownMenuItem
-    //             onClick={() => navigator.clipboard.writeText(payment.id)}
-    //           >
-    //             Copy payment ID
-    //           </DropdownMenuItem>
-    //           <DropdownMenuSeparator />
-    //           <DropdownMenuItem>View customer</DropdownMenuItem>
-    //           <DropdownMenuItem>View payment details</DropdownMenuItem>
-    //         </DropdownMenuContent>
-    //       </DropdownMenu>
-    //     );
+    //       <div className="flex justify-center">
+    //         <DropdownMenu>
+    //           <DropdownMenuTrigger asChild>
+    //             <Button variant="ghost" className="h-8 w-8 p-0">
+    //               <span className="sr-only">Open menu</span>
+    //               <MoreHorizontal />
+    //             </Button>
+    //           </DropdownMenuTrigger>
+    //           <DropdownMenuContent align="end">
+    //             <DropdownMenuItem className="cursor-pointer">
+    //               Edit
+    //             </DropdownMenuItem>
+    //             <DropdownMenuItem
+    //               className="cursor-pointer"
+    //               onClick={() => handleBlock(id)}
+    //             >
+    //               Block
+    //             </DropdownMenuItem>
+    //           </DropdownMenuContent>
+    //         </DropdownMenu>
+    //       </div>
+    //     )
     //   },
     // },
-  ];
-
+  ]
 
   const table = useReactTable({
     data: tableData,
@@ -545,7 +542,7 @@ export function ProgramTableDemo() {
         pageSize: 5, // Set page size to 5
       },
     },
-  });
+  })
   // const table = useReactTable({
   //   data,
   //   columns,
@@ -571,26 +568,26 @@ export function ProgramTableDemo() {
   // })
 
   const openDialog = (rowData) => {
-    setIsDialogOpen(true);
-  };
+    setIsDialogOpen(true)
+  }
 
   const closeDialog = () => {
-    setIsDialogOpen(false);
+    setIsDialogOpen(false)
     // Clear any row data when canceled
-  };
+  }
   const handleFilterChange = (filter) => {
-    setSelectedFilter(filter);
+    setSelectedFilter(filter)
     // Apply your filtering logic here based on `filter`
-    console.log(`Filter applied: ${filter}`);
-  };
+    console.log(`Filter applied: ${filter}`)
+  }
   const downloadCSV = () => {
     // Convert table data to CSV
-    const csv = Papa.unparse(data);
+    const csv = Papa.unparse(data)
     // Create a Blob object for the CSV
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
     // Use FileSaver to trigger a download
-    saveAs(blob, "table-data.csv");
-  };
+    saveAs(blob, 'table-data.csv')
+  }
   return (
     <Card>
       <CardHeader>
@@ -599,16 +596,17 @@ export function ProgramTableDemo() {
       <CardContent>
         <div className="w-full flex flex-col gap-4">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
-            {/* <div className="w-full">
-              <DataTableToolbar table={table} inputFilter="productName" />
-            </div> */}
-            <div className="flex gap-2 items-center">
+            <div>
+              {/* <DataTableToolbar table={table} inputFilter="productName" /> */}
+            </div>
+
+            <div className="flex  gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>
                 <FileDown />
               </Button>
 
               <DataTableViewOptions table={table} />
-              <Sheet>
+              {/* <Sheet>
                 <SheetTrigger asChild>
                   <div className="flex justify-center items-center">
                     <Button
@@ -629,20 +627,19 @@ export function ProgramTableDemo() {
                     </SheetDescription>
                   </SheetHeader>
                   <Form {...form}>
-                    <form className="space-y-4 mt-4" onSubmit={form.handleSubmit(onSubmit)}>
-                      {/* Program Name Field */}
+                    <form
+                      className="space-y-4 mt-4"
+                      onSubmit={form.handleSubmit(onSubmit)}
+                    >
                       <FormField
                         name="program_name"
                         control={form.control}
-                  
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Program Name</FormLabel>
                             <FormControl>
                               <Input
-                            
                                 placeholder="Enter program name"
-                            
                                 {...field}
                               />
                             </FormControl>
@@ -653,15 +650,12 @@ export function ProgramTableDemo() {
                       <FormField
                         name="category"
                         control={form.control}
-                     
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Program Category</FormLabel>
                             <FormControl>
                               <Input
-                          
                                 placeholder="Enter program category"
-                              
                                 {...field}
                               />
                             </FormControl>
@@ -670,7 +664,6 @@ export function ProgramTableDemo() {
                         )}
                       />
 
-                      {/* Description Field */}
                       <FormField
                         name="description"
                         control={form.control}
@@ -680,7 +673,6 @@ export function ProgramTableDemo() {
                             <FormControl>
                               <Textarea
                                 placeholder="Enter product description"
-                             
                                 {...field}
                               />
                             </FormControl>
@@ -702,8 +694,8 @@ export function ProgramTableDemo() {
                                 onChange={(e) => {
                                   const files = e.target.files
                                     ? Array.from(e.target.files)
-                                    : [];
-                                  field.onChange(files);
+                                    : []
+                                  field.onChange(files)
                                 }}
                               />
                             </FormControl>
@@ -712,18 +704,13 @@ export function ProgramTableDemo() {
                         )}
                       />
 
-                      {/* Submit Button */}
                       <SheetFooter>
-                       
-                          <Button type="submit">
-                            Submit
-                          </Button>
-                    
+                        <Button type="submit">Submit</Button>
                       </SheetFooter>
                     </form>
                   </Form>
                 </SheetContent>
-              </Sheet>
+              </Sheet> */}
             </div>
           </div>
           <div className="rounded-md border">
@@ -741,7 +728,7 @@ export function ProgramTableDemo() {
                                 header.getContext()
                               )}
                         </TableHead>
-                      );
+                      )
                     })}
                   </TableRow>
                 ))}
@@ -751,7 +738,7 @@ export function ProgramTableDemo() {
                   table.getRowModel().rows.map((row) => (
                     <TableRow
                       key={row.id}
-                      data-state={row.getIsSelected() && "selected"}
+                      data-state={row.getIsSelected() && 'selected'}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell key={cell.id}>
@@ -780,5 +767,5 @@ export function ProgramTableDemo() {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

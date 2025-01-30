@@ -3,15 +3,6 @@
   "docstatus": 0,
   "doctype": "Card Status",
   "is_active": 1,
-  "modified": "2025-01-21 19:31:57.534673",
-  "name": "Active",
-  "remark": null,
-  "status": "Active"
- },
- {
-  "docstatus": 0,
-  "doctype": "Card Status",
-  "is_active": 1,
   "modified": "2025-01-21 19:32:09.300315",
   "name": "Blocked",
   "remark": null,
@@ -22,8 +13,17 @@
   "doctype": "Card Status",
   "is_active": 1,
   "modified": "2025-01-21 19:35:24.354826",
-  "name": "KYC Pending",
+  "name": "Inactive",
   "remark": null,
-  "status": "KYC Pending"
+  "status": "Inactive"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Card Status",
+  "is_active": 1,
+  "modified": "2025-01-21 19:31:57.534673",
+  "name": "Active",
+  "remark": null,
+  "status": "Active"
  }
 ]

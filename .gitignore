@@ -9,3 +9,4 @@ __pycache__
 xfer_backend/public/xfer
 xfer_backend/public/node_modules
 xfer_backend/www/xfer.html
+xfer_backend/xfer_backend

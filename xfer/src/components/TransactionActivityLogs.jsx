@@ -18,78 +18,64 @@ import {
 import { Badge } from '@/components/ui/badge'
 
 import { Link } from 'react-router-dom'
-const data = [
-  {
-    product_id: '1',
-    cardRefId: 'CR456789',
-    Date: '2023-11-28 12:15:30',
-    status: 'Success',
-    FromAccount: '255616106789',
-    ToAccount: '465465546789',
-    team: 'Marketing',
-    product: 'EduPal App',
-    Amount: 9199.99,
-  },
-  {
-    product_id: '2',
-    cardRefId: 'CR456789',
-    Date: '2023-11-28 12:15:30',
-    status: 'Pending',
-    FromAccount: '255616106789',
-    ToAccount: '465465546789',
-    team: 'Sales',
-    product: 'Golzo Platform',
-    Amount: 1899.99,
-  },
-  {
-    product_id: '3',
-    cardRefId: 'CR456789',
-    Date: '2023-11-28 12:15:30',
-    status: 'Failed',
-    FromAccount: '255616106789',
-    ToAccount: '465465546789',
-    team: 'Development',
-    product: 'Call Recorder App',
-    Amount: 4589.89,
-  },
-]
 
-const TransactionActivityLogs = () => {
+const TransactionActivityLogs = ({
+  customerTransactionLogs,
+  customerTransactionLogsLoading,
+}) => {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
 
+  console.log('Customer Transaction Logs: ', customerTransactionLogs)
+
+  const tableData = React.useMemo(() => {
+    if (!customerTransactionLogs) return []
+    return (
+      !customerTransactionLogsLoading &&
+      customerTransactionLogs?.map((log) => ({
+        id: log.name, // Frappe's unique identifier
+        card_reference_id: log.card_reference_id,
+        from: log.from_account,
+        to: log.to_account,
+        amount: log.amount,
+        date: log.creation,
+        status: log.status,
+      }))
+    )
+  }, [customerTransactionLogs])
+
   const columns = [
     {
-      accessorKey: 'cardRefId',
-      header: 'Reference ID',
+      accessorKey: 'card_reference_id',
+      header: 'ID',
       cell: ({ row }) => (
         <Link>
           <div className="text-center hover:underline">
-            {row.getValue('cardRefId')}
+            {row.original.card_reference_id}
           </div>
         </Link>
       ),
     },
 
     {
-      accessorKey: 'FromAccount',
+      accessorKey: 'from',
       header: 'From',
-      cell: ({ row }) => <div>{row.getValue('FromAccount')}</div>,
+      cell: ({ row }) => <div>{row.original.from}</div>,
     },
     {
-      accessorKey: 'ToAccount',
+      accessorKey: 'to',
       header: 'To',
-      cell: ({ row }) => <div>{row.getValue('ToAccount')}</div>,
+      cell: ({ row }) => <div>{row.original.to}</div>,
     },
 
     {
-      accessorKey: 'Amount',
+      accessorKey: 'amount',
       header: 'Amount',
       cell: ({ row }) => {
-        const amount = row.original.Amount // Access the raw data directly
+        const amount = row.original.amount // Access the raw data directly
         // const type = row.original.Type // Access the Type from raw data
         // const colorClass = type === 'Credit' ? 'text-green-500' : 'text-red-500'
         const [whole, decimal] = amount.toFixed(2).split('.') // Split the amount into whole and decimal parts
@@ -102,11 +88,14 @@ const TransactionActivityLogs = () => {
       },
     },
     {
-      accessorKey: 'Date',
+      accessorKey: 'date',
       header: 'Date',
       cell: ({ row }) => {
-        const date = row.getValue('Date').split(' ')[0]
-        const time = row.getValue('Date').split(' ')[1]
+        const dateTime = row.original?.date?.split('.')[0]
+
+        const date = dateTime?.split(' ')[0].split('-').reverse().join('-')
+
+        const time = dateTime.split(' ')[1]
 
         return (
           <div className="flex flex-col items-center text-center">
@@ -134,13 +123,16 @@ const TransactionActivityLogs = () => {
 
           case 'Failed':
             return <Badge className="bg-[#ffe6e6] text-[#d32f2f]">Failed</Badge>
+
+          default:
+            return <div className="text-center">-</div>
         }
       },
     },
   ]
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -158,7 +150,7 @@ const TransactionActivityLogs = () => {
     },
     initialState: {
       pagination: {
-        pageSize: 5, // Set page size to 5
+        pageSize: 3, // Set page size to 5
       },
     },
   })

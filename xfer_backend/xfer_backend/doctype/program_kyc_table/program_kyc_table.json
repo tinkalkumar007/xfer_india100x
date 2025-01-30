@@ -1,0 +1,48 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:kyc_document",
+ "creation": "2025-01-30 11:14:42.387297",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "kyc_document",
+  "column_break_cfkm",
+  "is_enabled"
+ ],
+ "fields": [
+  {
+   "fieldname": "kyc_document",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "KYC Document",
+   "options": "KYC Document",
+   "unique": 1
+  },
+  {
+   "fieldname": "column_break_cfkm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_enabled",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Enabled"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-01-30 11:15:52.109824",
+ "modified_by": "Administrator",
+ "module": "Xfer Backend",
+ "name": "Program KYC Table",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
