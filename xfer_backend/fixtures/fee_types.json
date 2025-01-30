@@ -1,0 +1,30 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Fee Types",
+  "fee_type": "Shipping Fee",
+  "modified": "2025-01-30 13:41:47.422332",
+  "name": "Shipping Fee"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Fee Types",
+  "fee_type": "Issuing Fee",
+  "modified": "2025-01-30 13:41:37.774315",
+  "name": "Issuing Fee"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Fee Types",
+  "fee_type": "Transaction Fee",
+  "modified": "2025-01-30 13:41:59.361800",
+  "name": "Transaction Fee"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Fee Types",
+  "fee_type": "Reload Fee",
+  "modified": "2025-01-30 13:42:10.188894",
+  "name": "Reload Fee"
+ }
+]
