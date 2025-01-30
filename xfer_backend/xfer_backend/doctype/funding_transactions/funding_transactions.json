@@ -14,7 +14,8 @@
   "to_account",
   "column_break_kwhf",
   "status",
-  "bank_name"
+  "bank_name",
+  "bin"
  ],
  "fields": [
   {
@@ -66,11 +67,17 @@
    "fieldname": "bank_name",
    "fieldtype": "Read Only",
    "label": "Bank Name"
+  },
+  {
+   "fetch_from": "from_account.bin",
+   "fieldname": "bin",
+   "fieldtype": "Read Only",
+   "label": "BIN"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-29 17:39:22.361876",
+ "modified": "2025-01-30 18:06:16.696217",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Funding Transactions",
