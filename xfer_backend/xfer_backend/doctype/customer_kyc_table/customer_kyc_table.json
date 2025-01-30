@@ -1,45 +1,45 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-01-18 12:30:52.228847",
+ "creation": "2025-01-30 13:16:21.694997",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "fee_type",
-  "column_break_tqjy",
-  "amount"
+  "kyc_document",
+  "column_break_uwla",
+  "status"
  ],
  "fields": [
   {
-   "fieldname": "fee_type",
+   "fieldname": "kyc_document",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Fee Type",
-   "options": "Fee Types"
+   "label": "KYC Document",
+   "options": "KYC Document"
   },
   {
-   "fieldname": "column_break_tqjy",
+   "fieldname": "column_break_uwla",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "amount",
-   "fieldtype": "Currency",
+   "fieldname": "status",
+   "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Amount",
-   "precision": "2"
+   "label": "Status",
+   "options": "KYC Status"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-01-30 13:42:45.491312",
+ "modified": "2025-01-30 13:18:01.616700",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
- "name": "Program Fees Structure",
+ "name": "Customer KYC Table",
  "owner": "Administrator",
  "permissions": [],
- "sort_field": "modified",
+ "sort_field": "creation",
  "sort_order": "DESC",
  "states": []
 }

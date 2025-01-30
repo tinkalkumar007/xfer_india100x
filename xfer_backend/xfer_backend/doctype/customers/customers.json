@@ -18,7 +18,6 @@
   "lat_long",
   "channel",
   "selfie",
-  "kyc_status",
   "address_detail_section",
   "address_line_1",
   "address_line_2",
@@ -37,7 +36,10 @@
   "manager_detail_section",
   "manager_name",
   "column_break_hfan",
-  "manager_email"
+  "manager_email",
+  "kyc_status_section",
+  "table_ylxb",
+  "kyc_level"
  ],
  "fields": [
   {
@@ -146,7 +148,8 @@
   },
   {
    "fieldname": "section_break_myhj",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "Activities"
   },
   {
    "fieldname": "risk_category",
@@ -212,10 +215,20 @@
    "label": "Full Name"
   },
   {
-   "fieldname": "kyc_status",
+   "fieldname": "kyc_status_section",
+   "fieldtype": "Section Break",
+   "label": "KYC Status"
+  },
+  {
+   "fieldname": "table_ylxb",
+   "fieldtype": "Table",
+   "options": "Customer KYC Table"
+  },
+  {
+   "fieldname": "kyc_level",
    "fieldtype": "Link",
-   "label": "KYC Status",
-   "options": "KYC Status"
+   "label": "KYC Level",
+   "options": "KYC Level"
   }
  ],
  "image_field": "selfie",
@@ -226,7 +239,7 @@
    "link_fieldname": "mobile_number"
   }
  ],
- "modified": "2025-01-29 13:40:43.205460",
+ "modified": "2025-01-30 14:01:01.599724",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Customers",

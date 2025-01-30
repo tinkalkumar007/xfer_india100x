@@ -123,14 +123,16 @@
    "fieldtype": "Column Break"
   },
   {
+   "fetch_from": "program_name.program_manager",
    "fieldname": "program_manager",
-   "fieldtype": "Link",
+   "fieldtype": "Read Only",
    "label": "Program Manager",
    "options": "Program"
   },
   {
+   "fetch_from": "program_name.category",
    "fieldname": "program_category",
-   "fieldtype": "Link",
+   "fieldtype": "Read Only",
    "label": "Program Category",
    "options": "Program"
   },
@@ -205,7 +207,7 @@
    "link_fieldname": "card_reference_id"
   }
  ],
- "modified": "2025-01-29 12:59:45.034990",
+ "modified": "2025-01-30 13:33:06.328240",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Cards",

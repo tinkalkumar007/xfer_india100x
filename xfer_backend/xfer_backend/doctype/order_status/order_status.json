@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:status",
- "creation": "2025-01-29 12:44:49.153167",
+ "creation": "2025-01-30 11:58:45.431395",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -18,7 +18,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-29 12:45:40.829258",
+ "modified": "2025-01-30 11:59:32.403426",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Order Status",
