@@ -76,7 +76,7 @@ const ManagerProgramList = ({
     if (!customerCardsData) return []
     return customerCardsData?.map((cardData) => ({
       id: cardData.name, // Frappe's unique identifier
-      customer_name: cardData.customer_name,
+      card_reference_id: cardData.card_reference_id,
       limit: cardData.limit,
       issued_date: cardData.issue_date,
       card_status: cardData.card_status,
@@ -86,10 +86,10 @@ const ManagerProgramList = ({
   const columns = [
     {
       accessorKey: 'name',
-      header: 'Name',
+      header: 'Reference ID',
       cell: ({ row }) => (
         <div className="capitalize text-center cursor-pointer hover:underline">
-          {row.original.customer_name}
+          {row.original.card_reference_id}
         </div>
       ),
     },

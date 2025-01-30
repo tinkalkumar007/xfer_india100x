@@ -50,7 +50,7 @@ const TransactionActivityLogs = ({
   const columns = [
     {
       accessorKey: 'card_reference_id',
-      header: 'Reference ID',
+      header: 'ID',
       cell: ({ row }) => (
         <Link>
           <div className="text-center hover:underline">
