@@ -16,12 +16,12 @@
   "doctype": "MCC Whitelisting",
   "is_enabled": 0,
   "mcc": "4112",
-  "modified": "2025-01-30 13:46:29.680117",
+  "modified": "2025-01-30 16:53:59.087976",
   "name": "4112",
   "parent": "ONO-0001",
   "parentfield": "mcc_code",
   "parenttype": "Program",
-  "title": null
+  "title": "Passenger Railways"
  },
  {
   "docstatus": 0,
@@ -40,23 +40,23 @@
   "doctype": "MCC Whitelisting",
   "is_enabled": 0,
   "mcc": "4215",
-  "modified": "2025-01-30 13:46:29.680117",
+  "modified": "2025-01-30 16:53:59.087976",
   "name": "4215",
   "parent": "ONO-0001",
   "parentfield": "mcc_code",
   "parenttype": "Program",
-  "title": null
+  "title": "Courier Services – Air or Ground, Freight forwarders"
  },
  {
   "docstatus": 0,
   "doctype": "MCC Whitelisting",
   "is_enabled": 0,
   "mcc": "5532",
-  "modified": "2025-01-30 13:46:29.680117",
+  "modified": "2025-01-30 16:53:59.087976",
   "name": "5532",
   "parent": "ONO-0001",
   "parentfield": "mcc_code",
   "parenttype": "Program",
-  "title": null
+  "title": "Automotive Tire Stores"
  }
 ]

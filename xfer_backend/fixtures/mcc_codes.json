@@ -64,14 +64,6 @@
   "name": "7999"
  },
  {
-  "description": "Aquariums, Sea-aquariums, Dolphinariums",
-  "docstatus": 0,
-  "doctype": "MCC Codes",
-  "mcc": "7998",
-  "modified": "2025-01-20 14:41:07.726649",
-  "name": "7998"
- },
- {
   "description": "Membership Clubs (Sports, Recreation, Athletic), Country Clubs, and Private Golf Courses",
   "docstatus": 0,
   "doctype": "MCC Codes",
@@ -1024,14 +1016,6 @@
   "name": "4111"
  },
  {
-  "description": "Digital Goods: Large Digital Goods Merchant",
-  "docstatus": 0,
-  "doctype": "MCC Codes",
-  "mcc": "5818",
-  "modified": "2025-01-20 14:41:09.030770",
-  "name": "5818"
- },
- {
   "description": "Travel Agencies and Tour Operations",
   "docstatus": 0,
   "doctype": "MCC Codes",
@@ -1064,12 +1048,20 @@
   "name": "5999"
  },
  {
-  "description": "Air Conditioning and Refrigeration Repair Shops",
+  "description": "Aquariums, Sea-aquariums, Dolphinariums",
   "docstatus": 0,
   "doctype": "MCC Codes",
-  "mcc": "7623",
-  "modified": "2025-01-20 14:41:07.894295",
-  "name": "7623"
+  "mcc": "7998",
+  "modified": "2025-01-20 14:41:07.726649",
+  "name": "7998"
+ },
+ {
+  "description": "Digital Goods: Large Digital Goods Merchant",
+  "docstatus": 0,
+  "doctype": "MCC Codes",
+  "mcc": "5818",
+  "modified": "2025-01-20 14:41:09.030770",
+  "name": "5818"
  },
  {
   "description": "Stationery Stores, Office and School Supply Stores",
@@ -1078,6 +1070,14 @@
   "mcc": "5943",
   "modified": "2025-01-20 14:41:08.328594",
   "name": "5943"
+ },
+ {
+  "description": "Air Conditioning and Refrigeration Repair Shops",
+  "docstatus": 0,
+  "doctype": "MCC Codes",
+  "mcc": "7623",
+  "modified": "2025-01-20 14:41:07.894295",
+  "name": "7623"
  },
  {
   "description": "Automotive Tire Stores",

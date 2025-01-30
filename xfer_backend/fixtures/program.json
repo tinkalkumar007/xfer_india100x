@@ -150,17 +150,17 @@
    {
     "is_enabled": 0,
     "mcc": "4112",
-    "title": null
+    "title": "Passenger Railways"
    },
    {
     "is_enabled": 0,
     "mcc": "4215",
-    "title": null
+    "title": "Courier Services – Air or Ground, Freight forwarders"
    },
    {
     "is_enabled": 0,
     "mcc": "5532",
-    "title": null
+    "title": "Automotive Tire Stores"
    }
   ],
   "mids": [
@@ -173,7 +173,7 @@
     "merchant_id": "46455"
    }
   ],
-  "modified": "2025-01-30 13:46:29.680117",
+  "modified": "2025-01-30 16:53:59.087976",
   "name": "ONO-0001",
   "policy_url": null,
   "program_manager": "ONO",
@@ -186,13 +186,13 @@
   "table_eosn": [
    {
     "channel": "POS",
-    "is_enabled": 0,
+    "is_enabled": 1,
     "max_amount": "8956",
     "min_amount": "146"
    },
    {
     "channel": "ATM",
-    "is_enabled": 0,
+    "is_enabled": 1,
     "max_amount": "45141",
     "min_amount": "134"
    }

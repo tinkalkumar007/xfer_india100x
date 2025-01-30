@@ -147,7 +147,7 @@ const ProgramDetails = () => {
               Tags:
             </p>
             <div className="flex gap-2">
-              {tags.length > 0 &&
+              {tags?.length > 0 &&
                 tags?.map((tag) => {
                   switch (tag) {
                     case 'KYC':
