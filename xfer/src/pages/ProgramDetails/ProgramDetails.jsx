@@ -241,7 +241,10 @@ const ProgramDetails = () => {
             />
           </div>
           <div>
-            <WhitelistBIN />
+            <WhitelistBIN
+              bins={programDetails?.bins}
+              programDetailsLoading={programDetailsLoading}
+            />
           </div>
           <div>
             <WhitelistTID

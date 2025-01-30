@@ -252,7 +252,14 @@ export function ProgramTableDemo() {
 
   const { data: programData, isLoading: programDataLoading } =
     useFrappeGetDocList('Program', {
-      fields: ['*'],
+      fields: [
+        '_user_tags',
+        'name',
+        'program_name',
+        'category',
+        'description',
+        'status',
+      ],
     })
 
   if (!programDataLoading) {
@@ -270,6 +277,7 @@ export function ProgramTableDemo() {
       category: program.category,
       description: program.description,
       status: program.status,
+      tags: program._user_tags,
     }))
   }, [programData])
 
@@ -435,86 +443,76 @@ export function ProgramTableDemo() {
     //     );
     //   },
     // },
-    // {
-    //   accessorKey: "tags",
-    //   header: "Tags",
-    //   cell: ({ row }) => (
-    //     <div className="flex items-center justify-left gap-2">
-    //       {Object.keys(fieldIconMap).map((field) => {
-    //         if (row.original[field]) {
-    //           return (
-    //             <span
-    //               key={field}
-    //               className={`flex items-center gap-1`}
-    //               title={fieldIconMap[field].label}
-    //             >
-    //               {fieldIconMap[field].icon}
-    //             </span>
-    //           );
-    //         }
-    //         return null;
-    //       })}
-    //     </div>
-    //   ),
-    // },
     {
-      accessorKey: 'actions',
-      header: '',
+      accessorKey: 'tags',
+      header: 'Tags',
       cell: ({ row }) => {
-        const id = row.original.id // Get the entire row's data for actions
-        console.log('Print console id:', id)
+        const tags = row.original?.tags?.slice(1).split(',')
+
+        console.log('User tags:', row.original?.tags)
         return (
-          <div className="flex justify-center">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                  <span className="sr-only">Open menu</span>
-                  <MoreHorizontal />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem className="cursor-pointer">
-                  Edit
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  onClick={() => handleBlock(id)}
-                >
-                  Block
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          <div className="flex items-center justify-center gap-2">
+            {tags?.map((tag) => {
+              switch (tag) {
+                case 'KYC':
+                  return (
+                    <Badge variant="outline" className="">
+                      {tag}
+                    </Badge>
+                  )
+                case 'Reward':
+                  return (
+                    <Badge variant="outline" className="">
+                      {tag}
+                    </Badge>
+                  )
+                case 'Contactless':
+                  return (
+                    <Badge variant="outline" className="">
+                      {tag}
+                    </Badge>
+                  )
+                case 'Physical':
+                  return (
+                    <Badge variant="outline" className="">
+                      {tag}
+                    </Badge>
+                  )
+              }
+            })}
           </div>
         )
       },
     },
     // {
-    //   id: 'actions',
-    //   enableHiding: false,
+    //   accessorKey: 'actions',
+    //   header: '',
     //   cell: ({ row }) => {
-    //     const payment = row.original;
-
+    //     const id = row.original.id // Get the entire row's data for actions
+    //     console.log('Print console id:', id)
     //     return (
-    //       <DropdownMenu>
-    //         <DropdownMenuTrigger asChild>
-    //           <Button variant="ghost" className="h-8 w-8 p-0">
-    //             <span className="sr-only">Open menu</span>
-    //             <MoreHorizontal />
-    //           </Button>
-    //         </DropdownMenuTrigger>
-    //         <DropdownMenuContent align="end">
-    //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-    //           <DropdownMenuItem
-    //             onClick={() => navigator.clipboard.writeText(payment.id)}
-    //           >
-    //             Copy payment ID
-    //           </DropdownMenuItem>
-    //           <DropdownMenuSeparator />
-    //           <DropdownMenuItem>View customer</DropdownMenuItem>
-    //           <DropdownMenuItem>View payment details</DropdownMenuItem>
-    //         </DropdownMenuContent>
-    //       </DropdownMenu>
-    //     );
+    //       <div className="flex justify-center">
+    //         <DropdownMenu>
+    //           <DropdownMenuTrigger asChild>
+    //             <Button variant="ghost" className="h-8 w-8 p-0">
+    //               <span className="sr-only">Open menu</span>
+    //               <MoreHorizontal />
+    //             </Button>
+    //           </DropdownMenuTrigger>
+    //           <DropdownMenuContent align="end">
+    //             <DropdownMenuItem className="cursor-pointer">
+    //               Edit
+    //             </DropdownMenuItem>
+    //             <DropdownMenuItem
+    //               className="cursor-pointer"
+    //               onClick={() => handleBlock(id)}
+    //             >
+    //               Block
+    //             </DropdownMenuItem>
+    //           </DropdownMenuContent>
+    //         </DropdownMenu>
+    //       </div>
+    //     )
     //   },
     // },
   ]

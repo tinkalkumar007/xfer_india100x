@@ -35,10 +35,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 
 const WhitelistMCC = ({ mccCodes, programDetailsLoading }) => {
-  !programDetailsLoading &&
-    mccCodes?.map((code) => {
-      console.log(code)
-    })
   return (
     <div className="flex flex-col px-4 py-2 gap-4 justify-start border rounded-md bg-muted/50">
       <div>

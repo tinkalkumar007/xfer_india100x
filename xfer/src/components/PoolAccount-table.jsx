@@ -91,7 +91,9 @@ export function PoolAccountsTable() {
     })
 
   const { data: accountDetails, isLoading: accountDetailsLoading } =
-    useFrappeGetDoc('Pool Account', accountID)
+    useFrappeGetDoc('Pool Account', accountID, {
+      enabled: accountID,
+    })
 
   console.log('Account Details: ', accountDetails)
 
@@ -179,50 +181,46 @@ export function PoolAccountsTable() {
                         Status :{' '}
                       </p>
                       <p className="text-sm font-medium ">
-                        <Badge
-                          className="px-2 py-1 bg-[#e4f5e9] text-[#16794c] flex gap-1 items-end"
-                          variant="outline"
-                        >
-                          Active
-                        </Badge>
+                        {accountDetails?.status === 'Active' && (
+                          <Badge
+                            className="px-2 py-1 bg-[#e4f5e9] text-[#16794c] flex gap-1 items-end"
+                            variant="outline"
+                          >
+                            {accountDetails?.status}
+                          </Badge>
+                        )}
+                      </p>
+                    </div>
+                    <div className="flex justify-between items-center gap-2">
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Account Balance :{' '}
+                      </p>
+                      <p className="text-sm font-medium ">
+                        &#8377;{accountDetails?.account_balance}
                       </p>
                     </div>
                     <div className="flex justify-between items-center gap-2">
                       <p className="text-sm font-medium text-muted-foreground">
                         Account Holder Name :{' '}
                       </p>
-                      <p className="text-sm font-medium ">Harshit Adhikari</p>
+                      <p className="text-sm font-medium ">Dummy</p>
                     </div>
                     <div className="flex justify-between items-center gap-2">
                       <p className="text-sm font-medium text-muted-foreground">
                         Account Number :{' '}
                       </p>
-                      <p className="text-sm font-medium">487656787685</p>
-                    </div>
-                    <div className="flex justify-between items-center gap-2">
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Account Type :{' '}
+                      <p className="text-sm font-medium">
+                        {accountDetails?.account_number}
                       </p>
-                      <p className="text-sm font-medium">Savings</p>
-                    </div>
-                    <div className="flex justify-between items-center gap-2">
-                      <p className="text-sm font-medium text-muted-foreground">
-                        IFSC Code :{' '}
-                      </p>
-                      <p className="text-sm font-medium">TCH0003333</p>
-                    </div>
-                    <div className="flex justify-between items-center gap-2">
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Phone Number :{' '}
-                      </p>
-                      <p className="text-sm font-medium">7428630762</p>
                     </div>
 
                     <div className="flex justify-between items-center gap-2">
                       <p className="text-sm font-medium text-muted-foreground ">
                         Bank Name :{' '}
                       </p>
-                      <p className="text-sm font-medium ">Techno Bank</p>
+                      <p className="text-sm font-medium ">
+                        {accountDetails?.bank_name}
+                      </p>
                     </div>
                     <div className="flex justify-between items-center gap-2">
                       <p className="text-sm font-medium text-muted-foreground ">
@@ -230,46 +228,22 @@ export function PoolAccountsTable() {
                       </p>
                       <p className="text-sm font-medium ">98290</p>
                     </div>
-                    <div className="flex justify-between items-center gap-2">
-                      <p className="text-sm font-medium text-muted-foreground ">
-                        Branch Address :{' '}
-                      </p>
-                      <p className="text-sm font-medium ">
-                        Noida, Uttar Pradesh
-                      </p>
-                    </div>
+
                     <div className="flex justify-between items-center gap-2">
                       <p className="text-sm font-medium text-muted-foreground ">
                         Account Opening Date :{' '}
                       </p>
-                      <p className="text-sm font-medium ">22/12/2020</p>
-                    </div>
-                    <div className="flex justify-between items-center gap-2">
-                      <p className="text-sm font-medium text-muted-foreground ">
-                        Account Activation Date :{' '}
+                      <p className="text-sm font-medium ">
+                        {accountDetails?.creation
+                          ?.split('.')[0]
+                          ?.split(' ')[0]
+                          ?.split('-')
+                          .reverse()
+                          .join('/')}
                       </p>
-                      <p className="text-sm font-medium ">24/12/2020</p>
                     </div>
                   </div>
                 </div>
-
-                {/* <div className="flex flex-col gap-4">
-                  <h2 className="text-lg font-medium">Harshit Bank Details</h2>
-                  <div className="flex flex-col gap-2">
-                    <div className="flex gap-2 justify-between items-center">
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Account Number :
-                      </p>
-                      <p className="text-sm font-medium">465465546789</p>
-                    </div>
-                    <div className="flex gap-2 justify-between items-center">
-                      <p className="text-sm font-medium text-muted-foreground">
-                        BIN :
-                      </p>
-                      <p className="text-sm font-medium">12324643</p>
-                    </div>
-                  </div>
-                </div> */}
               </div>
             </div>
           </SheetContent>
@@ -340,37 +314,37 @@ export function PoolAccountsTable() {
         )
       },
     },
-    {
-      accessorKey: 'actions',
-      header: '',
-      cell: ({ row }) => {
-        const rowData = row.original // Get the entire row's data for actions
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0 ">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="cursor-pointer">
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => navigator.clipboard.writeText(payment.id)}
-              >
-                Block
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => navigator.clipboard.writeText(payment.id)}
-              >
-                Activate
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )
-      },
-    },
+    // {
+    //   accessorKey: 'actions',
+    //   header: '',
+    //   cell: ({ row }) => {
+    //     const rowData = row.original // Get the entire row's data for actions
+    //     return (
+    //       <DropdownMenu>
+    //         <DropdownMenuTrigger asChild>
+    //           <Button variant="ghost" className="h-8 w-8 p-0 ">
+    //             <span className="sr-only">Open menu</span>
+    //             <MoreHorizontal />
+    //           </Button>
+    //         </DropdownMenuTrigger>
+    //         <DropdownMenuContent align="end" className="cursor-pointer">
+    //           <DropdownMenuItem
+    //             className="cursor-pointer"
+    //             onClick={() => navigator.clipboard.writeText(payment.id)}
+    //           >
+    //             Block
+    //           </DropdownMenuItem>
+    //           <DropdownMenuItem
+    //             className="cursor-pointer"
+    //             onClick={() => navigator.clipboard.writeText(payment.id)}
+    //           >
+    //             Activate
+    //           </DropdownMenuItem>
+    //         </DropdownMenuContent>
+    //       </DropdownMenu>
+    //     )
+    //   },
+    // },
   ]
 
   const table = useReactTable({

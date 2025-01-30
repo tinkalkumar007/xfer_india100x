@@ -36,13 +36,17 @@ const FeeCodeSheet = ({ feeCodes }) => {
       </div>
 
       <div className="">
-        <div className="flex flex-col gap-2 px-4 pb-2 bg-muted/40">
+        <div className="grid grid-cols-2 items-start gap-2 px-4 pb-2 bg-muted/40">
           {feeCodes?.map((feeCode) => {
             return (
-              <div key={feeCode?.name} className="flex items-start gap-2">
-                <p className="text-sm font-medium">{feeCode?.fee_type} - </p>
-                <Badge variant="primary">{feeCode?.amount}</Badge>
-              </div>
+              <Badge
+                key={feeCode?.name}
+                className="flex items-end justify-start gap-2"
+                variant="primary"
+              >
+                <p className="text-sm font-medium">{feeCode?.fee_type} : </p>
+                <p className="text-sm font-medium">&#8377;{feeCode?.amount}</p>
+              </Badge>
             )
           })}
         </div>

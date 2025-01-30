@@ -334,7 +334,7 @@ const IssuedCardsDetails = () => {
                     </div>
                     <div className="mt-6 flex flex-col gap-1 justify-between items-start w-full">
                       <p className="font-medium text-xs text-muted-foreground">
-                        KYC STATUS
+                        KYC LEVEL
                       </p>
                       {cardData?.kyc_status === 'Under Review' && (
                         <Badge>{cardData?.kyc_status}</Badge>
@@ -381,7 +381,7 @@ const IssuedCardsDetails = () => {
                       </p>
                       <span className="font-medium text-sm">
                         {' '}
-                        {cardData?.balance}
+                        &#8377;{cardData?.balance}
                       </span>
                     </div>
                     <div className="flex flex-col gap-1 justify-between items-start w-full">

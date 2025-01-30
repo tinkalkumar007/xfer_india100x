@@ -340,37 +340,37 @@ export function AllCustomerTable() {
         )
       },
     },
-    {
-      accessorKey: 'actions',
-      header: '',
-      cell: ({ row }) => {
-        const rowData = row.original // Get the entire row's data for actions
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => navigator.clipboard.writeText(payment.id)}
-              >
-                Flag
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => navigator.clipboard.writeText(payment.id)}
-              >
-                Block
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )
-      },
-    },
+    // {
+    //   accessorKey: 'actions',
+    //   header: '',
+    //   cell: ({ row }) => {
+    //     const rowData = row.original // Get the entire row's data for actions
+    //     return (
+    //       <DropdownMenu>
+    //         <DropdownMenuTrigger asChild>
+    //           <Button variant="ghost" className="h-8 w-8 p-0">
+    //             <span className="sr-only">Open menu</span>
+    //             <MoreHorizontal />
+    //           </Button>
+    //         </DropdownMenuTrigger>
+    //         <DropdownMenuContent align="end">
+    //           <DropdownMenuItem
+    //             className="cursor-pointer"
+    //             onClick={() => navigator.clipboard.writeText(payment.id)}
+    //           >
+    //             Flag
+    //           </DropdownMenuItem>
+    //           <DropdownMenuItem
+    //             className="cursor-pointer"
+    //             onClick={() => navigator.clipboard.writeText(payment.id)}
+    //           >
+    //             Block
+    //           </DropdownMenuItem>
+    //         </DropdownMenuContent>
+    //       </DropdownMenu>
+    //     )
+    //   },
+    // },
   ]
 
   const table = useReactTable({

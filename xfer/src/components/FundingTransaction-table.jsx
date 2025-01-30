@@ -26,6 +26,8 @@ import {
   ChevronRight,
   ChevronsRight,
   ArrowUp,
+  ArrowDown,
+  X,
 } from 'lucide-react'
 import {
   Sheet,
@@ -80,7 +82,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import DataTableViewOptions from './DataTableViewOptions'
 import DataTableToolbar from './DataTableToolbar'
-import { useFrappeGetDocList } from 'frappe-react-sdk'
+import { useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk'
 
 const fieldIconMap = {
   Success: {
@@ -170,6 +172,12 @@ export function FundingTransactionTable() {
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
 
+  const [fundingTransactionID, setFundingTransactionID] = React.useState('')
+
+  const { data: fundingTransaction, isLoading: fundingTransactionLoading } =
+    useFrappeGetDoc('Funding Transactions', fundingTransactionID)
+  console.log('Funding Transaction:', fundingTransaction)
+
   const {
     data: fundingTransactionsData,
     isLoading: fundingTransactionsDataLoading,
@@ -177,7 +185,7 @@ export function FundingTransactionTable() {
     fields: ['*'],
   })
 
-  console.log(fundingTransactionsData)
+  console.log('Funding Transactions Data', fundingTransactionsData)
 
   const tableData = React.useMemo(() => {
     if (!fundingTransactionsData) return []
@@ -221,7 +229,12 @@ export function FundingTransactionTable() {
       cell: ({ row }) => (
         <Sheet>
           <SheetTrigger>
-            <div className="text-center hover:underline">
+            <div
+              className="text-center hover:underline"
+              onClick={() => {
+                setFundingTransactionID(row.original.id)
+              }}
+            >
               {row.original?.id}
             </div>
           </SheetTrigger>
@@ -235,22 +248,31 @@ export function FundingTransactionTable() {
             <div className="flex flex-col gap-4">
               <div className="border rounded-md flex gap-2 justify-between items-center px-4 py-4 mt-6">
                 <div className="flex gap-2 items-center ">
-                  <div className="rounded-full p-2 bg-[#e4f5e9] text-[#16794c]">
-                    <ArrowUp strokeWidth={1.5} className=" rounded-full" />
-                  </div>
+                  {fundingTransaction?.status === 'Success' && (
+                    <div className="rounded-full p-2 bg-[#e4f5e9] text-[#16794c]">
+                      <Check strokeWidth={1.5} className=" rounded-full" />
+                    </div>
+                  )}
+
+                  {fundingTransaction?.status === 'Failed' && (
+                    <div className="rounded-full p-2 bg-[#ffe6e6] text-[#d32f2f]">
+                      <X strokeWidth={1.5} className=" rounded-full" />
+                    </div>
+                  )}
+
                   <div className="flex flex-col">
                     <p className="font-medium text-md">
-                      Sending money to Harshit
+                      Payment to {fundingTransaction?.bank_name}
                     </p>
                     <p className="font-medium text-md text-muted-foreground">
-                      Sent
+                      {fundingTransaction?.status === 'Success' && 'Successful'}
+                      {fundingTransaction?.status === 'Failed' && 'Failed'}
                     </p>
                   </div>
                 </div>
                 <div className="flex flex-col items-end">
-                  <p className="font-medium text-md">- &#8377; 200</p>
-                  <p className="font-medium text-md text-muted-foreground">
-                    &#8377; 20
+                  <p className="font-medium text-md">
+                    &#8377; {fundingTransaction?.amount}
                   </p>
                 </div>
               </div>
@@ -264,75 +286,107 @@ export function FundingTransactionTable() {
                         Status :{' '}
                       </p>
                       <p className="text-sm font-medium ">
-                        <Badge
-                          className="px-2 py-1 bg-[#e4f5e9] text-[#16794c] flex gap-1 items-end"
-                          variant="outline"
-                        >
-                          <Check className="h-3 w-3" />
-                          Success
-                        </Badge>
+                        {fundingTransaction?.status === 'Success' && (
+                          <Badge
+                            className="px-2 py-1 bg-[#e4f5e9] text-[#16794c] flex gap-1 items-end"
+                            variant="outline"
+                          >
+                            <Check className="h-3 w-3" />
+                            {fundingTransaction?.status}
+                          </Badge>
+                        )}
+                        {fundingTransaction?.status === 'Failed' && (
+                          <Badge className="bg-[#ffe6e6] text-[#d32f2f]">
+                            Failed
+                          </Badge>
+                        )}
                       </p>
                     </div>
                     <div className="flex justify-between items-center gap-2">
                       <p className="text-sm font-medium text-muted-foreground">
                         Transaction Ref ID :{' '}
                       </p>
-                      <p className="text-sm font-medium">CR18765678</p>
+                      <p className="text-sm font-medium">
+                        {fundingTransaction?.name}
+                      </p>
                     </div>
 
                     <div className="flex justify-between items-center gap-2">
                       <p className="text-sm font-medium text-muted-foreground ">
                         Transaction Date :{' '}
                       </p>
-                      <p className="text-sm font-medium ">24/12/2024 2:40 PM</p>
+                      <p className="text-sm font-medium ">
+                        {`${fundingTransaction?.creation
+                          ?.split('.')[0]
+                          ?.split(' ')[0]
+                          ?.split('-')
+                          .reverse()
+                          .join('/')} ${
+                          fundingTransaction?.creation
+                            ?.split('.')[0]
+                            ?.split(' ')[1]
+                        }`}
+                      </p>
                     </div>
                     <div className="flex justify-between items-center gap-2">
                       <p className="text-sm font-medium text-muted-foreground ">
                         From Account :{' '}
                       </p>
-                      <p className="text-sm font-medium ">255616106789</p>
+                      <p className="text-sm font-medium ">
+                        {fundingTransaction?.from_account}
+                      </p>
                     </div>
                     <div className="flex justify-between items-center gap-2">
                       <p className="text-sm font-medium text-muted-foreground ">
                         To Account :{' '}
                       </p>
-                      <p className="text-sm font-medium ">465465546789</p>
+                      <p className="text-sm font-medium ">
+                        {fundingTransaction?.to_account}
+                      </p>
                     </div>
                     <div className="flex justify-between items-center gap-2">
                       <p className="text-sm font-medium text-muted-foreground">
-                        Recipient :{' '}
+                        Bank Name :{' '}
                       </p>
-                      <p className="text-sm font-medium ">Harshit</p>
+                      <p className="text-sm font-medium ">
+                        {fundingTransaction?.bank_name}
+                      </p>
                     </div>
                     <div className="flex justify-between items-center gap-2">
                       <p className="text-sm font-medium text-muted-foreground">
                         Amount Sent :{' '}
                       </p>
-                      <p className="text-sm font-medium ">&#8377; 100000</p>
+                      <p className="text-sm font-medium ">
+                        &#8377; {fundingTransaction?.amount}
+                      </p>
                     </div>
                     <div className="flex justify-between items-center gap-2">
                       <p className="text-sm font-medium text-muted-foreground">
                         Payment Method :{' '}
                       </p>
-                      <p className="text-sm font-medium">UPI</p>
+                      <p className="text-sm font-medium">Default</p>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-4">
-                  <h2 className="text-lg font-medium">Harshit Bank Details</h2>
+                  <h2 className="text-lg font-medium">
+                    {fundingTransaction?.bank_name} Bank Details
+                  </h2>
                   <div className="flex flex-col gap-2">
                     <div className="flex gap-2 justify-between items-center">
                       <p className="text-sm font-medium text-muted-foreground">
                         Account Number :
                       </p>
-                      <p className="text-sm font-medium">465465546789</p>
+                      <p className="text-sm font-medium">
+                        {fundingTransaction?.from_account}
+                      </p>
                     </div>
                     <div className="flex gap-2 justify-between items-center">
                       <p className="text-sm font-medium text-muted-foreground">
                         BIN :
                       </p>
-                      <p className="text-sm font-medium">12324643</p>
+                      <p className="text-sm font-medium">Default</p>
                     </div>
                   </div>
                 </div>
