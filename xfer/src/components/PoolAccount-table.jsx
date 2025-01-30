@@ -75,116 +75,22 @@ import {
 } from '@/components/ui/select'
 import DataTableViewOptions from './DataTableViewOptions'
 import DataTableToolbar from './DataTableToolbar'
-import { useFrappeGetDocList } from 'frappe-react-sdk'
-import { PolarAngleAxis } from 'recharts'
-//import ApiConfig from '@/config/ApiConfig'
+import { useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk'
 
-//import Cookies from 'js-cookie'
-
-const fieldIconMap = {
-  Active: {
-    icon: <Badge className="bg-[#e4f5e9] text-[#16794c]">Active</Badge>,
-    label: 'Successful transaction',
-  },
-  Inactive: {
-    icon: <Badge className="bg-[#fff0f0] text-[#b52a2a]">Inactive</Badge>,
-    label: 'Failed transaction',
-  },
-}
-
-const data = [
-  {
-    product_id: '1',
-    accountNumber: '53264738991022',
-    bankName: 'Dummy Bank',
-    bin: '98287',
-    totalAmount: '569234432.23',
-    status: 'Active',
-  },
-  {
-    product_id: '2',
-    accountNumber: '42367853401234',
-    bankName: 'Global Trust Bank',
-    bin: '98279',
-    totalAmount: '123456789.50',
-    status: 'Active',
-  },
-  {
-    product_id: '3',
-    accountNumber: '28763495023871',
-    bankName: 'Techno Bank',
-    bin: '98290',
-    totalAmount: '87945632.75',
-    status: 'Inactive',
-  },
-  {
-    product_id: '4',
-    accountNumber: '94857629385016',
-    bankName: 'Sunrise Financial',
-    bin: '98301',
-    totalAmount: '23456789.30',
-    status: 'Active',
-  },
-  {
-    product_id: '5',
-    accountNumber: '76834599023840',
-    bankName: 'Prime Capital Bank',
-    bin: '98288',
-    totalAmount: '987654321.10',
-    status: 'Active',
-  },
-  {
-    product_id: '6',
-    accountNumber: '65873498126754',
-    bankName: 'Standard Bank',
-    bin: '98299',
-    totalAmount: '52347645.55',
-    status: 'Inactive',
-  },
-  {
-    product_id: '7',
-    accountNumber: '34267192375631',
-    bankName: 'Citywide Bank',
-    bin: '98285',
-    totalAmount: '102345678.90',
-    status: 'Active',
-  },
-  {
-    product_id: '8',
-    accountNumber: '84723659802142',
-    bankName: 'BlueOcean Bank',
-    bin: '98305',
-    totalAmount: '39456780.40',
-    status: 'Active',
-  },
-  {
-    product_id: '9',
-    accountNumber: '92737463501728',
-    bankName: 'Innovative Financial Group',
-    bin: '98291',
-    totalAmount: '76543210.20',
-    status: 'Active',
-  },
-  {
-    product_id: '10',
-    accountNumber: '65839276293715',
-    bankName: 'MetroBank',
-    bin: '98302',
-    totalAmount: '34567890.60',
-    status: 'Inactive',
-  },
-]
-//const data=[];
 export function PoolAccountsTable() {
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
 
+  const [accountID, setAccountID] = React.useState('')
+
   const { data: PoolAccountsData, isLoading: poolAccountsDataLoading } =
     useFrappeGetDocList('Pool Account', {
       fields: ['*'],
     })
+
+  const { data: accountDetails } = useFrappeGetDoc()
 
   console.log(PoolAccountsData)
 
@@ -243,12 +149,17 @@ export function PoolAccountsTable() {
       enableHiding: false,
     },
     {
-      accessorKey: 'accountNumber',
+      accessorKey: 'account_number',
       header: 'Account Number',
       cell: ({ row }) => (
         <Sheet>
           <SheetTrigger>
-            <div className="text-center hover:underline">
+            <div
+              className="text-center hover:underline"
+              onClick={() => {
+                setAccountID(row.original.account_number)
+              }}
+            >
               {row.original.account_number}
             </div>
           </SheetTrigger>
@@ -258,28 +169,6 @@ export function PoolAccountsTable() {
             </SheetHeader>
             <Separator className="mt-2" />
             <div className="flex flex-col gap-4 mt-4">
-              {/* <div className="border rounded-md flex gap-2 justify-between items-center px-4 py-4 mt-6">
-                <div className="flex gap-2 items-center ">
-                  <div className="rounded-full p-2 bg-[#e4f5e9] text-[#16794c]">
-                    <ArrowUp strokeWidth={1.5} className=" rounded-full" />
-                  </div>
-                  <div className="flex flex-col">
-                    <p className="font-medium text-md">
-                      Sending money to Harshit
-                    </p>
-                    <p className="font-medium text-md text-muted-foreground">
-                      Sent
-                    </p>
-                  </div>
-                </div>
-                <div className="flex flex-col items-end">
-                  <p className="font-medium text-md">- &#8377; 200</p>
-                  <p className="font-medium text-md text-muted-foreground">
-                    &#8377; 20
-                  </p>
-                </div>
-              </div> */}
-
               <div className="flex flex-col gap-8">
                 <div className="flex flex-col gap-4">
                   <h2 className="text-lg font-medium">Account Details</h2>

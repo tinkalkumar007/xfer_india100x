@@ -104,14 +104,16 @@ export function ChangePasswordSection({
     mode: 'onChange',
   })
 
-  const mobileWatch = mobileForm.watch()
-
-  // Handlers
   const handleMobileSubmit = (data) => {
     console.log('Mobile Submitted:', data)
-    if (data.mobile_number === '8448954679') {
+    if (data.mobile_number === currentUserData.mobile_no) {
       console.log('Correct')
       setScreen('otp-screen')
+    } else {
+      mobileForm.setError('mobile_number', {
+        type: 'manual',
+        message: 'Mobile number does not match the details provided.',
+      })
     }
   }
 
@@ -120,6 +122,11 @@ export function ChangePasswordSection({
     if (data.otp === '1234') {
       console.log('Correct')
       setScreen('password-screen')
+    } else {
+      otpForm.setError('otp', {
+        type: 'manual',
+        message: 'Incorrect OTP.',
+      })
     }
   }
 
@@ -135,11 +142,15 @@ export function ChangePasswordSection({
         navigate('/account')
       })
       .catch((err) => {
+        console.log(err)
         toast({
           title: 'Something went wrong',
-          description: 'Uh-Oh! Something went wrong.',
+          description: `${err?.exception.split(':')[1]}`,
         })
-        console.log(err)
+        passwordForm.setError('confirm_password', {
+          type: 'manual',
+          message: `${err?.exception.split(':')[1]}`,
+        })
       })
   }
 
