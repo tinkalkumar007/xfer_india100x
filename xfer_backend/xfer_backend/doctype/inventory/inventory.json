@@ -72,32 +72,38 @@
   {
    "fieldname": "address_line_1",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Address Line 1"
   },
   {
    "fieldname": "address_line_2",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Address Line 2"
   },
   {
    "fieldname": "city",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "City"
   },
   {
    "fieldname": "data_bsln",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "State"
   },
   {
    "fieldname": "country",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Country",
    "options": "Country"
   },
   {
    "fieldname": "pin_code",
    "fieldtype": "Int",
+   "in_list_view": 1,
    "label": "Pin Code"
   },
   {
@@ -111,8 +117,10 @@
   {
    "fieldname": "status",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Status",
-   "options": "Order Status"
+   "options": "Order Status",
+   "print_hide": 1
   },
   {
    "fieldname": "program_detail_tab",
@@ -132,6 +140,7 @@
   {
    "fieldname": "transaction_id",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Transaction Id"
   },
   {
@@ -141,6 +150,7 @@
   {
    "fieldname": "transaction_status",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Transaction Status"
   },
   {
@@ -150,6 +160,7 @@
   {
    "fieldname": "amount",
    "fieldtype": "Currency",
+   "in_list_view": 1,
    "label": "Amount"
   },
   {
@@ -164,7 +175,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-29 12:54:26.517460",
+ "modified": "2025-01-30 12:16:18.219262",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Inventory",

@@ -90,9 +90,10 @@ export function PoolAccountsTable() {
       fields: ['*'],
     })
 
-  const { data: accountDetails } = useFrappeGetDoc()
+  const { data: accountDetails, isLoading: accountDetailsLoading } =
+    useFrappeGetDoc('Pool Account', accountID)
 
-  console.log(PoolAccountsData)
+  console.log('Account Details: ', accountDetails)
 
   const tableData = React.useMemo(() => {
     if (!PoolAccountsData) return []
@@ -423,7 +424,7 @@ export function PoolAccountsTable() {
         <div className="w-full">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
             <div className="w-full">
-              <DataTableToolbar table={table} inputFilter="accountNumber" />
+              <DataTableToolbar table={table} inputFilter="account_number" />
             </div>
             <div className="flex gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>

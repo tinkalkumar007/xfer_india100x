@@ -45,19 +45,6 @@ import {
   useFrappeGetDocCount,
 } from 'frappe-react-sdk'
 import { useNavigate, useParams } from 'react-router-dom'
-import { filterFns } from '@tanstack/react-table'
-
-const program = {
-  created_on: '17-12-2024',
-  created_by: 'ONO',
-  category: 'Entertainment',
-  status: false,
-  limit: '10000',
-  is_kyc: true,
-  is_contactless: true,
-  is_reward: true,
-  is_physical: true,
-}
 
 const ProgramDetails = () => {
   const { id } = useParams()
@@ -90,7 +77,7 @@ const ProgramDetails = () => {
             </div>
 
             <div className="flex gap-6 items-center">
-              <div className="flex items-center relative">
+              <div className="flex items-center relative mr-2">
                 <Switch
                   id="status"
                   checked={programDetails?.status === 'Active'}
@@ -108,9 +95,9 @@ const ProgramDetails = () => {
                   </HoverCardContent>
                 </HoverCard>
               </div>
-              <div>
+              {/* <div>
                 <Button variant="outline">Submit</Button>
-              </div>
+              </div> */}
             </div>
           </div>
           <Separator className="mt-[-8px]" />
@@ -279,7 +266,7 @@ const ProgramDetails = () => {
             />
           </div>
           <div>
-            <FeeCodeSheet />
+            <FeeCodeSheet feeCodes={programDetails?.table_ujtz} />
           </div>
         </div>
         <div className="grid grid-cols-1 gap-2">
@@ -290,7 +277,10 @@ const ProgramDetails = () => {
         </div>
       </div>
       <div className="w-full xl:min-w-[35%] flex flex-col gap-2">
-        <ProgramControls />
+        <ProgramControls
+          programDetails={programDetails}
+          programDetailsLoading={programDetailsLoading}
+        />
       </div>
     </div>
   )

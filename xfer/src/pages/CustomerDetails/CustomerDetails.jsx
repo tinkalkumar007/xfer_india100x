@@ -364,9 +364,7 @@ const CustomerDetails = () => {
                 customerTransactionLogsLoading={customerTransactionLogsLoading}
               />
             </div>
-            <div className="w-full flex justify-center">
-              <Separator className="w-[96%]" />
-            </div>
+
             <div className="w-full flex justify-center pb-6">
               <p className="text-sm font-semibold underline tracking-wide cursor-pointer">
                 View All Logs

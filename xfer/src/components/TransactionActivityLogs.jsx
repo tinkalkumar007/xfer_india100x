@@ -29,6 +29,8 @@ const TransactionActivityLogs = ({
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
 
+  console.log('Customer Transaction Logs: ', customerTransactionLogs)
+
   const tableData = React.useMemo(() => {
     if (!customerTransactionLogs) return []
     return (

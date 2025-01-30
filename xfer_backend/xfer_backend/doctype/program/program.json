@@ -27,10 +27,13 @@
   "reward_points",
   "controls_section",
   "allow_kit_to_kit",
+  "column_break_kwoe",
+  "allow_reload",
   "column_break_duua",
-  "allow_contactless",
-  "column_break_unsb",
   "allow_add_on",
+  "add_on_value",
+  "column_break_umum",
+  "allow_jit",
   "notifications_section",
   "table_zcnq",
   "whitelist_mcc_section",
@@ -297,12 +300,6 @@
   },
   {
    "default": "0",
-   "fieldname": "allow_contactless",
-   "fieldtype": "Check",
-   "label": "Allow Contactless"
-  },
-  {
-   "default": "0",
    "fieldname": "allow_add_on",
    "fieldtype": "Check",
    "label": "Allow ADD ON"
@@ -312,19 +309,41 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "column_break_unsb",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "bins",
    "fieldtype": "Table",
    "label": "BINs",
    "options": "BINs"
+  },
+  {
+   "default": "0",
+   "fieldname": "allow_jit",
+   "fieldtype": "Check",
+   "label": "Allow JIT"
+  },
+  {
+   "default": "0",
+   "fieldname": "allow_reload",
+   "fieldtype": "Check",
+   "label": "Allow Reload"
+  },
+  {
+   "fieldname": "column_break_kwoe",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "add_on_value",
+   "fieldtype": "Int",
+   "label": "Add On Value"
+  },
+  {
+   "fieldname": "column_break_umum",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-29 12:15:31.398593",
+ "modified": "2025-01-30 12:52:08.650847",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Program",
