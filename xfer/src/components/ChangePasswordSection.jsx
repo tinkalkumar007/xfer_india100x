@@ -89,17 +89,22 @@ export function ChangePasswordSection({
   const mobileForm = useForm({
     resolver: zodResolver(mobileSchema),
     defaultValues: { mobile_number: '' },
+    mode: 'onChange',
   })
 
   const otpForm = useForm({
     resolver: zodResolver(otpSchema),
     defaultValues: { otp: '' },
+    mode: 'onChange',
   })
 
   const passwordForm = useForm({
     resolver: zodResolver(passwordSchema),
     defaultValues: { new_password: '', confirm_password: '' },
+    mode: 'onChange',
   })
+
+  const mobileWatch = mobileForm.watch()
 
   // Handlers
   const handleMobileSubmit = (data) => {
@@ -172,6 +177,7 @@ export function ChangePasswordSection({
                             autocomplete="off"
                           />
                         </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -215,6 +221,7 @@ export function ChangePasswordSection({
                             </InputOTPGroup>
                           </InputOTP>
                         </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />

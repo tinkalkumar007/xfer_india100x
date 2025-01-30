@@ -100,7 +100,7 @@ export function FlaggedCustomerTable() {
     })
   const tableData = React.useMemo(() => {
     if (!flaggedCustomersData) return []
-    return flaggedCustomersData.map((customer) => ({
+    return flaggedCustomersData?.map((customer) => ({
       id: customer.name,
       first_name: customer.first_name,
       last_name: customer.last_name,
@@ -186,7 +186,7 @@ export function FlaggedCustomerTable() {
       header: 'Description',
       cell: ({ row }) => {
         const description = row.original?.remark
-        const length = description.length
+        const length = description?.length
 
         // Calculate font size based on description length
         const fontSize =

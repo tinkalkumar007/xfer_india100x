@@ -75,6 +75,8 @@ import {
 } from '@/components/ui/select'
 import DataTableViewOptions from './DataTableViewOptions'
 import DataTableToolbar from './DataTableToolbar'
+import { useFrappeGetDocList } from 'frappe-react-sdk'
+import { PolarAngleAxis } from 'recharts'
 //import ApiConfig from '@/config/ApiConfig'
 
 //import Cookies from 'js-cookie'
@@ -174,39 +176,30 @@ const data = [
 ]
 //const data=[];
 export function PoolAccountsTable() {
-  //const [isDialogOpen, setIsDialogOpen] = React.useState(false)
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
-  //const data= await axios.get(ApiConfig.poolAccount);
-  //console.log(data);
-  // const [data, setData] = React.useState([])
-  const [loading, setLoading] = React.useState(true) // State for loading
-  const [error, setError] = React.useState(null) // State for error handling
 
-  // React.useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       setLoading(true)
-  //       //const token=Cookies.get("auth_token");
-  //       //console.log(token);
-  //       //axios.default.withCredentials=true;
-  //       const response = await axios.get('/wallet/get_balance', {
-  //         withCredentials: true,
-  //       }) // Replace with your API endpoint
-  //       console.log(response)
-  //       setData(response.data.data) // Assuming the response is an array of pool accounts
-  //       console.log(response.data)
-  //     } catch (err) {
-  //       console.error(error)
-  //       setError(err)
-  //     } finally {
-  //       setLoading(false)
-  //     }
-  //   }
-  //   fetchData()
-  // }, [])
+  const { data: PoolAccountsData, isLoading: poolAccountsDataLoading } =
+    useFrappeGetDocList('Pool Account', {
+      fields: ['*'],
+    })
+
+  console.log(PoolAccountsData)
+
+  const tableData = React.useMemo(() => {
+    if (!PoolAccountsData) return []
+    return PoolAccountsData?.map((poolAccount) => ({
+      id: poolAccount.name, // Frappe's unique identifier
+      account_number: poolAccount.account_number,
+      account_balance: poolAccount.account_balance,
+      bank_name: poolAccount.bank_name,
+      bin: poolAccount.bin,
+      status: poolAccount.status,
+    }))
+  }, [PoolAccountsData])
+
   const columns = [
     // {
     //   accessorKey: 'product_id',
@@ -256,7 +249,7 @@ export function PoolAccountsTable() {
         <Sheet>
           <SheetTrigger>
             <div className="text-center hover:underline">
-              {row.getValue('accountNumber')}
+              {row.original.account_number}
             </div>
           </SheetTrigger>
           <SheetContent className="w-full sm:max-w-md">
@@ -394,11 +387,11 @@ export function PoolAccountsTable() {
       ),
     },
     {
-      accessorKey: 'bankName',
+      accessorKey: 'bank_name',
       header: 'Bank Name',
       cell: ({ row }) => (
         <div className="text-center cursor-pointer hover:underline">
-          {row.getValue('bankName')}
+          {row.original.bank_name}
         </div>
       ),
     },
@@ -415,25 +408,23 @@ export function PoolAccountsTable() {
           </Button>
         )
       },
-      cell: ({ row }) => (
-        <div className="text-center">{row.getValue('bin')}</div>
-      ),
+      cell: ({ row }) => <div className="text-center">{row.original.bin}</div>,
     },
     {
-      accessorKey: 'totalAmount',
+      accessorKey: 'account_balance',
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
-            Amount
+            Account Balance
             <ArrowUpDown />
           </Button>
         )
       },
       cell: ({ row }) => {
-        const amount = Number(row.original.totalAmount) // Access the raw data directly
+        const amount = Number(row.original.account_balance) // Access the raw data directly
         const [whole, decimal] = amount.toFixed(2).split('.') // Split the amount into whole and decimal parts
         return (
           <div className="text-center flex items-center justify-center">
@@ -447,10 +438,15 @@ export function PoolAccountsTable() {
       header: `Status`,
       cell: ({ row }) => {
         const status = row.original.status
-        return status === true ? (
-          <Badge className="bg-[#e4f5e9] text-[#16794c]">Active</Badge>
-        ) : (
-          <Badge className="bg-[#fff0f0] text-[#b52a2a]">Inactive</Badge>
+        return (
+          <>
+            {status === 'Active' && (
+              <Badge className="bg-[#e4f5e9] text-[#16794c]">Active</Badge>
+            )}
+            {status === 'Inactive' && (
+              <Badge className="bg-[#fff0f0] text-[#b52a2a]">Inactive</Badge>
+            )}
+          </>
         )
       },
     },
@@ -488,7 +484,7 @@ export function PoolAccountsTable() {
   ]
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

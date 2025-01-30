@@ -14,6 +14,7 @@
   "bin",
   "status",
   "program_manager_detail_section",
+  "column_break_eevz",
   "program_manager",
   "column_break_fwwg",
   "contact_detail"
@@ -27,18 +28,21 @@
   {
    "fieldname": "account_number",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Account Number",
    "unique": 1
   },
   {
    "fieldname": "account_balance",
    "fieldtype": "Currency",
+   "in_list_view": 1,
    "label": "Account Balance"
   },
   {
    "default": "Active",
    "fieldname": "status",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Status",
    "options": "Active\nInactive\nSuspended\nBlocked"
   },
@@ -59,6 +63,7 @@
   {
    "fieldname": "program_manager",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Program Manager",
    "options": "Program Manager"
   },
@@ -75,12 +80,17 @@
   {
    "fieldname": "bank_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Bank Name"
+  },
+  {
+   "fieldname": "column_break_eevz",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-29 14:54:13.085863",
+ "modified": "2025-01-29 17:12:41.370453",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Pool Account",

@@ -251,12 +251,12 @@ export function IssuedCardsTable() {
     {
       header: 'Tags',
       cell: ({ row }) => {
-        const tags = row.original?.tags.slice(1).split(',')
+        const tags = row.original?.tags?.slice(1).split(',')
 
         console.log('Tags: ', tags)
         return (
           <div className="flex items-center justify-center gap-2">
-            {tags.map((tag) => {
+            {tags?.map((tag) => {
               switch (tag) {
                 case 'KYC':
                   return (

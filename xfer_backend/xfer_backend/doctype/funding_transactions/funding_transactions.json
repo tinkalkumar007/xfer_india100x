@@ -13,7 +13,8 @@
   "from_account",
   "to_account",
   "column_break_kwhf",
-  "status"
+  "status",
+  "bank_name"
  ],
  "fields": [
   {
@@ -25,22 +26,26 @@
   {
    "fieldname": "from_account",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "From Account",
    "options": "Pool Account"
   },
   {
    "fieldname": "to_account",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "To Account"
   },
   {
    "fieldname": "amount",
    "fieldtype": "Currency",
+   "in_list_view": 1,
    "label": "Amount"
   },
   {
    "fieldname": "status",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Status"
   },
   {
@@ -55,11 +60,17 @@
   {
    "fieldname": "column_break_kwhf",
    "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "from_account.bank_name",
+   "fieldname": "bank_name",
+   "fieldtype": "Read Only",
+   "label": "Bank Name"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-29 14:56:45.648907",
+ "modified": "2025-01-29 17:39:22.361876",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Funding Transactions",

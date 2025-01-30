@@ -186,7 +186,7 @@ export function PendingKycTable() {
   const { data: pendingCustomersData, isLoading: pendingCustomersDataLoading } =
     useFrappeGetDocList('Customers', {
       fields: ['*'],
-      filters: [['kyc_level', '!=', 'Active']],
+      filters: [['kyc_status', '!=', 'Active']],
     })
 
   if (!pendingCustomersDataLoading) {
@@ -200,7 +200,7 @@ export function PendingKycTable() {
       first_name: customer.first_name,
       last_name: customer.last_name,
       last_active: customer.creation,
-      kyc_level: customer.kyc_level,
+      kyc_level: customer.kyc_status,
     }))
   }, [pendingCustomersData])
 
