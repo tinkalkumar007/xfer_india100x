@@ -1,0 +1,65 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:bin_number",
+ "creation": "2025-01-29 12:10:51.624963",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "bin_detail_section",
+  "bin_number",
+  "column_break_hnjw",
+  "bank_name",
+  "column_break_oshb",
+  "is_enabled"
+ ],
+ "fields": [
+  {
+   "fieldname": "bin_detail_section",
+   "fieldtype": "Section Break",
+   "label": "BIN Detail"
+  },
+  {
+   "fieldname": "bin_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "BIN Number",
+   "unique": 1
+  },
+  {
+   "fieldname": "column_break_hnjw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "bank_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Bank Name"
+  },
+  {
+   "fieldname": "column_break_oshb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_enabled",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Enabled"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-01-29 12:14:54.741869",
+ "modified_by": "Administrator",
+ "module": "Xfer Backend",
+ "name": "BINs",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

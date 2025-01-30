@@ -24,6 +24,7 @@
   {
    "fieldname": "gstin",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "GSTIN"
   },
   {
@@ -43,19 +44,26 @@
   {
    "fieldname": "email_id",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Email ID",
    "options": "Email"
   },
   {
    "fieldname": "country",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Country",
    "options": "Country"
   }
  ],
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2025-01-21 20:03:43.311727",
+ "links": [
+  {
+   "link_doctype": "Program",
+   "link_fieldname": "program_name"
+  }
+ ],
+ "modified": "2025-01-29 18:17:27.092601",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Program Manager",

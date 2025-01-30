@@ -192,14 +192,6 @@
   "name": "7631"
  },
  {
-  "description": "Air Conditioning and Refrigeration Repair Shops",
-  "docstatus": 0,
-  "doctype": "MCC Codes",
-  "mcc": "7623",
-  "modified": "2025-01-20 14:41:07.894295",
-  "name": "7623"
- },
- {
   "description": "Radio Repair Shops",
   "docstatus": 0,
   "doctype": "MCC Codes",
@@ -528,14 +520,6 @@
   "name": "5944"
  },
  {
-  "description": "Stationery Stores, Office and School Supply Stores",
-  "docstatus": 0,
-  "doctype": "MCC Codes",
-  "mcc": "5943",
-  "modified": "2025-01-20 14:41:08.328594",
-  "name": "5943"
- },
- {
   "description": "Book Stores",
   "docstatus": 0,
   "doctype": "MCC Codes",
@@ -816,14 +800,6 @@
   "name": "5533"
  },
  {
-  "description": "Automotive Tire Stores",
-  "docstatus": 0,
-  "doctype": "MCC Codes",
-  "mcc": "5532",
-  "modified": "2025-01-20 14:41:08.706960",
-  "name": "5532"
- },
- {
   "description": "Automobile and Truck Dealers (Used Only)",
   "docstatus": 0,
   "doctype": "MCC Codes",
@@ -1024,14 +1000,6 @@
   "name": "4225"
  },
  {
-  "description": "Courier Services – Air or Ground, Freight forwarders",
-  "docstatus": 0,
-  "doctype": "MCC Codes",
-  "mcc": "4215",
-  "modified": "2025-01-20 14:41:08.977736",
-  "name": "4215"
- },
- {
   "description": "Motor Freight Carriers, Moving and Storage Companies, Trucking – Local/Long Distance, Delivery Services – Local",
   "docstatus": 0,
   "doctype": "MCC Codes",
@@ -1046,14 +1014,6 @@
   "mcc": "4121",
   "modified": "2025-01-20 14:41:09.000765",
   "name": "4121"
- },
- {
-  "description": "Passenger Railways",
-  "docstatus": 0,
-  "doctype": "MCC Codes",
-  "mcc": "4112",
-  "modified": "2025-01-20 14:41:09.010129",
-  "name": "4112"
  },
  {
   "description": "Local/Suburban Commuter Passenger Transportation – Railroads, Feries, Local Water Transportation.",
@@ -1102,5 +1062,45 @@
   "mcc": "5999",
   "modified": "2025-01-20 14:41:09.068906",
   "name": "5999"
+ },
+ {
+  "description": "Air Conditioning and Refrigeration Repair Shops",
+  "docstatus": 0,
+  "doctype": "MCC Codes",
+  "mcc": "7623",
+  "modified": "2025-01-20 14:41:07.894295",
+  "name": "7623"
+ },
+ {
+  "description": "Stationery Stores, Office and School Supply Stores",
+  "docstatus": 0,
+  "doctype": "MCC Codes",
+  "mcc": "5943",
+  "modified": "2025-01-20 14:41:08.328594",
+  "name": "5943"
+ },
+ {
+  "description": "Automotive Tire Stores",
+  "docstatus": 0,
+  "doctype": "MCC Codes",
+  "mcc": "5532",
+  "modified": "2025-01-20 14:41:08.706960",
+  "name": "5532"
+ },
+ {
+  "description": "Courier Services – Air or Ground, Freight forwarders",
+  "docstatus": 0,
+  "doctype": "MCC Codes",
+  "mcc": "4215",
+  "modified": "2025-01-20 14:41:08.977736",
+  "name": "4215"
+ },
+ {
+  "description": "Passenger Railways",
+  "docstatus": 0,
+  "doctype": "MCC Codes",
+  "mcc": "4112",
+  "modified": "2025-01-20 14:41:09.010129",
+  "name": "4112"
  }
 ]

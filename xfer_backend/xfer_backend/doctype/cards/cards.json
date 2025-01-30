@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:{card_reference_id}",
+ "autoname": "field:card_reference_id",
  "creation": "2025-01-18 11:35:01.504808",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -15,6 +15,7 @@
   "card_number",
   "pin_type",
   "card_status",
+  "channel",
   "customer_detail_section",
   "mobile_number",
   "customer_name",
@@ -34,7 +35,7 @@
   "last_used_date",
   "section_break_hhys",
   "blocked_reason",
-  "column_break_ozvc",
+  "column_break_sygi",
   "kyc_status"
  ],
  "fields": [
@@ -46,7 +47,9 @@
   {
    "fieldname": "card_reference_id",
    "fieldtype": "Data",
-   "label": "Card Reference Id"
+   "in_list_view": 1,
+   "label": "Card Reference Id",
+   "unique": 1
   },
   {
    "fieldname": "column_break_izvn",
@@ -60,17 +63,20 @@
   {
    "fieldname": "card_type",
    "fieldtype": "Select",
-   "label": "Card Type"
+   "label": "Card Type",
+   "options": "Virtual\nPhysical\nVirtual and Physical"
   },
   {
    "fieldname": "card_nature",
    "fieldtype": "Select",
-   "label": "Card Nature"
+   "label": "Card Nature",
+   "options": "Primary\nADD On"
   },
   {
    "fieldname": "pin_type",
    "fieldtype": "Select",
-   "label": "PIN Type"
+   "label": "PIN Type",
+   "options": "Green Pin\nMPIN"
   },
   {
    "fieldname": "card_status",
@@ -85,16 +91,19 @@
    "label": "Customer Detail"
   },
   {
-   "fetch_from": "mobile_number.last_name",
+   "fetch_from": "mobile_number.full_name",
    "fieldname": "customer_name",
    "fieldtype": "Read Only",
+   "in_list_view": 1,
    "label": "Customer Name"
   },
   {
    "fieldname": "mobile_number",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Mobile Number",
-   "options": "Customers"
+   "options": "Customers",
+   "search_index": 1
   },
   {
    "fieldname": "column_break_zgwb",
@@ -113,6 +122,7 @@
   {
    "fieldname": "program_name",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Program Name",
    "options": "Program"
   },
@@ -121,14 +131,17 @@
    "fieldtype": "Column Break"
   },
   {
+   "fetch_from": "program_name.program_manager",
    "fieldname": "program_manager",
-   "fieldtype": "Link",
+   "fieldtype": "Read Only",
+   "in_list_view": 1,
    "label": "Program Manager",
    "options": "Program"
   },
   {
+   "fetch_from": "program_name.category",
    "fieldname": "program_category",
-   "fieldtype": "Link",
+   "fieldtype": "Read Only",
    "label": "Program Category",
    "options": "Program"
   },
@@ -176,8 +189,14 @@
    "label": "Balance"
   },
   {
-   "fieldname": "column_break_ozvc",
-   "fieldtype": "Column Break"
+   "fieldname": "blocked_reason",
+   "fieldtype": "Data",
+   "label": "Blocked Reason"
+  },
+  {
+   "fieldname": "channel",
+   "fieldtype": "Data",
+   "label": "Channel"
   },
   {
    "fieldname": "kyc_status",
@@ -186,9 +205,8 @@
    "options": "KYC Status"
   },
   {
-   "fieldname": "blocked_reason",
-   "fieldtype": "Data",
-   "label": "Blocked Reason"
+   "fieldname": "column_break_sygi",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -198,11 +216,11 @@
    "link_fieldname": "card_reference_id"
   }
  ],
- "modified": "2025-01-21 19:58:17.267847",
+ "modified": "2025-01-30 15:13:40.540174",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Cards",
- "naming_rule": "Expression",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

@@ -1,0 +1,24 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Customer KYC Table",
+  "kyc_document": "Adhar Card",
+  "modified": "2025-01-30 14:02:15.687463",
+  "name": "jmsav0jc4l",
+  "parent": "9878348290",
+  "parentfield": "table_ylxb",
+  "parenttype": "Customers",
+  "status": "Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Customer KYC Table",
+  "kyc_document": "Pan Card",
+  "modified": "2025-01-30 14:02:15.687463",
+  "name": "hf3oauv2md",
+  "parent": "9878348290",
+  "parentfield": "table_ylxb",
+  "parenttype": "Customers",
+  "status": "Pending"
+ }
+]

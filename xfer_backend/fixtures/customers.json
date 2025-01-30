@@ -13,6 +13,7 @@
   "email": "jharaunak@gmail.com",
   "failed_login_attempts": 0,
   "first_name": "Raunak",
+  "full_name": null,
   "kyc_level": "0cku9kqt6o",
   "last_name": "Jha",
   "lat_long": null,
@@ -26,7 +27,8 @@
   "risk_category": "1plsm98qt0",
   "selfie": null,
   "state": "up",
-  "status": null
+  "status": null,
+  "table_ylxb": []
  },
  {
   "account_locked": 0,
@@ -42,19 +44,30 @@
   "email": "harshit@gmail.com",
   "failed_login_attempts": 0,
   "first_name": "Harshit",
-  "kyc_level": "0cku9kqt6o",
+  "full_name": "Harshit Adhikari",
+  "kyc_level": "Basic",
   "last_name": "Adhikari",
   "lat_long": "23.32, 23.34",
   "location_coordinates": null,
   "manager_email": "privacycard@xettle.net",
   "manager_name": "Privacy Card",
   "mobile_no": "9878348290",
-  "modified": "2025-01-20 17:27:27.968338",
+  "modified": "2025-01-30 14:02:15.687463",
   "name": "9878348290",
   "pincode": "201301",
   "risk_category": "1plsm98qt0",
   "selfie": null,
   "state": "UP",
-  "status": "Active"
+  "status": "Active",
+  "table_ylxb": [
+   {
+    "kyc_document": "Adhar Card",
+    "status": "Approved"
+   },
+   {
+    "kyc_document": "Pan Card",
+    "status": "Pending"
+   }
+  ]
  }
 ]

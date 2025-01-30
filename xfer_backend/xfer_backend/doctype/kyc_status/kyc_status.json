@@ -24,12 +24,13 @@
   {
    "fieldname": "remark",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Remark"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-18 12:04:14.055950",
+ "modified": "2025-01-30 13:23:59.100349",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "KYC Status",
