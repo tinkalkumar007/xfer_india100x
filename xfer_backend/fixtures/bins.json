@@ -1,12 +1,12 @@
 [
  {
-  "bank_name": "SBI ",
-  "bin_number": "965132",
+  "bank_name": "Axis Bank",
+  "bin_number": "644521",
   "docstatus": 0,
   "doctype": "BINs",
   "is_enabled": 0,
-  "modified": "2025-01-30 19:37:54.085540",
-  "name": "965132",
+  "modified": "2025-01-31 11:41:00.918130",
+  "name": "644521",
   "parent": "Privacy Card-0001",
   "parentfield": "bins",
   "parenttype": "Program"
@@ -20,18 +20,6 @@
   "modified": "2025-01-30 16:53:59.087976",
   "name": "653165",
   "parent": "ONO-0001",
-  "parentfield": "bins",
-  "parenttype": "Program"
- },
- {
-  "bank_name": "Axis Bank",
-  "bin_number": "644521",
-  "docstatus": 0,
-  "doctype": "BINs",
-  "is_enabled": 0,
-  "modified": "2025-01-30 19:37:54.085540",
-  "name": "644521",
-  "parent": "Privacy Card-0001",
   "parentfield": "bins",
   "parenttype": "Program"
  },
