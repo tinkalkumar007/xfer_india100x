@@ -1,17 +1,5 @@
 [
  {
-  "bank_name": "Axis Bank",
-  "bin_number": "644521",
-  "docstatus": 0,
-  "doctype": "BINs",
-  "is_enabled": 0,
-  "modified": "2025-01-31 11:41:00.918130",
-  "name": "644521",
-  "parent": "Privacy Card-0001",
-  "parentfield": "bins",
-  "parenttype": "Program"
- },
- {
   "bank_name": "Axis",
   "bin_number": "653165",
   "docstatus": 0,

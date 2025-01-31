@@ -1064,14 +1064,6 @@
   "name": "5818"
  },
  {
-  "description": "Stationery Stores, Office and School Supply Stores",
-  "docstatus": 0,
-  "doctype": "MCC Codes",
-  "mcc": "5943",
-  "modified": "2025-01-20 14:41:08.328594",
-  "name": "5943"
- },
- {
   "description": "Automotive Tire Stores",
   "docstatus": 0,
   "doctype": "MCC Codes",
@@ -1094,6 +1086,14 @@
   "mcc": "4112",
   "modified": "2025-01-20 14:41:09.010129",
   "name": "4112"
+ },
+ {
+  "description": "Stationery Stores, Office and School Supply Stores",
+  "docstatus": 0,
+  "doctype": "MCC Codes",
+  "mcc": "5943",
+  "modified": "2025-01-20 14:41:08.328594",
+  "name": "5943"
  },
  {
   "description": "Air Conditioning and Refrigeration Repair Shops",

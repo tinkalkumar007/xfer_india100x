@@ -5,13 +5,7 @@
   "allow_jit": 0,
   "allow_kit_to_kit": 0,
   "allow_reload": 0,
-  "bins": [
-   {
-    "bank_name": "Axis Bank",
-    "bin_number": "644521",
-    "is_enabled": 0
-   }
-  ],
+  "bins": [],
   "card_type": "Virtual and Physical",
   "category": "Entertainment",
   "compliance_level": "",
@@ -43,7 +37,7 @@
     "merchant_id": "44265"
    }
   ],
-  "modified": "2025-01-31 11:41:00.918130",
+  "modified": "2025-01-31 12:32:13.478349",
   "name": "Privacy Card-0001",
   "policy_url": null,
   "program_manager": "Privacy Card",
