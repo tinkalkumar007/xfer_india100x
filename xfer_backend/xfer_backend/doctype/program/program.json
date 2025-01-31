@@ -28,8 +28,6 @@
   "reward_points",
   "controls_section",
   "allow_kit_to_kit",
-  "column_break_kwoe",
-  "allow_reload",
   "column_break_duua",
   "allow_jit",
   "column_break_unsb",
@@ -332,11 +330,20 @@
    "fieldtype": "Select",
    "label": "Card Type",
    "options": "Virtual\nPhysical\nVirtual and Physical"
+  },
+  {
+   "fieldname": "column_break_unsb",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2025-01-30 13:26:30.815952",
+ "links": [
+  {
+   "link_doctype": "Cards",
+   "link_fieldname": "card_reference_id"
+  }
+ ],
+ "modified": "2025-01-30 23:04:52.713186",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Program",
