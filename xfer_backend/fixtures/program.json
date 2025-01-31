@@ -30,12 +30,12 @@
    {
     "is_enabled": 0,
     "mcc": "5943",
-    "title": null
+    "title": "Stationery Stores, Office and School Supply Stores"
    },
    {
     "is_enabled": 0,
     "mcc": "7623",
-    "title": null
+    "title": "Air Conditioning and Refrigeration Repair Shops"
    }
   ],
   "mids": [
@@ -48,7 +48,7 @@
     "merchant_id": "44265"
    }
   ],
-  "modified": "2025-01-30 13:44:47.468215",
+  "modified": "2025-01-30 19:37:54.085540",
   "name": "Privacy Card-0001",
   "policy_url": null,
   "program_manager": "Privacy Card",
