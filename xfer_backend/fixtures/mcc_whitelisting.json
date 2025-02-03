@@ -1,0 +1,74 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "MCC Whitelisting",
+  "is_enabled": 0,
+  "mcc": "5943",
+  "modified": "2025-02-01 12:00:45.346558",
+  "name": "5943",
+  "parent": "Privacy Card-0001",
+  "parentfield": "mcc_code",
+  "parenttype": "Program",
+  "title": "Stationery Stores, Office and School Supply Stores"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "MCC Whitelisting",
+  "is_enabled": 0,
+  "mcc": "4112",
+  "modified": "2025-02-01 12:06:13.529220",
+  "name": "4112",
+  "parent": "ONO-0001",
+  "parentfield": "mcc_code",
+  "parenttype": "Program",
+  "title": "Passenger Railways"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "MCC Whitelisting",
+  "is_enabled": 0,
+  "mcc": "7623",
+  "modified": "2025-02-01 12:00:45.346558",
+  "name": "7623",
+  "parent": "Privacy Card-0001",
+  "parentfield": "mcc_code",
+  "parenttype": "Program",
+  "title": "Air Conditioning and Refrigeration Repair Shops"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "MCC Whitelisting",
+  "is_enabled": 0,
+  "mcc": "4215",
+  "modified": "2025-02-01 12:06:13.529220",
+  "name": "4215",
+  "parent": "ONO-0001",
+  "parentfield": "mcc_code",
+  "parenttype": "Program",
+  "title": "Courier Services – Air or Ground, Freight forwarders"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "MCC Whitelisting",
+  "is_enabled": 0,
+  "mcc": "5532",
+  "modified": "2025-02-01 12:06:13.529220",
+  "name": "5532",
+  "parent": "ONO-0001",
+  "parentfield": "mcc_code",
+  "parenttype": "Program",
+  "title": "Automotive Tire Stores"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "MCC Whitelisting",
+  "is_enabled": 0,
+  "mcc": "7998",
+  "modified": "2025-02-01 12:06:13.529220",
+  "name": "7998",
+  "parent": "ONO-0001",
+  "parentfield": "mcc_code",
+  "parenttype": "Program",
+  "title": "Aquariums, Sea-aquariums, Dolphinariums"
+ }
+]

@@ -1,0 +1,26 @@
+[
+ {
+  "bank_name": "Axis",
+  "bin_number": "653165",
+  "docstatus": 0,
+  "doctype": "BINs",
+  "is_enabled": 0,
+  "modified": "2025-02-01 12:06:13.529220",
+  "name": "653165",
+  "parent": "ONO-0001",
+  "parentfield": "bins",
+  "parenttype": "Program"
+ },
+ {
+  "bank_name": "HDFC",
+  "bin_number": "986532",
+  "docstatus": 0,
+  "doctype": "BINs",
+  "is_enabled": 0,
+  "modified": "2025-02-01 12:06:13.529220",
+  "name": "986532",
+  "parent": "ONO-0001",
+  "parentfield": "bins",
+  "parenttype": "Program"
+ }
+]

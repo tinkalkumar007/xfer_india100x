@@ -1,0 +1,35 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Program KYC Table",
+  "is_enabled": 1,
+  "kyc_document": "Adhar Card",
+  "modified": "2025-02-01 12:00:45.346558",
+  "name": "Adhar Card",
+  "parent": "Privacy Card-0001",
+  "parentfield": "table_knkp",
+  "parenttype": "Program"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Program KYC Table",
+  "is_enabled": 0,
+  "kyc_document": "License",
+  "modified": "2025-02-01 12:06:13.529220",
+  "name": "License",
+  "parent": "ONO-0001",
+  "parentfield": "table_knkp",
+  "parenttype": "Program"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Program KYC Table",
+  "is_enabled": 1,
+  "kyc_document": "Pan Card",
+  "modified": "2025-02-01 12:00:45.346558",
+  "name": "Pan Card",
+  "parent": "Privacy Card-0001",
+  "parentfield": "table_knkp",
+  "parenttype": "Program"
+ }
+]

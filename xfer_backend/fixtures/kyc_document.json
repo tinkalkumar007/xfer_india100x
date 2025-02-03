@@ -1,0 +1,23 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "KYC Document",
+  "document_name": "Adhar Card",
+  "modified": "2025-01-30 11:04:02.382205",
+  "name": "Adhar Card"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "KYC Document",
+  "document_name": "Pan Card",
+  "modified": "2025-01-30 11:04:10.932562",
+  "name": "Pan Card"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "KYC Document",
+  "document_name": "License",
+  "modified": "2025-01-30 11:04:19.941624",
+  "name": "License"
+ }
+]

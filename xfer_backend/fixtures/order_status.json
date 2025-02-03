@@ -1,0 +1,30 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Order Status",
+  "modified": "2025-01-30 12:06:46.811830",
+  "name": "Ordered",
+  "status": "Ordered"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Order Status",
+  "modified": "2025-01-30 12:06:54.632719",
+  "name": "Delivered",
+  "status": "Delivered"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Order Status",
+  "modified": "2025-01-30 12:07:00.248951",
+  "name": "Canceled",
+  "status": "Canceled"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Order Status",
+  "modified": "2025-01-30 12:10:37.551515",
+  "name": "Shipped",
+  "status": "Shipped"
+ }
+]
