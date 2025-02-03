@@ -1,0 +1,28 @@
+[
+ {
+  "account_balance": 1352.0,
+  "account_number": "846512354612",
+  "bank_name": "Axis Bank",
+  "bin": "612352",
+  "contact_detail": "ono@dev.com",
+  "docstatus": 0,
+  "doctype": "Pool Account",
+  "modified": "2025-01-30 17:24:13.295572",
+  "name": "846512354612",
+  "program_manager": "ONO",
+  "status": "Active"
+ },
+ {
+  "account_balance": 6651230.51,
+  "account_number": "45124561245",
+  "bank_name": "SBI",
+  "bin": "512222",
+  "contact_detail": "privacycard@xettle.net",
+  "docstatus": 0,
+  "doctype": "Pool Account",
+  "modified": "2025-01-30 17:15:15.051336",
+  "name": "45124561245",
+  "program_manager": "Privacy Card",
+  "status": "Active"
+ }
+]

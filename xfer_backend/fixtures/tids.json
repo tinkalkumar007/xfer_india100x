@@ -1,0 +1,68 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "TIDs",
+  "is_enabled": 0,
+  "modified": "2025-02-01 12:00:45.346558",
+  "name": "7jr7l1h9au",
+  "parent": "Privacy Card-0001",
+  "parentfield": "tids",
+  "parenttype": "Program",
+  "terminal_id": "6316"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "TIDs",
+  "is_enabled": 0,
+  "modified": "2025-02-01 12:06:13.529220",
+  "name": "dikq2uqik3",
+  "parent": "ONO-0001",
+  "parentfield": "tids",
+  "parenttype": "Program",
+  "terminal_id": "5286"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "TIDs",
+  "is_enabled": 0,
+  "modified": "2025-02-01 12:00:45.346558",
+  "name": "k26tsi2u1p",
+  "parent": "Privacy Card-0001",
+  "parentfield": "tids",
+  "parenttype": "Program",
+  "terminal_id": "9865"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "TIDs",
+  "is_enabled": 0,
+  "modified": "2025-02-01 12:06:13.529220",
+  "name": "biq3bclvb6",
+  "parent": "ONO-0001",
+  "parentfield": "tids",
+  "parenttype": "Program",
+  "terminal_id": "5568"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "TIDs",
+  "is_enabled": 0,
+  "modified": "2025-02-01 12:00:45.346558",
+  "name": "4sa7oh5i59",
+  "parent": "Privacy Card-0001",
+  "parentfield": "tids",
+  "parenttype": "Program",
+  "terminal_id": "7542"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "TIDs",
+  "is_enabled": 0,
+  "modified": "2025-02-01 12:06:13.529220",
+  "name": "1hk9d0gq0p",
+  "parent": "ONO-0001",
+  "parentfield": "tids",
+  "parenttype": "Program",
+  "terminal_id": "6323"
+ }
+]

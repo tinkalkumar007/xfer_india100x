@@ -1,0 +1,68 @@
+[
+ {
+  "amount": 23.0,
+  "docstatus": 0,
+  "doctype": "Program Fees Structure",
+  "fee_type": "Issuing Fee",
+  "modified": "2025-02-01 12:00:45.346558",
+  "name": "8p1210vcqp",
+  "parent": "Privacy Card-0001",
+  "parentfield": "table_ujtz",
+  "parenttype": "Program"
+ },
+ {
+  "amount": 3.0,
+  "docstatus": 0,
+  "doctype": "Program Fees Structure",
+  "fee_type": "Reload Fee",
+  "modified": "2025-02-01 12:06:13.529220",
+  "name": "9b5or3oqih",
+  "parent": "ONO-0001",
+  "parentfield": "table_ujtz",
+  "parenttype": "Program"
+ },
+ {
+  "amount": 2.0,
+  "docstatus": 0,
+  "doctype": "Program Fees Structure",
+  "fee_type": "Reload Fee",
+  "modified": "2025-02-01 12:00:45.346558",
+  "name": "08kiri5nvp",
+  "parent": "Privacy Card-0001",
+  "parentfield": "table_ujtz",
+  "parenttype": "Program"
+ },
+ {
+  "amount": 2.0,
+  "docstatus": 0,
+  "doctype": "Program Fees Structure",
+  "fee_type": "Transaction Fee",
+  "modified": "2025-02-01 12:06:13.529220",
+  "name": "vl0pkreecl",
+  "parent": "ONO-0001",
+  "parentfield": "table_ujtz",
+  "parenttype": "Program"
+ },
+ {
+  "amount": 4.0,
+  "docstatus": 0,
+  "doctype": "Program Fees Structure",
+  "fee_type": "Transaction Fee",
+  "modified": "2025-02-01 12:00:45.346558",
+  "name": "04vuh46tgh",
+  "parent": "Privacy Card-0001",
+  "parentfield": "table_ujtz",
+  "parenttype": "Program"
+ },
+ {
+  "amount": 100.0,
+  "docstatus": 0,
+  "doctype": "Program Fees Structure",
+  "fee_type": "Shipping Fee",
+  "modified": "2025-02-01 12:06:13.529220",
+  "name": "fepehe11q9",
+  "parent": "ONO-0001",
+  "parentfield": "table_ujtz",
+  "parenttype": "Program"
+ }
+]
