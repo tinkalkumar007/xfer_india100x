@@ -76,12 +76,15 @@ import {
 import DataTableViewOptions from './DataTableViewOptions'
 import DataTableToolbar from './DataTableToolbar'
 import { useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk'
+import { useToast } from '@/hooks/use-toast'
+import Empty from './Empty'
 
 export function PoolAccountsTable() {
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const { toast } = useToast()
 
   const [accountID, setAccountID] = React.useState('')
 
@@ -110,25 +113,6 @@ export function PoolAccountsTable() {
   }, [PoolAccountsData])
 
   const columns = [
-    // {
-    //   accessorKey: 'product_id',
-    //   header: ({ column }) => {
-    //     return (
-    //       <Button
-    //         variant="ghost"
-    //         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-    //       >
-    //         Sr No
-    //         <ArrowUpDown />
-    //       </Button>
-    //     )
-    //   },
-    //   cell: ({ row }) => (
-    //     <div className="capitalize text-center">
-    //       {row.getValue('product_id')}
-    //     </div>
-    //   ),
-    // },
     {
       id: 'select',
       header: ({ table }) => (
@@ -301,17 +285,15 @@ export function PoolAccountsTable() {
     {
       header: `Status`,
       cell: ({ row }) => {
-        const status = row.original.status
-        return (
-          <>
-            {status === 'Active' && (
-              <Badge className="bg-[#e4f5e9] text-[#16794c]">Active</Badge>
-            )}
-            {status === 'Inactive' && (
-              <Badge className="bg-[#fff0f0] text-[#b52a2a]">Inactive</Badge>
-            )}
-          </>
-        )
+        const status = row.original?.status
+        switch (status) {
+          case 'Active':
+            return <Badge variant="outline">{status}</Badge>
+          case 'Inactive':
+            return <Badge variant="outline">{status}</Badge>
+          default:
+            return <Badge variant="outline">{status}</Badge>
+        }
       },
     },
     // {
@@ -381,18 +363,34 @@ export function PoolAccountsTable() {
   }
 
   const downloadCSV = () => {
+    if (!tableData || tableData.length === 0) {
+      toast({
+        title: 'No data available to download',
+      })
+      return
+    }
     // Convert table data to CSV
-    const csv = Papa.unparse(data)
+    const csv = Papa.unparse(tableData)
     // Create a Blob object for the CSV
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
     // Use FileSaver to trigger a download
     saveAs(blob, 'table-data.csv')
   }
 
+  if (!poolAccountsDataLoading && PoolAccountsData.length === 0) {
+    return (
+      <Empty
+        heading="No Data Found."
+        subHeading="No account history found."
+        buttonText="Contact Us"
+      />
+    )
+  }
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Pool Accounts</CardTitle>
+        <CardTitle>POOL ACCOUNTS</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="w-full">

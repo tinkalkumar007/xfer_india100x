@@ -94,124 +94,8 @@ import { Badge } from '@/components/ui/badge'
 import DataTableToolbar from './DataTableToolbar'
 import CreateOrder from '../pages/CreateOrder/CreateOrder'
 import { useFrappeGetDocList } from 'frappe-react-sdk'
-
-const fieldIconMap = {
-  approved: {
-    icon: <Badge className="bg-[#e4f5e9] text-[#16794c]">Approved</Badge>,
-    label: 'Approved',
-  },
-  rejected: {
-    icon: <Badge className="bg-[#fff0f0] text-[#b52a2a]">Rejected</Badge>,
-    label: 'Rejected',
-  },
-
-  progress: {
-    icon: <Badge className="bg-[#F5FBFC] text-[#267A94]">Progress</Badge>,
-    label: 'Progress',
-  },
-}
-const data = [
-  {
-    product_id: 1,
-    product_name: 'Smartphone',
-    product_category: 'Example',
-    card_nature: 'virtual',
-    ordered_cards: 10,
-    status: 'approved',
-    approved: true,
-    created_date: '12-01-2024',
-  },
-  {
-    product_id: 2,
-    product_name: 'Tablet',
-    product_category: 'Example',
-    card_nature: 'physical',
-    ordered_cards: 5,
-    status: 'progress',
-    progress: true,
-    created_date: '11-05-2023',
-  },
-  {
-    product_id: 3,
-    product_name: 'Headphones',
-    product_category: 'Example',
-    card_nature: 'physical',
-    ordered_cards: 2,
-    status: 'rejected',
-    rejected: true,
-    created_date: '10-03-2012',
-  },
-  {
-    product_id: 4,
-    product_name: 'Smartwatch',
-    product_category: 'Example',
-    card_nature: 'physical',
-    ordered_cards: 3,
-    status: 'progress',
-    progress: true,
-    created_date: '09-10-2023',
-  },
-  {
-    product_id: 5,
-    product_name: 'Keyboard',
-    product_category: 'Example',
-    card_nature: 'physical',
-    ordered_cards: 1,
-    status: 'approved',
-    approved: true,
-    created_date: '08-03-2023',
-  },
-  {
-    product_id: 6,
-    product_name: 'Mouse',
-    product_category: 'Example',
-    card_nature: 'physical',
-    ordered_cards: 4,
-    status: 'approved',
-    approved: true,
-    created_date: '07-05-2022',
-  },
-  {
-    product_id: 7,
-    product_name: 'Monitor',
-    product_category: 'Example',
-    card_nature: 'physical',
-    ordered_cards: 2,
-    status: 'rejected',
-    rejected: true,
-    created_date: '06-03-2021',
-  },
-  {
-    product_id: 8,
-    product_name: 'Mousepad',
-    product_category: 'Example',
-    card_nature: 'physical',
-    ordered_cards: 1,
-    status: 'progress',
-    progress: true,
-    created_date: '05-05-2005',
-  },
-  {
-    product_id: 9,
-    product_name: 'Mousepad',
-    product_category: 'Example',
-    card_nature: 'physical',
-    ordered_cards: 1,
-    status: 'progress',
-    progress: true,
-    created_date: '04-03-2024',
-  },
-  {
-    product_id: 10,
-    product_name: 'Mousepad',
-    product_category: 'Example',
-    card_nature: 'physical',
-    ordered_cards: 1,
-    status: 'progress',
-    progress: true,
-    created_date: '03-05-2023',
-  },
-]
+import { useToast } from '@/hooks/use-toast'
+import Empty from './Empty'
 
 export function InventoryTable() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
@@ -219,23 +103,26 @@ export function InventoryTable() {
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const { toast } = useToast()
 
-  const { data: inventoryData, isLoading: inventoryDataLoading } =
-    useFrappeGetDocList('Inventory', {
-      fields: ['*'],
-    })
+  const {
+    data: inventoryData,
+    isLoading: inventoryDataLoading,
+    mutate: inventoryRefetch,
+  } = useFrappeGetDocList('Inventory', {
+    fields: ['*'],
+  })
 
-  console.log(inventoryData)
+  if (!inventoryDataLoading) console.log('Inventory Data:', inventoryData)
 
   const tableData = React.useMemo(() => {
     if (!inventoryData) return []
-    return inventoryData?.map((program) => ({
-      id: program.name, // Frappe's unique identifier
-      program_name: program.program_name,
-      category: program.category,
-      description: program.description,
-      status: inventoryData.status,
-      date: inventoryData.creation,
+    return inventoryData?.map((order) => ({
+      id: order.name,
+      order_id: order.name,
+      status: order.status,
+      amount: order.amount,
+      date: order.creation,
     }))
   }, [inventoryData])
 
@@ -263,121 +150,60 @@ export function InventoryTable() {
       enableHiding: false,
     },
     {
-      accessorKey: 'product_name',
-      header: 'Product Name',
+      accessorKey: 'order_id',
+      header: 'Order ID',
       cell: ({ row }) => {
-        const id = row.original.product_id
+        const id = row.original.order_id
         return (
-          <Link to={`/inventory/order-details/${id}`}>
+          <Link to={`/inventory/${id}`}>
             <div className="capitalize text-center cursor-pointer hover:underline">
-              {row.getValue('product_name')}
+              #{row.original?.order_id}
             </div>
           </Link>
         )
       },
     },
     {
-      accessorKey: 'product_category',
-      header: 'Product Category',
-      cell: ({ row }) => (
-        <div className="capitalize text-center">
-          {row.getValue('product_category')}
-        </div>
-      ),
-    },
-    {
-      accessorKey: 'card_nature',
-      header: 'Card Nature',
-      cell: ({ row }) => (
-        <div className="capitalize text-center">
-          {row.getValue('card_nature')}
-        </div>
-      ),
-    },
-    {
-      accessorKey: 'ordered_cards',
-      header: ({ column }) => {
+      accessorKey: 'amount',
+      header: 'Order Amount',
+      cell: ({ row }) => {
         return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Ordered Cards
-            <ArrowUpDown />
-          </Button>
+          <div className="capitalize text-center cursor-pointer">
+            &#8377; {row.original?.amount}
+          </div>
         )
       },
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue('ordered_cards')}</div>
-      ),
     },
-
     {
-      accessorKey: 'created_date',
-      header: 'Created Date',
+      accessorKey: 'date',
+      header: 'Order Date',
       cell: ({ row }) => (
-        <div className="lowercase text-center">
-          {row.getValue('created_date')}
+        <div className="capitalize text-center">
+          {row.original?.date
+            ?.split('.')[0]
+            .split(' ')[0]
+            .split('-')
+            .reverse()
+            .join('-')}
         </div>
       ),
     },
     {
       accessorKey: 'status',
       header: 'Status',
-      cell: ({ row }) => (
-        <div className="flex items-center justify-center gap-2">
-          {Object.keys(fieldIconMap).map((field) => {
-            if (row.original[field]) {
-              return (
-                <span
-                  key={field}
-                  className="flex items-center gap-1"
-                  title={fieldIconMap[field].label}
-                >
-                  {fieldIconMap[field].icon}
-                </span>
-              )
-            }
-            return null
-          })}
-        </div>
-      ),
+      cell: ({ row }) => {
+        const status = row.original?.status
+        if (!status) return <div>-</div>
+        switch (status) {
+          default:
+            return <Badge variant="primary">{status}</Badge>
+        }
+      },
     },
-    // {
-    //   accessorKey: 'actions',
-    //   header: '',
-    //   cell: ({ row }) => {
-    //     const rowData = row.original // Get the entire row's data for actions
-    //     return (
-    //       <DropdownMenu>
-    //         <DropdownMenuTrigger asChild>
-    //           <Button variant="ghost" className="h-8 w-8 p-0">
-    //             <span className="sr-only">Open menu</span>
-    //             <MoreHorizontal />
-    //           </Button>
-    //         </DropdownMenuTrigger>
-    //         <DropdownMenuContent align="end">
-    //           <DropdownMenuItem
-    //             className="cursor-pointer"
-    //             onClick={() => navigator.clipboard.writeText(payment.id)}
-    //           >
-    //             Approve
-    //           </DropdownMenuItem>
-    //           <DropdownMenuItem
-    //             className="cursor-pointer"
-    //             onClick={() => navigator.clipboard.writeText(payment.id)}
-    //           >
-    //             Reject
-    //           </DropdownMenuItem>
-    //         </DropdownMenuContent>
-    //       </DropdownMenu>
-    //     )
-    //   },
-    // },
   ]
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -400,28 +226,34 @@ export function InventoryTable() {
     },
   })
 
-  const openDialog = (rowData) => {
-    setIsDialogOpen(true)
-  }
-
-  const closeDialog = () => {
-    setIsDialogOpen(false)
-    // Clear any row data when canceled
-  }
   const downloadCSV = () => {
+    if (!tableData || tableData.length === 0) {
+      toast({
+        title: 'No data available to download',
+      })
+      return
+    }
     // Convert table data to CSV
-    const csv = Papa.unparse(data)
+    const csv = Papa.unparse(tableData)
     // Create a Blob object for the CSV
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
     // Use FileSaver to trigger a download
     saveAs(blob, 'table-data.csv')
   }
 
-  const isFiltered = table.getState().columnFilters.length > 0
+  if (!inventoryDataLoading && inventoryData.length === 0) {
+    return (
+      <Empty
+        heading="No Orders Found."
+        subHeading="You have no order history."
+        buttonText="Create Order"
+      />
+    )
+  }
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Inventory</CardTitle>
+        <CardTitle>INVENTORY</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="w-full">
@@ -429,9 +261,9 @@ export function InventoryTable() {
             <div className="w-full">
               <DataTableToolbar
                 table={table}
-                inputFilter="product_name"
-                status={status}
-                card_nature={card_nature}
+                inputFilter="order_id"
+                // status={status}
+                // card_nature={card_nature}
               />
             </div>
             <div className="flex gap-2 items-center">
@@ -440,7 +272,7 @@ export function InventoryTable() {
               </Button>
 
               <DataTableViewOptions table={table} />
-              <CreateOrder />
+              <CreateOrder inventoryRefetch={inventoryRefetch} />
             </div>
           </div>
           <div className="rounded-md border mt-3">

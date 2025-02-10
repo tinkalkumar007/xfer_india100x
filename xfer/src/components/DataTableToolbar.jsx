@@ -8,8 +8,10 @@ import { tags, priorities } from './programData'
 import DataTableFacetedFilter from '@/components/DataTableFacetedFilter'
 import DataTableViewOptions from '@/components/DataTableViewOptions'
 
-const DataTableToolbar = ({ table, inputFilter, ...filtersObject }) => {
+const DataTableToolbar = ({ table, inputFilter, ...filters }) => {
   const isFiltered = table.getState().columnFilters.length > 0
+
+  console.log('Filters: ', filters)
 
   return (
     <div className="flex items-center justify-between w-full">
@@ -28,6 +30,24 @@ const DataTableToolbar = ({ table, inputFilter, ...filtersObject }) => {
         )}
 
         <div className="flex items-center gap-2">
+          {Object.entries(filters).map(([key, options]) => {
+            const title = key
+              ?.split('_') // Split the string by underscore
+              .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each part
+              .join(' ')
+
+            return (
+              <DataTableFacetedFilter
+                key={title} // Unique key for React
+                column={table.getColumn(key)} // Get the column based on the key
+                title={title} // Set the title to the key (e.g., "status", "card_nature")
+                options={options} // Pass the options (array of objects)
+              />
+            )
+          })}
+        </div>
+
+        {/* <div className="flex items-center gap-2">
           {Object.entries(filtersObject).map(([key, options]) => {
             const updatedKey = key
               .split('_') // Split the string by underscore
@@ -43,7 +63,7 @@ const DataTableToolbar = ({ table, inputFilter, ...filtersObject }) => {
               />
             )
           })}
-        </div>
+        </div> */}
 
         {isFiltered && (
           <Button

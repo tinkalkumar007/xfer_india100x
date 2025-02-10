@@ -48,7 +48,7 @@ const WhitelistMID = ({ midCodes, programDetailsLoading }) => {
 
       <div>
         {!programDetailsLoading && midCodes?.length > 0 ? (
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-wrap">
             {midCodes?.map((mid, index) => {
               if (index <= 3) {
                 return (
@@ -67,14 +67,14 @@ const WhitelistMID = ({ midCodes, programDetailsLoading }) => {
                 <HoverCard>
                   <HoverCardTrigger asChild>
                     <Button
-                      variant=""
-                      className="cursor-pointer tracking-wider h-6"
+                      variant="outline"
+                      className="cursor-pointer tracking-wider h-6 text-xs"
                     >
                       +{midCodes.length - 4} more
                     </Button>
                   </HoverCardTrigger>
                   <HoverCardContent className="w-80">
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 flex-wrap">
                       {midCodes?.map((mid, _i) => {
                         if (_i > 3) {
                           return (

@@ -5,7 +5,10 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetClose,
 } from '@/components/ui/sheet'
+
+import { Badge } from '@/components/ui/badge'
 
 import { Separator } from '@/components/ui/separator'
 import {
@@ -41,7 +44,7 @@ import {
 
 import { v4 as uuidv4 } from 'uuid'
 
-import { CirclePlus, Trash } from 'lucide-react'
+import { CircleCheckIcon, CirclePlus, Trash } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -49,10 +52,13 @@ import { useEffect, useState } from 'react'
 import MakePayment from '../../components/MakePayment'
 import CreateOrderForm from '../../components/CreateOrderForm'
 import { useNavigate } from 'react-router-dom'
+import { useFrappeCreateDoc } from 'frappe-react-sdk'
 
-const CreateOrder = () => {
+const CreateOrder = ({ inventoryRefetch }) => {
   const [screen, setScreen] = useState('create_order')
   const navigate = useNavigate()
+
+  const { createDoc, loading, error } = useFrappeCreateDoc()
 
   const [tableData, setTableData] = useState([])
 
@@ -64,7 +70,7 @@ const CreateOrder = () => {
           Create Order
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-xl">
+      <SheetContent className="w-full lg:w-[28rem] lg:max-w-md">
         <SheetHeader>
           {screen === 'create_order' && (
             <>
@@ -84,15 +90,31 @@ const CreateOrder = () => {
               </SheetDescription>
             </>
           )}
+          {screen === 'order_successful' && (
+            <div className="flex flex-col gap-4 items-center mt-10">
+              <div>
+                <CircleCheckIcon className="w-16 h-16 text-green-500" />
+              </div>
+              <div className="flex flex-col gap-2 items-center text-center">
+                <SheetTitle>Thank you for your order!</SheetTitle>
+                <SheetDescription>
+                  Your order was successfully placed and is being processed.
+                </SheetDescription>
+              </div>
 
-          {screen === 'make_payment' && (
-            <>
-              <SheetTitle>Make Payment</SheetTitle>
-              <SheetDescription>
-                Review your selected items and provide accurate shipping
-                information to complete your purchase.
-              </SheetDescription>
-            </>
+              <div className="w-full">
+                <SheetClose className="w-full">
+                  <Button
+                    className="w-full"
+                    onClick={() => {
+                      setScreen('create_order')
+                    }}
+                  >
+                    Done
+                  </Button>
+                </SheetClose>
+              </div>
+            </div>
           )}
         </SheetHeader>
 
@@ -107,55 +129,29 @@ const CreateOrder = () => {
         )}
         {screen === 'order_summary' && (
           <div className="flex flex-col gap-4 select-none w-full mt-3">
-            <div className="w-full border rounded-md">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="text-md">Product Name</TableHead>
-                    <TableHead className="text-md">Quantity</TableHead>
-                    <TableHead className="text-right text-md">Amount</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {tableData.length > 0
-                    ? tableData.map((data) => (
-                        <TableRow key={data.id}>
-                          <TableCell className="font-medium text-md">
-                            {data.product_name}
-                          </TableCell>
-                          <TableCell className="font-medium text-md">
-                            {data.quantity}
-                          </TableCell>
-
-                          <TableCell className="font-medium text-md text-right">
-                            &#8377; 400
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    : null}
-                </TableBody>
-              </Table>
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-muted-foreground">
+                Program Name :{' '}
+              </span>
+              <span className="text-sm font-medium">
+                {tableData.program_name}
+              </span>
             </div>
-            <div className="px-4 py-2 border rounded-md">
-              <div className="grid gap-4 grid-cols-1">
-                <div className="flex items-center justify-between">
-                  <p className="font-medium text-md">subtotal</p>
-                  <p className="font-medium text-md">&#8377; 400.00</p>
-                </div>
-                <div className="flex items-center justify-between">
-                  <p className="font-medium text-md">shipping</p>
-                  <p className="font-medium text-md">&#8377; 0.00</p>
-                </div>
-                <div className="flex items-center justify-between">
-                  <p className="font-medium text-md">tax</p>
-                  <p className="font-medium text-md">&#8377; 0.00</p>
-                </div>
-                <Separator className="w-full" />
-                <div className="flex items-center justify-between font-medium">
-                  <div>Total</div>
-                  <div>&#8377; 400.00</div>
-                </div>
-              </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-muted-foreground">
+                Physical Quantity :{' '}
+              </span>
+              <span className="text-sm font-medium">
+                {tableData.physical_quantity}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-muted-foreground">
+                Virtual Quantity :{' '}
+              </span>
+              <span className="text-sm font-medium">
+                {tableData.virtual_quantity}
+              </span>
             </div>
             <div className="w-full flex justify-between gap-4">
               <Button
@@ -167,21 +163,24 @@ const CreateOrder = () => {
               >
                 Back
               </Button>
-
               <Button
                 className=""
                 onClick={() => {
-                  setScreen('make_payment')
+                  createDoc('Inventory', {
+                    ...tableData,
+                  })
+                    .then((response) => {
+                      inventoryRefetch()
+                      setScreen('order_successful')
+                      setTableData({})
+                    })
+                    .catch((err) => console.log(err))
                 }}
+                disabled={loading}
               >
-                Make Payment
+                Place Your Order
               </Button>
             </div>
-          </div>
-        )}
-        {screen === 'make_payment' && (
-          <div>
-            <MakePayment />
           </div>
         )}
       </SheetContent>

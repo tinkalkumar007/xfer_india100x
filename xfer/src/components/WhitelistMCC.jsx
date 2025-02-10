@@ -46,9 +46,9 @@ const WhitelistMCC = ({ mccCodes, programDetailsLoading }) => {
         </p>
       </div>
 
-      <div>
+      <div className="">
         {!programDetailsLoading && mccCodes?.length > 0 ? (
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-wrap">
             {mccCodes?.map((code, index) => {
               if (index <= 3) {
                 return (
@@ -67,14 +67,14 @@ const WhitelistMCC = ({ mccCodes, programDetailsLoading }) => {
                 <HoverCard>
                   <HoverCardTrigger asChild>
                     <Button
-                      variant=""
-                      className="cursor-pointer tracking-wider h-6"
+                      variant="outline"
+                      className="cursor-pointer tracking-wider text-xs h-6"
                     >
                       +{mccCodes.length - 4} more
                     </Button>
                   </HoverCardTrigger>
                   <HoverCardContent className="w-80">
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 flex-wrap">
                       {mccCodes?.map((code, _i) => {
                         if (_i > 3) {
                           return (

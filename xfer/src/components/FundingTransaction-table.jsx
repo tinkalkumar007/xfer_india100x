@@ -83,87 +83,8 @@ import { Badge } from '@/components/ui/badge'
 import DataTableViewOptions from './DataTableViewOptions'
 import DataTableToolbar from './DataTableToolbar'
 import { useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk'
-
-const fieldIconMap = {
-  Success: {
-    icon: <Badge className="bg-[#e4f5e9] text-[#16794c]">Success</Badge>,
-    label: 'Successful transaction',
-  },
-  Pending: {
-    icon: <Badge className="bg-[#fff7d3] text-[#ab6e05]">Pending</Badge>,
-    label: 'Pending transaction',
-  },
-  Failed: {
-    icon: <Badge className="bg-[#fff0f0] text-[#b52a2a]">Failed</Badge>,
-    label: 'Failed transaction',
-  },
-}
-
-const data = [
-  {
-    bankName: 'MetroBank',
-    cardRefId: 'CR456789',
-    FromAccount: '255616106789',
-    ToAccount: '465465546789',
-    Amount: 9199.99,
-    status: 'Pending',
-    Date: '2023-11-29 08:25:05',
-  },
-  {
-    bankName: 'CityBank',
-    cardRefId: 'CR123456',
-    FromAccount: '255616106789',
-    ToAccount: '465465546789',
-    Amount: 12999.99,
-    status: 'Success',
-    Date: '2023-11-28 12:15:30',
-  },
-  {
-    bankName: 'HDFC Bank',
-    cardRefId: 'CR789456',
-    FromAccount: '255616106789',
-    ToAccount: '465465546789',
-    Amount: 15999.99,
-    status: 'Failed',
-    Date: '2023-11-27 10:30:15',
-  },
-  {
-    bankName: 'ICICI Bank',
-    cardRefId: 'CR987654',
-    FromAccount: '255616106789',
-    ToAccount: '465465546789',
-    Amount: 18999.99,
-    status: 'Pending',
-    Date: '2023-11-26 09:45:20',
-  },
-  {
-    bankName: 'SBI Bank',
-    cardRefId: 'CR345678',
-    FromAccount: '255616106789',
-    ToAccount: '465465546789',
-    Amount: 21999.99,
-    status: 'Failed',
-    Date: '2023-11-25 18:00:45',
-  },
-  {
-    bankName: 'PNB Bank',
-    cardRefId: 'CR567890',
-    FromAccount: '255616106789',
-    ToAccount: '465465546789',
-    Amount: 24999.99,
-    status: 'Success',
-    Date: '2023-11-24 17:15:50',
-  },
-  {
-    bankName: 'BOB Bank',
-    cardRefId: 'CR678901',
-    FromAccount: '255616106789',
-    ToAccount: '465465546789',
-    Amount: 27999.99,
-    status: 'Success',
-    Date: '2023-11-23 16:30:55',
-  },
-]
+import { useToast } from '@/hooks/use-toast'
+import Empty from './Empty'
 
 export function FundingTransactionTable() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
@@ -171,6 +92,7 @@ export function FundingTransactionTable() {
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const { toast } = useToast()
 
   const [fundingTransactionID, setFundingTransactionID] = React.useState('')
 
@@ -232,7 +154,7 @@ export function FundingTransactionTable() {
             <div
               className="text-center hover:underline"
               onClick={() => {
-                setFundingTransactionID(row.original.id)
+                setFundingTransactionID(row.original?.id)
               }}
             >
               {row.original?.id}
@@ -479,7 +401,7 @@ export function FundingTransactionTable() {
       accessorKey: 'status',
       header: `Status`,
       cell: ({ row }) => {
-        const status = row.original.status
+        const status = row.original?.status
 
         switch (status) {
           case 'Success':
@@ -493,6 +415,9 @@ export function FundingTransactionTable() {
 
           case 'Failed':
             return <Badge className="bg-[#ffe6e6] text-[#d32f2f]">Failed</Badge>
+
+          default:
+            return <Badge variant="outline"></Badge>
         }
       },
     },
@@ -522,26 +447,33 @@ export function FundingTransactionTable() {
     },
   })
 
-  const openDialog = (rowData) => {
-    setIsDialogOpen(true)
-  }
-
-  const closeDialog = () => {
-    setIsDialogOpen(false)
-    // Clear any row data when canceled
-  }
   const downloadCSV = () => {
+    if (!tableData || tableData.length === 0) {
+      toast({
+        title: 'No data available to download',
+      })
+      return
+    }
     // Convert table data to CSV
-    const csv = Papa.unparse(data)
+    const csv = Papa.unparse(tableData)
     // Create a Blob object for the CSV
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
     // Use FileSaver to trigger a download
     saveAs(blob, 'table-data.csv')
   }
+  if (!fundingTransactionsDataLoading && fundingTransactionsData.length === 0) {
+    return (
+      <Empty
+        heading="No Data Found."
+        subHeading="No transaction history found."
+        buttonText="Contact Us"
+      />
+    )
+  }
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Funding Transaction List</CardTitle>
+        <CardTitle>FUNDING TRANSACTIONS LIST</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="w-full">
@@ -550,7 +482,7 @@ export function FundingTransactionTable() {
               <DataTableToolbar
                 table={table}
                 inputFilter="id"
-                status={status}
+                // status={status}
               />
             </div>
             <div className="flex gap-2 items-center">

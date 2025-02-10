@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import axios from '../api/axios'
 import {
   flexRender,
@@ -79,59 +79,36 @@ import { status } from '@/data/issued-cards-data'
 import DataTableToolbar from './DataTableToolbar'
 import DataTableViewOptions from './DataTableViewOptions'
 import { useFrappeGetDocList } from 'frappe-react-sdk'
-
-const fieldIconMap = {
-  kycRequired: {
-    icon: (
-      <Badge className="bg-[#e4f5e9] text-[#16794c] cursor-pointer">KYC</Badge>
-    ),
-    label: 'KYC Required',
-  },
-  contactlessAllowed: {
-    icon: (
-      <Badge className="bg-[#f9f0ff] text-[#6e399d]  cursor-pointer">
-        Contactless
-      </Badge>
-    ),
-    label: 'Contactless Allowed',
-  },
-  isPhysical: {
-    icon: (
-      <Badge className="bg-[#F5FBFC] text-[#267A94]  cursor-pointer">
-        Physical
-      </Badge>
-    ),
-    label: 'Physical Not Allowed',
-  },
-  isRewardsApplicable: {
-    icon: (
-      <Badge className="bg-[#fff1e7] text-[#bd3e0c] cursor-pointer">
-        Reward
-      </Badge>
-    ),
-    label: 'Rewards Applicable',
-  },
-}
+import { useToast } from '@/hooks/use-toast'
+import Empty from './Empty'
 
 export function IssuedCardsTable() {
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false)
-  // const [data, setData] = React.useState([]);
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const { toast } = useToast()
+
+  const [searchParams] = useSearchParams()
+
+  const filters = Array.from(searchParams.entries()).map(([key, value]) => {
+    if (!(key === 'page') && !(key === 'limit')) return [key, '=', value]
+  })
+
+  console.log('Search Params: ', filters)
 
   const { data: issuedCardsData, isLoading: issuedCardsLoading } =
     useFrappeGetDocList('Cards', {
       fields: [
         'card_reference_id',
         'card_number',
-        'program_category',
         'modified',
         'issue_date',
         'card_status',
+        'program_name',
         '_user_tags',
       ],
+      filters: searchParams.size > 0 && filters,
     })
 
   if (!issuedCardsLoading) {
@@ -143,7 +120,7 @@ export function IssuedCardsTable() {
     return issuedCardsData.map((card) => ({
       id: card.card_reference_id,
       card_number: card.card_number,
-      program_category: card.program_category,
+      program_name: card.program_name,
       last_active: card.modified,
       issued_date: card.issue_date,
       card_status: card.card_status,
@@ -180,7 +157,7 @@ export function IssuedCardsTable() {
       cell: ({ row }) => {
         const id = row.original?.id
         return (
-          <Link to={`/issued-cards/issuedcards-details/${id}`}>
+          <Link to={`/issued-cards/${id}`}>
             <div className="capitalize text-center hover:underline">{id}</div>
           </Link>
         )
@@ -205,12 +182,13 @@ export function IssuedCardsTable() {
       },
     },
     {
-      accessorKey: 'program_category',
-      header: 'Program Category',
+      accessorKey: 'program_name',
+      header: 'Program Name',
       cell: ({ row }) => {
-        const category = row.original.program_category
-        //console.log(product);
-        return <div className="capitalize">{category ? category : '-'}</div>
+        const program_name = row.original.program_name
+        return (
+          <div className="capitalize">{program_name ? program_name : '-'}</div>
+        )
       },
     },
     {
@@ -235,17 +213,31 @@ export function IssuedCardsTable() {
       header: 'Status',
       cell: ({ row }) => {
         const status = row.original?.card_status
-        return (
-          <div>
-            {status === null && '-'}
-            {status === 'Active' && (
-              <Badge className="bg-[#e4f5e9] text-[#16794c]">Active</Badge>
-            )}
-            {status === 'Inactive' && (
-              <Badge className="bg-[#fff0f0] text-[#b52a2a]">Inactive</Badge>
-            )}
-          </div>
-        )
+        switch (status) {
+          case 'Active':
+            return (
+              <Badge variant="outline" className="bg-[#E4F5E9] text-[#16794C]">
+                {status}
+              </Badge>
+            )
+          case 'Inactive':
+            return (
+              <Badge variant="outline" className="">
+                {status}
+              </Badge>
+            )
+          case 'Blocked':
+            return (
+              <Badge
+                variant="outline"
+                className="bg-[#FFF1E7] text-[#BD3E0C] cursor-pointer"
+              >
+                {status}
+              </Badge>
+            )
+          default:
+            return <Badge variant="outline">{status}</Badge>
+        }
       },
     },
     {
@@ -283,11 +275,7 @@ export function IssuedCardsTable() {
                     </Badge>
                   )
                 default:
-                  return (
-                    <Badge key={tag} className="bg-gray-100 text-gray-800">
-                      -
-                    </Badge>
-                  )
+                  return <Badge key={tag}></Badge>
               }
             })}
           </div>
@@ -360,48 +348,44 @@ export function IssuedCardsTable() {
     // Clear any row data when canceled
   }
   const downloadCSV = () => {
+    if (!tableData || tableData.length === 0) {
+      toast({
+        title: 'No data available to download',
+      })
+      return
+    }
     // Convert table data to CSV
-    const csv = Papa.unparse(data)
+    const csv = Papa.unparse(tableData)
     // Create a Blob object for the CSV
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
     // Use FileSaver to trigger a download
     saveAs(blob, 'table-data.csv')
   }
-  // /card/allIssuedCards
-  // State for table data
-  // const [loading, setLoading] = React.useState(true); // State for loading
-  // const [error, setError] = React.useState(null); // State for error handling
 
-  // React.useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get('/card/allIssuedCards',{
-  //         withCredentials: true,
-  //       });
-  //       console.log(response.data.data);
-  //       setData(response.data.data);
-  //     } catch (err) {
-  //       console.error('Error fetching data:', err);
-  //       //setError('Failed to fetch data. Please try again later.');
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
+  if (!issuedCardsLoading && issuedCardsData.length === 0) {
+    return (
+      <Empty
+        heading="No Cards Found."
+        subHeading="No cards issued yet."
+        buttonText="Contact Us"
+      />
+    )
+  }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Issued Cards</CardTitle>
+        <CardTitle>ISSUED CARDS</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="w-full">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
             <div className="w-full">
-              {/* <DataTableToolbar
+              <DataTableToolbar
                 table={table}
-                inputFilter="card_ref_id"
-                status={status}
-              /> */}
+                inputFilter="id"
+                // status={status}
+              />
             </div>
             <div className="flex gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>

@@ -8,6 +8,7 @@ import Error404 from './pages/Error404/Error404'
 import Programs from './pages/Programs/Programs'
 import ProgramManagers from './pages/ProgramManagers/ProgramManagers'
 import Inventory from './pages/Inventory/Inventory'
+
 import IssuedCards from './pages/IssuedCards/IssuedCards'
 import AllCustomers from './pages/AllCustomers/AllCustomers'
 import FlaggedCustomers from './pages/FlaggedCustomers/FlaggedCustomers'
@@ -40,6 +41,15 @@ import ProtectedRoute from '@/components/ProtectedRoute'
 import PublicRoute from './components/PublicRoute'
 import TestDoc from './components/TestDoc'
 import { FrappeProvider } from 'frappe-react-sdk'
+import { ProgramTableDemo } from './components/program-table'
+import { InventoryTable } from './components/inventory-table'
+import { IssuedCardsTable } from './components/issued-cards-table'
+import { AllCustomerTable } from './components/Allcustomer-table'
+import { FlaggedCustomerTable } from './components/Flaggedcustomer-table'
+import { PendingKycTable } from './components/PendingKyc-table'
+import { PoolAccountsTable } from './components/PoolAccount-table'
+import { FundingTransactionTable } from './components/FundingTransaction-table'
+import { ActivityLogsTable } from './components/user-activity-logs-table'
 function App() {
   const getSiteName = () => {
     // @ts-ignore
@@ -72,47 +82,35 @@ function App() {
               />
               <Route path="/test-doc" element={<TestDoc />} />
               <Route path="/system-dashboard" element={<SystemDashboard />} />
-              <Route path="/programs" element={<Programs />} />
+              <Route path="/programs" element={<ProgramTableDemo />} />
+              <Route path="/programs/:id" element={<ProgramDetails />} />
+              <Route path="/inventory" element={<InventoryTable />} />
+              <Route path="/inventory/:id" element={<OrderDetails />} />
+              <Route path="/issued-cards" element={<IssuedCardsTable />} />
               <Route
-                path="/programs/program/:id"
-                element={<ProgramDetails />}
-              />
-              <Route
-                path="/programs/create-program"
-                element={<CreateProgram />}
-              />
-              {/* <Route path="/program-managers" element={<ProgramManagers />} /> */}
-              <Route
-                path="/program-managers/manager/:id"
-                element={<ProgramManagerDetails />}
-              />
-              <Route path="/inventory" element={<Inventory />} />
-              <Route
-                path="/inventory/order-details/:id"
-                element={<OrderDetails />}
-              />
-              <Route path="/issued-cards" element={<IssuedCards />} />
-              <Route
-                path="/issued-cards/issuedcards-details/:id"
+                path="/issued-cards/:id"
                 element={<IssuedCardsDetails />}
               />
-              <Route path="/all-customers" element={<AllCustomers />} />
-              <Route
-                path="/customers/customer/:id"
-                element={<CustomerDetails />}
-              />
+              <Route path="/all-customers" element={<AllCustomerTable />} />
+              <Route path="/customers/:id" element={<CustomerDetails />} />
 
-              <Route path="/flagged-customers" element={<FlaggedCustomers />} />
-              <Route path="/pending-for-kyc" element={<PendingKyc />} />
-              <Route path="/pool-accounts" element={<PoolAccounts />} />
+              <Route
+                path="/flagged-customers"
+                element={<FlaggedCustomerTable />}
+              />
+              <Route
+                path="/pending-kyc-customers"
+                element={<PendingKycTable />}
+              />
+              <Route path="/pool-accounts" element={<PoolAccountsTable />} />
               <Route
                 path="/funding-transactions"
-                element={<FundingTransactions />}
+                element={<FundingTransactionTable />}
               />
               {/* <Route path="/system-users" element={<SystemUsers />} /> */}
               <Route
                 path="/user-activity-logs"
-                element={<UserActivityLogs />}
+                element={<ActivityLogsTable />}
               />
               {/* Nested Routes */}
               <Route element={<UserProfileLayout />}>

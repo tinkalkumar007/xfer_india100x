@@ -23,7 +23,17 @@ import {
   Phone,
   ShieldCheck,
   User,
+  Calendar,
 } from 'lucide-react'
+
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
 
 import { AlertTriangle } from 'lucide-react'
 import { useParams } from 'react-router-dom'
@@ -32,8 +42,9 @@ import {
   useFrappeGetDocCount,
   useFrappeGetDocList,
 } from 'frappe-react-sdk'
-import { filterFns } from '@tanstack/react-table'
+
 import React from 'react'
+import FlaggedActivities from '../../components/FlaggedActivities'
 
 const activities = [
   {
@@ -69,10 +80,11 @@ const CustomerDetails = () => {
       fields: ['*'],
       filters: [['mobile_number', '=', id]],
     })
+
   const { data: CustomerDetails, isLoading: customerDetailsLoading } =
     useFrappeGetDoc('Customers', id)
 
-  console.log('Customer details', CustomerDetails)
+  console.log('Customer details: ', CustomerDetails)
 
   const {
     data: customerTransactionLogs,
@@ -80,11 +92,23 @@ const CustomerDetails = () => {
   } = useFrappeGetDocList('Transaction Logs', {
     fields: ['*'],
     filters: [['customer_mobile_number', '=', id]],
+    limit: 4,
   })
 
   if (!customerTransactionLogsLoading) {
     console.log('Customer Transaction Logs', customerTransactionLogs)
   }
+
+  const totalSpends = React.useMemo(() => {
+    if (!customerTransactionLogs) return 0
+    return customerTransactionLogs?.reduce((acc, current) => {
+      if (current.transaction_type !== 'Reload' && current.status === 'Success')
+        return acc + current.amount
+      return acc
+    }, 0)
+  }, [customerTransactionLogs])
+
+  console.log('Total Spends:', totalSpends)
 
   const totalBalance = React.useMemo(() => {
     if (!customerCardsData) return null
@@ -93,125 +117,122 @@ const CustomerDetails = () => {
 
   return (
     <>
-      <div className="w-full flex flex-col lg:flex-row gap-2 items-center border rounded-md px-2">
-        <div className="flex gap-4 px-4 py-6 items-center w-full lg:w-[30%]">
-          <div className=" lg:w-[30%] flex justify-center items-center">
-            <img src={OnoLogo} alt="" width={90} height={90} />
-          </div>
-          <div className="flex flex-col gap-1 w-[70%]">
-            <div className="flex gap-2">
-              <h2 className="font-bold text-xl">
-                {CustomerDetails?.first_name} {CustomerDetails?.last_name}
+      <div className="w-full flex-col border rounded-md">
+        <div className="h-4">
+          <FlaggedActivities
+            customerDetailsLoading={customerDetailsLoading}
+            customerDetails={CustomerDetails}
+          />
+        </div>
+        <div className="w-full flex flex-col lg:flex-row gap-2 items-center ">
+          <div className="flex gap-4 px-4 py-6 items-center w-full lg:w-[30%]">
+            <div className=" lg:w-[30%] flex justify-center items-center">
+              <img src={OnoLogo} alt="" width={90} height={90} />
+            </div>
+            <div className="flex flex-col gap-1 w-[70%]">
+              <div className="flex gap-2">
+                <h2 className="font-bold text-xl">
+                  {CustomerDetails?.first_name} {CustomerDetails?.last_name}
+                </h2>
+                <div>
+                  <Badge className="bg-[#e4f5e9] text-[#16794c]">Active</Badge>
+                </div>
+              </div>
+              <h2 className="text-sm text-muted-foreground">
+                Customer ID :{' '}
+                <span className="font-medium">{CustomerDetails?.name}</span>
               </h2>
-              <Badge className="bg-[#e4f5e9] text-[#16794c]">Active</Badge>
-            </div>
-            <h2 className="text-sm text-muted-foreground">
-              Customer ID :{' '}
-              <span className="font-medium">{CustomerDetails?.name}</span>
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Created On :{' '}
-              <span className="font-medium">
-                {CustomerDetails?.creation
-                  ?.split('.')[0]
-                  ?.split(' ')[0]
-                  .split('-')
-                  .reverse()
-                  .join('-')}
-              </span>
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <Separator orientation="vertical" className="h-28" />
-        </div>
-
-        <div className="flex flex-col gap-2 w-full lg:w-[70%] px-4 py-2">
-          <div className="flex justify-between">
-            <div className="flex gap-2 items-center w-full">
-              <div>
-                <User size={20} />
-              </div>
-              <div className="w-full">
-                <p className="text-sm text-muted-foreground w-[50%]">
-                  {CustomerDetails?.first_name}
-                </p>
-                <p className="text-sm font-medium text-muted-foreground w-[50%]">
-                  First Name
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-2 items-center w-full">
-              <div>
-                <Phone size={20} />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground ">
-                  {CustomerDetails?.mobile_no}
-                </p>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Phone
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-2  items-center w-full">
-              <div>
-                <Mail size={20} />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">
-                  {CustomerDetails?.email}
-                </p>
-                <p className="text-sm font-medium text-muted-foreground ">
-                  Email
-                </p>
-              </div>
+              <p className="text-sm text-muted-foreground">
+                Created On :{' '}
+                <span className="font-medium">
+                  {CustomerDetails?.creation
+                    ?.split('.')[0]
+                    ?.split(' ')[0]
+                    .split('-')
+                    .reverse()
+                    .join('-')}
+                </span>
+              </p>
             </div>
           </div>
-          <div className="flex justify-between">
-            <div className="flex gap-2 items-center w-full">
-              <div>
-                <ShieldCheck size={20} />
+
+          <div>
+            <Separator orientation="vertical" className="h-28" />
+          </div>
+
+          <div className="flex flex-col gap-2 w-full lg:w-[70%] px-4 py-2">
+            <div className="flex justify-between">
+              <div className="flex gap-2 items-center w-full">
+                <div>
+                  <User size={20} />
+                </div>
+                <div className="w-full">
+                  <p className="text-sm text-muted-foreground w-[50%]">
+                    {CustomerDetails?.first_name}
+                  </p>
+                </div>
               </div>
-              <div>
-                <Badge className="bg-[#e4f5e9] text-[#16794c]">
-                  {CustomerDetails?.kyc_level}
-                </Badge>
-                <p className="text-sm font-medium text-muted-foreground">
-                  KYC Status
-                </p>
+              <div className="flex gap-2 items-center w-full">
+                <div>
+                  <Phone size={20} />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground ">
+                    {CustomerDetails?.mobile_no}
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2  items-center w-full">
+                <div>
+                  <Mail size={20} />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">
+                    {CustomerDetails?.email}
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="flex gap-1 items-center w-full">
-              <div>
-                <Clock size={20} />
+            <div className="flex justify-between">
+              <div className="flex gap-2 items-center w-full">
+                <div>
+                  <ShieldCheck size={20} />
+                </div>
+                <div>
+                  <Badge className="bg-[#e4f5e9] text-[#16794c]">
+                    {CustomerDetails?.kyc_level}
+                  </Badge>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground">-</p>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Last Active
-                </p>
+              <div className="flex gap-1 items-center w-full">
+                <div>
+                  <Calendar />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">
+                    {CustomerDetails?.date_of_birth
+                      ?.split('-')
+                      .reverse()
+                      .join('-')}
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="flex gap-2 items-center w-full">
-              <div>
-                <MapPin size={20} />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground ">
-                  {`${CustomerDetails?.address_line_1} ${CustomerDetails?.address_line_2} ${CustomerDetails?.city} ${CustomerDetails?.country}`}
-                </p>
-                <p className="text-sm font-medium text-muted-foreground ">
-                  Address
-                </p>
+              <div className="flex gap-2 items-center w-full">
+                <div>
+                  <MapPin size={20} />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground ">
+                    {`${CustomerDetails?.address_line_1} ${CustomerDetails?.address_line_2} ${CustomerDetails?.city} ${CustomerDetails?.country}`}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="relative w-full flex flex-col md:flex-row gap-2">
-        <div className="w-full lg:w-[40%] flex flex-col gap-2">
+      <div className="relative w-full flex flex-col gap-2">
+        {/* <div className="w-full flex flex-col gap-2">
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex gap-2 items-center">
@@ -280,8 +301,9 @@ const CustomerDetails = () => {
               ))}
             </div>
           </div>
-        </div>
-        <div className="w-full lg:w-[60%] flex flex-col gap-2">
+        </div> */}
+
+        <div className="w-full flex flex-col gap-2">
           <div className="flex flex-col gap-2 rounded-md border bg-muted/50">
             <div className="flex flex-col px-4 pt-4 pb-2">
               <h2 className="font-semibold text-lg">Card Details</h2>
@@ -314,14 +336,20 @@ const CustomerDetails = () => {
                   <p className="font-medium text-sm text-muted-foreground">
                     Total Spends
                   </p>
-                  <p className="font-medium text-md">&#8377;500</p>
+                  {totalSpends ? (
+                    <p className="font-medium text-md">&#8377;{totalSpends}</p>
+                  ) : (
+                    <p className="font-medium text-md">-</p>
+                  )}
                 </div>
 
                 <div className="flex flex-col gap-1">
                   <p className="font-medium text-sm text-muted-foreground">
-                    Transaction Limit
+                    Total Transactions
                   </p>
-                  <p className="font-medium text-md">&#8377;100000</p>
+                  <p className="font-medium text-md">
+                    {customerTransactionLogs?.length}
+                  </p>
                 </div>
               </div>
             </div>
@@ -341,11 +369,6 @@ const CustomerDetails = () => {
                 customerCardsData={customerCardsData}
                 customerCardsDataLoading={customerCardsDataLoading}
               />
-              <div className="w-full flex justify-center pb-6">
-                <p className="text-sm font-semibold underline tracking-wide cursor-pointer">
-                  View All Cards
-                </p>
-              </div>
             </div>
           </div>
           <div className="border rounded-md flex flex-col gap-2">
@@ -363,12 +386,6 @@ const CustomerDetails = () => {
                 customerTransactionLogs={customerTransactionLogs}
                 customerTransactionLogsLoading={customerTransactionLogsLoading}
               />
-            </div>
-
-            <div className="w-full flex justify-center pb-6">
-              <p className="text-sm font-semibold underline tracking-wide cursor-pointer">
-                View All Logs
-              </p>
             </div>
           </div>
         </div>

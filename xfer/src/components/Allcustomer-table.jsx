@@ -80,119 +80,8 @@ import { ProgramManager } from '../data/all-customer-data'
 import { DataTablePagination } from '@/components/DataTablePagination'
 import ProgramManagerDetails from '../pages/ProgramManagerDetails/ProgramManagerDetails'
 import { useFrappeAuth, useFrappeGetDocList } from 'frappe-react-sdk'
-
-// const data = [
-//   {
-//     product_id: '1',
-//     customerId: '123456789',
-//     Name: 'John Doe',
-//     ProgramManager: 'Privacy Card',
-//     totalCards: '4',
-//     totalTransactions: '120',
-//     createdBy: 'Admin',
-//     lastActive: '12-01-2023',
-//   },
-//   {
-//     product_id: '2',
-//     customerId: '123456789',
-//     Name: 'Jane Smith',
-//     ProgramManager: 'Business Card',
-//     totalCards: '2',
-//     totalTransactions: '85',
-//     createdBy: 'Manager1',
-//     lastActive: '11-05-2021',
-//   },
-//   {
-//     product_id: '3',
-//     customerId: '123456789',
-//     Name: 'Robert Brown',
-//     ProgramManager: 'Travel Card',
-//     totalCards: '3',
-//     totalTransactions: '140',
-//     createdBy: 'SupervisorX',
-//     lastActive: '11-05-2021',
-//   },
-//   {
-//     product_id: '4',
-//     customerId: '123456789',
-//     Name: 'Emily Davis',
-//     ProgramManager: 'Gift Card',
-//     totalCards: '1',
-//     totalTransactions: '15',
-//     createdBy: 'Admin',
-//     lastActive: '12-05-2021',
-//   },
-//   {
-//     product_id: '5',
-//     customerId: '123456789',
-//     Name: 'Michael Wilson',
-//     ProgramManager: 'Virtual Card',
-//     totalCards: '5',
-//     totalTransactions: '200',
-//     createdBy: 'AdminAssistant',
-//     lastActive: '11-05-2021',
-//   },
-//   {
-//     product_id: '6',
-//     customerId: '123456789',
-//     Name: 'Olivia Johnson',
-//     ProgramManager: 'Platinum Card',
-//     totalCards: '2',
-//     totalTransactions: '95',
-//     createdBy: 'Manager3',
-//     lastActive: '12-05-2021',
-//   },
-//   {
-//     product_id: '7',
-//     customerId: '123456789',
-//     Name: 'James White',
-//     ProgramManager: 'Student Card',
-//     totalCards: '1',
-//     totalTransactions: '45',
-//     createdBy: 'SupervisorY',
-//     lastActive: '11-05-2021',
-//   },
-//   {
-//     product_id: '8',
-//     customerId: '123456789',
-//     Name: 'Sophia Martinez',
-//     ProgramManager: 'Savings Card',
-//     totalCards: '3',
-//     totalTransactions: '130',
-//     createdBy: 'Admin',
-//     lastActive: '11-05-2021',
-//   },
-//   {
-//     product_id: '9',
-//     customerId: '123456789',
-//     Name: 'Ethan Taylor',
-//     ProgramManager: 'Cashback Card',
-//     totalCards: '2',
-//     totalTransactions: '70',
-//     createdBy: 'Manager2',
-//     lastActive: '11-05-2021',
-//   },
-//   {
-//     product_id: '10',
-//     customerId: '123456789',
-//     Name: 'Isabella Hernandez',
-//     ProgramManager: 'Corporate Card',
-//     totalCards: '6',
-//     totalTransactions: '300',
-//     createdBy: 'SupervisorZ',
-//     lastActive: '12-05-2021',
-//   },
-//   {
-//     product_id: '11',
-//     customerId: '123456789',
-//     Name: 'Liam Garcia',
-//     ProgramManager: 'Premium Card',
-//     totalCards: '4',
-//     totalTransactions: '190',
-//     createdBy: 'Admin',
-//     lastActive: '12-05-2021',
-//   },
-// ]
+import { useToast } from '@/hooks/use-toast'
+import Empty from './Empty'
 
 export function AllCustomerTable() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
@@ -200,6 +89,7 @@ export function AllCustomerTable() {
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const { toast } = useToast()
 
   const { currentUser } = useFrappeAuth()
 
@@ -219,6 +109,7 @@ export function AllCustomerTable() {
       id: customer.name,
       first_name: customer.first_name,
       last_name: customer.last_name,
+      customer_name: `${customer.first_name} ${customer.last_name}`,
       last_active: customer.modified,
       status: customer.status,
     }))
@@ -253,7 +144,7 @@ export function AllCustomerTable() {
       cell: ({ row }) => {
         const id = row.original.id
         return (
-          <Link to={`/customers/customer/${id}`}>
+          <Link to={`/customers/${id}`}>
             <div className="capitalize text-center hover:underline">
               {row.original?.id}
             </div>
@@ -263,7 +154,7 @@ export function AllCustomerTable() {
     },
 
     {
-      accessorKey: 'Name',
+      accessorKey: 'customer_name',
       header: 'Name',
       cell: ({ row }) => (
         <div className="capitalize text-center">
@@ -316,11 +207,19 @@ export function AllCustomerTable() {
       accessorKey: 'status',
       header: 'Status',
 
-      cell: ({ row }) => (
-        <div className="text-center">
-          <Badge>{row.original?.status}</Badge>
-        </div>
-      ),
+      cell: ({ row }) => {
+        const status = row.original?.status
+        switch (status) {
+          case 'Active':
+            return <Badge variant="outline">{status}</Badge>
+          case 'Inactive':
+            return <Badge variant="outline">{status}</Badge>
+          case 'Blocked':
+            return <Badge variant="outline">{status}</Badge>
+          default:
+            return <Badge variant="outline">{status}</Badge>
+        }
+      },
     },
     {
       accessorKey: 'last_active',
@@ -340,37 +239,6 @@ export function AllCustomerTable() {
         )
       },
     },
-    // {
-    //   accessorKey: 'actions',
-    //   header: '',
-    //   cell: ({ row }) => {
-    //     const rowData = row.original // Get the entire row's data for actions
-    //     return (
-    //       <DropdownMenu>
-    //         <DropdownMenuTrigger asChild>
-    //           <Button variant="ghost" className="h-8 w-8 p-0">
-    //             <span className="sr-only">Open menu</span>
-    //             <MoreHorizontal />
-    //           </Button>
-    //         </DropdownMenuTrigger>
-    //         <DropdownMenuContent align="end">
-    //           <DropdownMenuItem
-    //             className="cursor-pointer"
-    //             onClick={() => navigator.clipboard.writeText(payment.id)}
-    //           >
-    //             Flag
-    //           </DropdownMenuItem>
-    //           <DropdownMenuItem
-    //             className="cursor-pointer"
-    //             onClick={() => navigator.clipboard.writeText(payment.id)}
-    //           >
-    //             Block
-    //           </DropdownMenuItem>
-    //         </DropdownMenuContent>
-    //       </DropdownMenu>
-    //     )
-    //   },
-    // },
   ]
 
   const table = useReactTable({
@@ -397,37 +265,45 @@ export function AllCustomerTable() {
     },
   })
 
-  const openDialog = (rowData) => {
-    setIsDialogOpen(true)
-  }
-
-  const closeDialog = () => {
-    setIsDialogOpen(false)
-    // Clear any row data when canceled
-  }
   const downloadCSV = () => {
+    if (!tableData || tableData.length === 0) {
+      toast({
+        title: 'No data available to download',
+      })
+      return
+    }
     // Convert table data to CSV
-    const csv = Papa.unparse(data)
+    const csv = Papa.unparse(tableData)
     // Create a Blob object for the CSV
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
     // Use FileSaver to trigger a download
     saveAs(blob, 'table-data.csv')
   }
 
+  if (!customersDataLoading && customersData.length !== 0) {
+    return (
+      <Empty
+        heading="No Customers Found."
+        subHeading="No Customers Found."
+        buttonText="Contact Us"
+      />
+    )
+  }
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>All Customer List</CardTitle>
+        <CardTitle>ALL CUSTOMERS LIST</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="w-full">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
             <div className="w-full">
-              {/* <DataTableToolbar
+              <DataTableToolbar
                 table={table}
-                inputFilter="Name"
-                ProgramManager={ProgramManager}
-              /> */}
+                inputFilter="customer_name"
+                // ProgramManager={ProgramManager}
+              />
             </div>
             <div className="flex gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>

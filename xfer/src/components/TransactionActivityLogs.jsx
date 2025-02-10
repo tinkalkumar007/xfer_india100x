@@ -7,6 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { DataTablePagination } from '@/components/DataTablePagination'
+
 import {
   flexRender,
   getCoreRowModel,
@@ -15,6 +17,15 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
 import { Badge } from '@/components/ui/badge'
 
 import { Link } from 'react-router-dom'
@@ -47,6 +58,10 @@ const TransactionActivityLogs = ({
     )
   }, [customerTransactionLogs])
 
+  const initialTableData = React.useMemo(() => {
+    return tableData.slice(0, 3)
+  }, [tableData])
+
   const columns = [
     {
       accessorKey: 'card_reference_id',
@@ -63,12 +78,12 @@ const TransactionActivityLogs = ({
     {
       accessorKey: 'from',
       header: 'From',
-      cell: ({ row }) => <div>{row.original.from}</div>,
+      cell: ({ row }) => <div className="text-center">{row.original.from}</div>,
     },
     {
       accessorKey: 'to',
       header: 'To',
-      cell: ({ row }) => <div>{row.original.to}</div>,
+      cell: ({ row }) => <div className="text-center">{row.original.to}</div>,
     },
 
     {
@@ -114,15 +129,23 @@ const TransactionActivityLogs = ({
         switch (status) {
           case 'Success':
             return (
-              <Badge className="bg-[#e4f5e9] text-[#16794c]">Success</Badge>
+              <div className="text-center">
+                <Badge className="bg-[#e4f5e9] text-[#16794c]">Success</Badge>
+              </div>
             )
           case 'Pending':
             return (
-              <Badge className="bg-[#fff7d3] text-[#ab6e05]">Pending</Badge>
+              <div className="text-center">
+                <Badge className="bg-[#fff7d3] text-[#ab6e05]">Pending</Badge>
+              </div>
             )
 
-          case 'Failed':
-            return <Badge className="bg-[#ffe6e6] text-[#d32f2f]">Failed</Badge>
+          case 'Rejected':
+            return (
+              <div className="text-center">
+                <Badge className="bg-[#ffe6e6] text-[#d32f2f]">Rejected</Badge>
+              </div>
+            )
 
           default:
             return <div className="text-center">-</div>
@@ -131,7 +154,26 @@ const TransactionActivityLogs = ({
     },
   ]
 
-  const table = useReactTable({
+  const initialTable = useReactTable({
+    data: initialTableData,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+    },
+  })
+
+  const entireTable = useReactTable({
     data: tableData,
     columns,
     onSortingChange: setSorting,
@@ -150,16 +192,16 @@ const TransactionActivityLogs = ({
     },
     initialState: {
       pagination: {
-        pageSize: 3, // Set page size to 5
+        pageSize: 5,
       },
     },
   })
   return (
-    <div className="pt-2 px-4 pb-4">
+    <div className="pt-2 px-4 pb-4 space-y-4">
       <div className="grid grid-cols-1 gap-2 border rounded-md">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {initialTable.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
@@ -177,8 +219,8 @@ const TransactionActivityLogs = ({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+            {initialTable.getRowModel().rows?.length ? (
+              initialTable.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
@@ -205,6 +247,72 @@ const TransactionActivityLogs = ({
             )}
           </TableBody>
         </Table>
+      </div>
+      <div className="w-full flex justify-center pb-6">
+        <Sheet>
+          <SheetTrigger>
+            <p className="text-sm font-semibold underline tracking-wide cursor-pointer">
+              View All Logs
+            </p>
+          </SheetTrigger>
+          <SheetContent className="w-[32rem] max-w-2xl md:w-[48rem] md:max-w-3xl lg:w-[56rem] lg:max-w-4xl">
+            <SheetHeader>
+              <SheetTitle>Transaction Logs</SheetTitle>
+            </SheetHeader>
+
+            <div className="w-full border rounded-md mt-4">
+              <Table>
+                <TableHeader>
+                  {entireTable.getHeaderGroups().map((headerGroup) => (
+                    <TableRow key={headerGroup.id}>
+                      {headerGroup.headers.map((header) => {
+                        return (
+                          <TableHead className="text-center" key={header.id}>
+                            {header.isPlaceholder
+                              ? null
+                              : flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                                )}
+                          </TableHead>
+                        )
+                      })}
+                    </TableRow>
+                  ))}
+                </TableHeader>
+                <TableBody>
+                  {entireTable.getRowModel().rows?.length ? (
+                    entireTable.getRowModel().rows.map((row) => (
+                      <TableRow
+                        key={row.id}
+                        data-state={row.getIsSelected() && 'selected'}
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={columns.length}
+                        className="h-24 text-center"
+                      >
+                        No results.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+            <DataTablePagination table={entireTable} />
+          </SheetContent>
+        </Sheet>
       </div>
     </div>
   )

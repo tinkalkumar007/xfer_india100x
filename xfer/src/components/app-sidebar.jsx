@@ -68,19 +68,19 @@ import {
 const sidebarData = {
   overview: [
     {
-      title: 'Business Dashboard',
+      title: 'BUSINESS DASHBOARD',
       url: '/business-dashboard',
       icon: LayoutDashboard, // Dashboard layout icon for business overview
     },
     {
-      title: 'System Dashboard',
+      title: 'SYSTEM DASHBOARD',
       url: '/system-dashboard',
       icon: Monitor, // Monitor icon for system overview
     },
   ],
   program_management: [
     {
-      title: 'Programs',
+      title: 'PROGRAMS',
       url: '/programs',
       icon: ClipboardList, // Represents a list of programs
     },
@@ -92,41 +92,41 @@ const sidebarData = {
   ],
   card_management: [
     {
-      title: 'Inventory',
+      title: 'INVENTORY',
       url: '/inventory',
       icon: Box, // Box icon for inventory
     },
     {
-      title: 'Issued Cards',
+      title: 'ISSUED CARDS',
       url: '/issued-cards',
       icon: CreditCard, // Card icon for issued cards
     },
   ],
   customers: [
     {
-      title: 'All Customers',
+      title: 'ALL CUSTOMERS',
       url: '/all-customers',
       icon: UserCheck, // User check icon for all verified customers
     },
     {
-      title: 'Flagged Customers',
+      title: 'FLAGGED CUSTOMERS',
       url: '/flagged-customers',
       icon: Flag, // Flag icon for flagged customers
     },
     {
-      title: 'Pending for KYC',
-      url: '/pending-for-kyc',
+      title: 'PENDING KYC CUSTOMERS',
+      url: '/pending-kyc-customers',
       icon: FileText, // Document icon for pending KYC
     },
   ],
   fund_management: [
     {
-      title: 'Pool Accounts',
+      title: 'POOL ACCOUNTS',
       url: '/pool-accounts',
       icon: Landmark, // Landmark icon for pool accounts
     },
     {
-      title: 'Funding Transactions',
+      title: 'FUNDING TRANSACTIONS',
       url: '/funding-transactions',
       icon: DollarSign, // Dollar icon for funding transactions
     },
@@ -143,24 +143,7 @@ const sidebarData = {
       icon: Activity, // Activity icon for logs
     },
   ],
-  settings: [
-    {
-      title: 'Security Settings',
-      url: '/security-settings',
-      icon: ShieldAlert, // Shield icon for security
-    },
-    {
-      title: 'API Settings',
-      url: '/api-settings',
-      icon: Key, // Key icon for API settings
-    },
-    {
-      title: 'Default Configs',
-      url: '/default-configs',
-      icon: Settings, // General settings icon for default configurations
-    },
-  ],
-}
+  }
 
 export function AppSidebar({ ...props }) {
   const location = useLocation()

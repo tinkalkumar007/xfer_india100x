@@ -85,6 +85,8 @@ import {
 } from '@/components/ui/table'
 import DataTableViewOptions from './DataTableViewOptions'
 import DataTableToolbar from './DataTableToolbar'
+import { useToast } from '@/hooks/use-toast'
+import Empty from './Empty'
 
 export function FlaggedCustomerTable() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
@@ -92,6 +94,7 @@ export function FlaggedCustomerTable() {
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const { toast } = useToast()
 
   const { data: flaggedCustomersData, isLoading: flaggedCustomersLoading } =
     useFrappeGetDocList('Customers', {
@@ -104,6 +107,7 @@ export function FlaggedCustomerTable() {
       id: customer.name,
       first_name: customer.first_name,
       last_name: customer.last_name,
+      customer_name: `${customer.first_name} ${customer.last_name}`,
       risk_priority: customer.risk_category,
       last_active: customer.modified,
       remark: customer.remark,
@@ -155,7 +159,7 @@ export function FlaggedCustomerTable() {
       accessorKey: 'id',
       header: 'Customer ID',
       cell: ({ row }) => (
-        <Link to={`/customers/customer/${row.original.id}`}>
+        <Link to={`/customers/${row.original.id}`}>
           <div className="capitalize text-center hover:underline">
             {row.original?.id}
           </div>
@@ -163,7 +167,7 @@ export function FlaggedCustomerTable() {
       ),
     },
     {
-      accessorKey: 'name',
+      accessorKey: 'customer_name',
       header: 'Name',
       cell: ({ row }) => (
         <div className="capitalize text-center">
@@ -210,20 +214,16 @@ export function FlaggedCustomerTable() {
       header: 'Priority',
       cell: ({ row }) => {
         const priority = row.original?.risk_priority
-        return (
-          <div className="text-center">
-            {priority === '' && '-'}
-            {priority === 'High' && (
-              <Badge className="bg-[#fff0f0] text-[#b52a2a]">High</Badge>
-            )}
-            {priority === 'Low' && (
-              <Badge className="bg-[#fff7d3] text-[#ab6e05]">Low</Badge>
-            )}
-            {priority === 'Medium' && (
-              <Badge className="bg-[#e3f2fd] text-[#1976d2]">Medium</Badge>
-            )}
-          </div>
-        )
+        switch (priority) {
+          case 'Low':
+            return <Badge variant="outline">{priority}</Badge>
+          case 'High':
+            return <Badge variant="outline">{priority}</Badge>
+          case 'Medium':
+            return <Badge variant="outline">{priority}</Badge>
+          default:
+            return <Badge variant="outline">{priority}</Badge>
+        }
       },
     },
     // {
@@ -283,38 +283,45 @@ export function FlaggedCustomerTable() {
     },
   })
 
-  const openDialog = (rowData) => {
-    setIsDialogOpen(true)
-  }
-
-  const closeDialog = () => {
-    setIsDialogOpen(false)
-    // Clear any row data when canceled
-  }
   const downloadCSV = () => {
+    if (!tableData || tableData.length === 0) {
+      toast({
+        title: 'No data available to download',
+      })
+      return
+    }
     // Convert table data to CSV
-    const csv = Papa.unparse(data)
+    const csv = Papa.unparse(tableData)
     // Create a Blob object for the CSV
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
     // Use FileSaver to trigger a download
     saveAs(blob, 'table-data.csv')
   }
+  if (!flaggedCustomersLoading && flaggedCustomersData.length === 0) {
+    return (
+      <Empty
+        heading="No Customers Found."
+        subHeading="No suspicious activity detected."
+        buttonText="Contact Us"
+      />
+    )
+  }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Flagged Customer List</CardTitle>
+        <CardTitle>FLAGGED CUSTOMERS LIST</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="w-full">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
             <div className="w-full">
-              {/* <DataTableToolbar
+              <DataTableToolbar
                 table={table}
-                inputFilter="product_name"
-                program_manager={program_manager}
-                priority={priority}
-              /> */}
+                inputFilter="customer_name"
+                // program_manager={program_manager}
+                // priority={priority}
+              />
             </div>
             <div className="flex gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>

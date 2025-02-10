@@ -80,101 +80,8 @@ import { status, program_manager } from '@/data/pending-kyc-data'
 import DataTableViewOptions from './DataTableViewOptions'
 import DataTableToolbar from './DataTableToolbar'
 import { useFrappeGetDocList } from 'frappe-react-sdk'
-
-const data = [
-  {
-    product_id: '1',
-    customerId: '123654789',
-    Name: 'Mona',
-    ProgramManager: 'Sales Card',
-    status: 'pending',
-    verificationRemarks: 'Resubmission Required',
-    submissionDate: '2022-10-05',
-  },
-  {
-    product_id: '2',
-    customerId: '123664789',
-    Name: 'John Doe',
-    ProgramManager: 'Platinum Card',
-    status: 'pending',
-    verificationRemarks: 'Address proof missing',
-    submissionDate: '2023-09-15',
-  },
-  {
-    product_id: '3',
-    customerId: '123654782',
-    Name: 'Sophia Smith',
-    ProgramManager: 'Business Loan',
-    status: 'under review',
-    verificationRemarks: 'Verification in progress',
-    submissionDate: '2023-11-01',
-  },
-  {
-    product_id: '4',
-    customerId: '123684789',
-    Name: 'Ethan Brown',
-    ProgramManager: 'Travel Card',
-    status: 'rejected',
-    verificationRemarks: 'ID proof mismatch',
-    submissionDate: '2023-08-20',
-  },
-  {
-    product_id: '5',
-    customerId: '123656554',
-    Name: 'Liam Wilson',
-    ProgramManager: 'Premium Savings',
-    status: 'pending',
-    verificationRemarks: 'Photo unclear, resubmit',
-    submissionDate: '2023-10-10',
-  },
-  {
-    product_id: '6',
-    customerId: '123654779',
-    Name: 'Emma Davis',
-    ProgramManager: 'Retail Finance',
-    status: 'under review',
-    verificationRemarks: 'Cross-verifying documents',
-    submissionDate: '2023-09-25',
-  },
-  {
-    product_id: '7',
-    customerId: '123654798',
-    Name: 'Oliver Martinez',
-    ProgramManager: 'Gold Card',
-    status: 'pending',
-    verificationRemarks: 'Bank statement not submitted',
-    submissionDate: '2023-10-02',
-  },
-  {
-    product_id: '8',
-    customerId: '189654789',
-    Name: 'Ava Taylor',
-    ProgramManager: 'Student Plan',
-    status: 'pending',
-    verificationRemarks: 'Document not signed',
-    submissionDate: '2023-11-15',
-  },
-  {
-    product_id: '9',
-    customerId: '123654756',
-    Name: 'Michael Johnson',
-    ProgramManager: 'Cashback Offers',
-    status: 'rejected',
-    verificationRemarks: 'Document not legible',
-    submissionDate: '2023-07-30',
-  },
-  {
-    product_id: '10',
-    customerId: '123654723',
-    Name: 'Emily Clark',
-    ProgramManager: 'Merchant Services',
-    status: 'under review',
-    verificationRemarks: 'Final verification stage',
-    submissionDate: '2023-11-10',
-  },
-]
-
-//console.log(data)
+import { useToast } from '@/hooks/use-toast'
+import Empty from './Empty'
 
 export function PendingKycTable() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
@@ -182,11 +89,12 @@ export function PendingKycTable() {
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const { toast } = useToast()
 
   const { data: pendingCustomersData, isLoading: pendingCustomersDataLoading } =
     useFrappeGetDocList('Customers', {
       fields: ['*'],
-      filters: [['kyc_status', '!=', 'Active']],
+      filters: [['kyc_level', '=', 'Pending']],
     })
 
   if (!pendingCustomersDataLoading) {
@@ -199,8 +107,9 @@ export function PendingKycTable() {
       id: customer.name,
       first_name: customer.first_name,
       last_name: customer.last_name,
+      customer_name: `${customer.first_name} ${customer.last_name}`,
       last_active: customer.creation,
-      kyc_level: customer.kyc_status,
+      kyc_level: customer.kyc_level,
     }))
   }, [pendingCustomersData])
 
@@ -259,7 +168,7 @@ export function PendingKycTable() {
       accessorKey: 'id',
       header: 'Customer ID',
       cell: ({ row }) => (
-        <Link to={`/customers/customer/${row.original.id}`}>
+        <Link to={`/customers/${row.original.id}`}>
           <div className="capitalize text-center hover:underline">
             {row.original.id}
           </div>
@@ -267,7 +176,7 @@ export function PendingKycTable() {
       ),
     },
     {
-      accessorKey: 'name',
+      accessorKey: 'customer_name',
       header: 'Name',
       cell: ({ row }) => (
         <div className="capitalize text-center">
@@ -299,60 +208,64 @@ export function PendingKycTable() {
       },
     },
     {
-      accessorKey: 'status',
-      header: 'Status',
+      accessorKey: 'kyc_level',
+      header: 'KYC Level',
       cell: ({ row }) => {
-        const kyc_level = row.original.kyc_level
+        const kyc_level = row.original?.kyc_level
 
         switch (kyc_level) {
-          case 'Pending':
+          case 'Basic':
             return (
-              <Badge className="bg-[#fff7d3] text-[#ab6e05]">{kyc_level}</Badge>
-            )
-          case 'Under Review':
-            return (
-              <Badge className="bg-[#e3f2fd] text-[#1976d2]">
-                Under Review
+              <Badge className="bg-[#fff7d3] text-[#ab6e05]" variant="outline">
+                {kyc_level}
               </Badge>
             )
-          case 'Rejected':
+          case 'Completed':
             return (
-              <Badge className="bg-[#ffe6e6] text-[#d32f2f]">Rejected</Badge>
+              <Badge className="bg-[#fff7d3] text-[#ab6e05]" variant="outline">
+                {kyc_level}
+              </Badge>
+            )
+          default:
+            return (
+              <Badge className="" variant="primary">
+                {kyc_level}
+              </Badge>
             )
         }
       },
     },
-    {
-      accessorKey: 'actions',
-      header: '',
-      cell: ({ row }) => {
-        const id = row.original.product_id
-        const rowData = row.original // Get the entire row's data for actions
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem className="cursor-pointer">
-                <Link to={`/programs/program/${id}`}>View Details</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => {
-                  handleCopy(rowData)
-                }}
-              >
-                Copy
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )
-      },
-    },
+    // {
+    //   accessorKey: 'actions',
+    //   header: '',
+    //   cell: ({ row }) => {
+    //     const id = row.original.product_id
+    //     const rowData = row.original // Get the entire row's data for actions
+    //     return (
+    //       <DropdownMenu>
+    //         <DropdownMenuTrigger asChild>
+    //           <Button variant="ghost" className="h-8 w-8 p-0">
+    //             <span className="sr-only">Open menu</span>
+    //             <MoreHorizontal />
+    //           </Button>
+    //         </DropdownMenuTrigger>
+    //         <DropdownMenuContent align="end">
+    //           <DropdownMenuItem className="cursor-pointer">
+    //             <Link to={`/programs/program/${id}`}>View Details</Link>
+    //           </DropdownMenuItem>
+    //           <DropdownMenuItem
+    //             className="cursor-pointer"
+    //             onClick={() => {
+    //               handleCopy(rowData)
+    //             }}
+    //           >
+    //             Copy
+    //           </DropdownMenuItem>
+    //         </DropdownMenuContent>
+    //       </DropdownMenu>
+    //     )
+    //   },
+    // },
   ]
 
   const table = useReactTable({
@@ -378,40 +291,46 @@ export function PendingKycTable() {
       },
     },
   })
-
-  const openDialog = (rowData) => {
-    setIsDialogOpen(true)
-  }
-
-  const closeDialog = () => {
-    setIsDialogOpen(false)
-    // Clear any row data when canceled
-  }
-
   const downloadCSV = () => {
+    if (!tableData || tableData.length === 0) {
+      toast({
+        title: 'No data available to download',
+      })
+      return
+    }
     // Convert table data to CSV
-    const csv = Papa.unparse(data)
+    const csv = Papa.unparse(tableData)
     // Create a Blob object for the CSV
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
     // Use FileSaver to trigger a download
     saveAs(blob, 'table-data.csv')
   }
 
+  if (!pendingCustomersDataLoading && pendingCustomersData.length === 0) {
+    return (
+      <Empty
+        heading="No Customers Found!"
+        subHeading="No suspicious activity detected."
+        buttonText="Contact Us"
+      />
+    )
+  }
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Pending KYC List</CardTitle>
+        <CardTitle>PENDING KYC CUSTOMERS</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="w-full">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
             <div className="w-full">
-              {/* <DataTableToolbar
+              <DataTableToolbar
                 table={table}
-                inputFilter="product_name"
-                program_manager={program_manager}
-                status={status}
-              /> */}
+                inputFilter="customer_name"
+                // program_manager={program_manager}
+                // status={status}
+              />
             </div>
             <div className="flex gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>
