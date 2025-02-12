@@ -1,9 +1,11 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import axios from '@/api/axios'
 import {
   flexRender,
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
@@ -75,7 +77,11 @@ import {
 } from '@/components/ui/select'
 import DataTableViewOptions from './DataTableViewOptions'
 import DataTableToolbar from './DataTableToolbar'
-import { useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk'
+import {
+  useFrappeGetDoc,
+  useFrappeGetDocCount,
+  useFrappeGetDocList,
+} from 'frappe-react-sdk'
 import { useToast } from '@/hooks/use-toast'
 import Empty from './Empty'
 
@@ -85,13 +91,36 @@ export function PoolAccountsTable() {
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
   const { toast } = useToast()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = parseInt(searchParams.get('page') || '0')
+  const limit = parseInt(searchParams.get('limit') || '1')
+
+  const filters = Array.from(searchParams.entries())
+    .map(([key, value]) => {
+      if (key === 'query') {
+        return ['account_number', 'like', `%${value}%`]
+      }
+      if (!(key === 'page') && !(key === 'limit')) {
+        return [key, '=', value]
+      }
+    })
+    .filter((item) => item !== undefined)
 
   const [accountID, setAccountID] = React.useState('')
+
+  const { data, isLoading } = useFrappeGetDocList('Pool Account', {
+    fields: ['name'],
+  })
 
   const { data: PoolAccountsData, isLoading: poolAccountsDataLoading } =
     useFrappeGetDocList('Pool Account', {
       fields: ['*'],
+      filters: searchParams.size > 0 && filters,
+      limit_start: page * limit,
+      limit: limit,
     })
+  const { data: totalCount, isLoading: totalCountLoading } =
+    useFrappeGetDocCount('Pool Account', searchParams.size > 0 && filters)
 
   const { data: accountDetails, isLoading: accountDetailsLoading } =
     useFrappeGetDoc('Pool Account', accountID, {
@@ -116,21 +145,27 @@ export function PoolAccountsTable() {
     {
       id: 'select',
       header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && 'indeterminate')
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
+        <div className="flex justify-center">
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && 'indeterminate')
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
+          />
+        </div>
       ),
       cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
+        <div className="flex justify-center">
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        </div>
       ),
       enableSorting: false,
       enableHiding: false,
@@ -139,99 +174,103 @@ export function PoolAccountsTable() {
       accessorKey: 'account_number',
       header: 'Account Number',
       cell: ({ row }) => (
-        <Sheet>
-          <SheetTrigger>
-            <div
-              className="text-center hover:underline"
-              onClick={() => {
-                setAccountID(row.original.account_number)
-              }}
-            >
-              {row.original.account_number}
-            </div>
-          </SheetTrigger>
-          <SheetContent className="w-full sm:max-w-md">
-            <SheetHeader>
-              <SheetTitle className="text-xl">Pool Account Overview</SheetTitle>
-            </SheetHeader>
-            <Separator className="mt-2" />
-            <div className="flex flex-col gap-4 mt-4">
-              <div className="flex flex-col gap-8">
-                <div className="flex flex-col gap-4">
-                  <h2 className="text-lg font-medium">Account Details</h2>
-                  <div className="flex flex-col gap-2">
-                    <div className="flex justify-between items-center gap-2">
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Status :{' '}
-                      </p>
-                      <p className="text-sm font-medium ">
-                        {accountDetails?.status === 'Active' && (
-                          <Badge
-                            className="px-2 py-1 bg-[#e4f5e9] text-[#16794c] flex gap-1 items-end"
-                            variant="outline"
-                          >
-                            {accountDetails?.status}
-                          </Badge>
-                        )}
-                      </p>
-                    </div>
-                    <div className="flex justify-between items-center gap-2">
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Account Balance :{' '}
-                      </p>
-                      <p className="text-sm font-medium ">
-                        &#8377;{accountDetails?.account_balance}
-                      </p>
-                    </div>
-                    <div className="flex justify-between items-center gap-2">
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Account Holder Name :{' '}
-                      </p>
-                      <p className="text-sm font-medium ">Dummy</p>
-                    </div>
-                    <div className="flex justify-between items-center gap-2">
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Account Number :{' '}
-                      </p>
-                      <p className="text-sm font-medium">
-                        {accountDetails?.account_number}
-                      </p>
-                    </div>
+        <div className="flex justify-center">
+          <Sheet>
+            <SheetTrigger>
+              <div
+                className="text-center hover:underline"
+                onClick={() => {
+                  setAccountID(row.original.account_number)
+                }}
+              >
+                {row.original.account_number}
+              </div>
+            </SheetTrigger>
+            <SheetContent className="w-full sm:max-w-md">
+              <SheetHeader>
+                <SheetTitle className="text-xl">
+                  Pool Account Overview
+                </SheetTitle>
+              </SheetHeader>
+              <Separator className="mt-2" />
+              <div className="flex flex-col gap-4 mt-4">
+                <div className="flex flex-col gap-8">
+                  <div className="flex flex-col gap-4">
+                    <h2 className="text-lg font-medium">Account Details</h2>
+                    <div className="flex flex-col gap-2">
+                      <div className="flex justify-between items-center gap-2">
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Status :{' '}
+                        </p>
+                        <p className="text-sm font-medium ">
+                          {accountDetails?.status === 'Active' && (
+                            <Badge
+                              className="px-2 py-1 bg-[#e4f5e9] text-[#16794c] flex gap-1 items-end"
+                              variant="outline"
+                            >
+                              {accountDetails?.status}
+                            </Badge>
+                          )}
+                        </p>
+                      </div>
+                      <div className="flex justify-between items-center gap-2">
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Account Balance :{' '}
+                        </p>
+                        <p className="text-sm font-medium ">
+                          &#8377;{accountDetails?.account_balance}
+                        </p>
+                      </div>
+                      <div className="flex justify-between items-center gap-2">
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Account Holder Name :{' '}
+                        </p>
+                        <p className="text-sm font-medium ">Dummy</p>
+                      </div>
+                      <div className="flex justify-between items-center gap-2">
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Account Number :{' '}
+                        </p>
+                        <p className="text-sm font-medium">
+                          {accountDetails?.account_number}
+                        </p>
+                      </div>
 
-                    <div className="flex justify-between items-center gap-2">
-                      <p className="text-sm font-medium text-muted-foreground ">
-                        Bank Name :{' '}
-                      </p>
-                      <p className="text-sm font-medium ">
-                        {accountDetails?.bank_name}
-                      </p>
-                    </div>
-                    <div className="flex justify-between items-center gap-2">
-                      <p className="text-sm font-medium text-muted-foreground ">
-                        BIN :{' '}
-                      </p>
-                      <p className="text-sm font-medium ">98290</p>
-                    </div>
+                      <div className="flex justify-between items-center gap-2">
+                        <p className="text-sm font-medium text-muted-foreground ">
+                          Bank Name :{' '}
+                        </p>
+                        <p className="text-sm font-medium ">
+                          {accountDetails?.bank_name}
+                        </p>
+                      </div>
+                      <div className="flex justify-between items-center gap-2">
+                        <p className="text-sm font-medium text-muted-foreground ">
+                          BIN :{' '}
+                        </p>
+                        <p className="text-sm font-medium ">98290</p>
+                      </div>
 
-                    <div className="flex justify-between items-center gap-2">
-                      <p className="text-sm font-medium text-muted-foreground ">
-                        Account Opening Date :{' '}
-                      </p>
-                      <p className="text-sm font-medium ">
-                        {accountDetails?.creation
-                          ?.split('.')[0]
-                          ?.split(' ')[0]
-                          ?.split('-')
-                          .reverse()
-                          .join('/')}
-                      </p>
+                      <div className="flex justify-between items-center gap-2">
+                        <p className="text-sm font-medium text-muted-foreground ">
+                          Account Opening Date :{' '}
+                        </p>
+                        <p className="text-sm font-medium ">
+                          {accountDetails?.creation
+                            ?.split('.')[0]
+                            ?.split(' ')[0]
+                            ?.split('-')
+                            .reverse()
+                            .join('/')}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </SheetContent>
-        </Sheet>
+            </SheetContent>
+          </Sheet>
+        </div>
       ),
     },
     {
@@ -288,11 +327,24 @@ export function PoolAccountsTable() {
         const status = row.original?.status
         switch (status) {
           case 'Active':
-            return <Badge variant="outline">{status}</Badge>
+            return (
+              <div className="flex justify-center">
+                <Badge variant="outline">{status}</Badge>
+              </div>
+            )
           case 'Inactive':
-            return <Badge variant="outline">{status}</Badge>
+            return (
+              <div className="flex justify-center">
+                {' '}
+                <Badge variant="outline">{status}</Badge>
+              </div>
+            )
           default:
-            return <Badge variant="outline">{status}</Badge>
+            return (
+              <div className="flex justify-center">
+                <Badge variant="primary">{status}</Badge>
+              </div>
+            )
         }
       },
     },
@@ -332,25 +384,29 @@ export function PoolAccountsTable() {
   const table = useReactTable({
     data: tableData,
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
-      columnFilters,
       columnVisibility,
       rowSelection,
-    },
-    initialState: {
+      columnFilters,
       pagination: {
-        pageSize: 5, // Set page size to 5
+        pageIndex: page,
+        pageSize: limit,
       },
     },
+    enableRowSelection: true,
+    manualPagination: true,
+    pageCount: Math.ceil(((!totalCountLoading && totalCount) || 0) / limit),
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
   })
 
   const openDialog = (rowData) => {
@@ -377,7 +433,7 @@ export function PoolAccountsTable() {
     saveAs(blob, 'table-data.csv')
   }
 
-  if (!poolAccountsDataLoading && PoolAccountsData.length === 0) {
+  if (!isLoading && data?.length === 0) {
     return (
       <Empty
         heading="No Data Found."
@@ -396,7 +452,10 @@ export function PoolAccountsTable() {
         <div className="w-full">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
             <div className="w-full">
-              <DataTableToolbar table={table} inputFilter="account_number" />
+              <div className="w-[25%]">
+                <DataTableToolbar />
+              </div>
+              <div></div>
             </div>
             <div className="flex gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>
@@ -427,18 +486,43 @@ export function PoolAccountsTable() {
                 ))}
               </TableHeader>
               <TableBody>
-                {table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell className="text-center" key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
+                {poolAccountsDataLoading ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      <div className="w-full h-full flex justify-center items-center">
+                        <div className="spinner w-14 h-14 rounded-full border-4 border-gray-200 border-r-blue-500 animate-spin"></div>
+                      </div>
+                    </TableCell>
                   </TableRow>
-                ))}
+                ) : table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && 'selected'}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </div>

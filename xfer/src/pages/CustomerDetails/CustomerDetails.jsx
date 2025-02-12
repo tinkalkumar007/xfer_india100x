@@ -36,7 +36,7 @@ import {
 } from '@/components/ui/sheet'
 
 import { AlertTriangle } from 'lucide-react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import {
   useFrappeGetDoc,
   useFrappeGetDocCount,
@@ -72,6 +72,7 @@ const activities = [
 
 const CustomerDetails = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
   const { data: totalCards, isLoading: totalCardsLoading } =
     useFrappeGetDocCount('Cards', [['mobile_number', '=', id]])
 
@@ -81,9 +82,15 @@ const CustomerDetails = () => {
       filters: [['mobile_number', '=', id]],
     })
 
-  const { data: CustomerDetails, isLoading: customerDetailsLoading } =
-    useFrappeGetDoc('Customers', id)
+  const {
+    data: CustomerDetails,
+    isLoading: customerDetailsLoading,
+    error: errorFetchingCustomerDetails,
+  } = useFrappeGetDoc('Customers', id)
 
+  if (errorFetchingCustomerDetails) {
+    navigate('/error404')
+  }
   console.log('Customer details: ', CustomerDetails)
 
   const {

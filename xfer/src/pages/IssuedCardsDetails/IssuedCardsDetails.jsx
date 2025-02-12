@@ -29,7 +29,7 @@ import {
   useFrappeGetDocCount,
   useFrappeGetDocList,
 } from 'frappe-react-sdk'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
 
 // const data = {
 //   is_physical: true,
@@ -40,6 +40,7 @@ const IssuedCardsDetails = () => {
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const navigate = useNavigate()
 
   const { id } = useParams()
 
@@ -59,10 +60,15 @@ const IssuedCardsDetails = () => {
     return acc
   }, 0)
 
-  const { data: cardData, isLoading: cardDataLoading } = useFrappeGetDoc(
-    'Cards',
-    id
-  )
+  const {
+    data: cardData,
+    isLoading: cardDataLoading,
+    error: errorFetchingIssuedCards,
+  } = useFrappeGetDoc('Cards', id)
+
+  if (errorFetchingIssuedCards) {
+    navigate('/error404')
+  }
 
   const { data: programData, isLoading: programDataLoading } = useFrappeGetDoc(
     'Program',

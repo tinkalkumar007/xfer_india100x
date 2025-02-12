@@ -161,7 +161,7 @@ const CreateOrder = ({ inventoryRefetch }) => {
                   setScreen('create_order')
                 }}
               >
-                Back
+                Back  
               </Button>
               <Button
                 className=""

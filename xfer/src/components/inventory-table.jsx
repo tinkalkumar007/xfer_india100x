@@ -1,64 +1,9 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
-import DataTableFacetedFilter from '@/components/DataTableFacetedFilter'
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet'
+import { Link, useSearchParams } from 'react-router-dom'
+
 import DataTableViewOptions from '@/components/DataTableViewOptions'
 
-import {
-  ArrowUpDown,
-  ChevronDown,
-  ArrowLeft,
-  ArrowRight,
-  CirclePlus,
-  MoreHorizontal,
-  Check,
-  Pencil,
-  Trash2,
-  CircleX,
-  FileDown,
-  ChevronLeft,
-  ChevronsLeft,
-  ChevronRight,
-  ChevronsRight,
-  X,
-  Plus,
-} from 'lucide-react'
-
-import {
-  AlertDialog,
-  AlertDialogTitle,
-  AlertDialogContent,
-  AlertDialogTrigger,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogDescription,
-} from '@/components/ui/alert-dialog'
-import { status, card_nature } from '../data/inventory-data'
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { FileDown } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -69,19 +14,31 @@ import {
   CardTitle,
   CardDescription,
 } from '@/components/ui/card'
-import { DataTablePagination } from '@/components/DataTablePagination'
 import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { DataTablePagination } from '@/components/DataTablePagination'
+
 import { saveAs } from 'file-saver'
 import * as Papa from 'papaparse'
-import { Input } from '@/components/ui/input'
+
+import {
+  flexRender,
+  getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
+
 import {
   Table,
   TableBody,
@@ -93,27 +50,68 @@ import {
 import { Badge } from '@/components/ui/badge'
 import DataTableToolbar from './DataTableToolbar'
 import CreateOrder from '../pages/CreateOrder/CreateOrder'
-import { useFrappeGetDocList } from 'frappe-react-sdk'
+import {
+  useFrappeGetDocCount,
+  useFrappeGetDocList,
+  useSearch,
+} from 'frappe-react-sdk'
 import { useToast } from '@/hooks/use-toast'
 import Empty from './Empty'
+import { DateTimePicker } from './ui/datetime-picker'
+import DatePickerAndTimeInput from './DatePickerAndTimeInput'
 
 export function InventoryTable() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
+  const [date, setDate] = React.useState(undefined)
+  const [time, setTime] = React.useState(undefined)
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const [selectedFilter, setSelectedFilter] = React.useState('Today')
   const { toast } = useToast()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = parseInt(searchParams.get('page') || '0')
+  const limit = parseInt(searchParams.get('limit') || '1')
+  const orderStatus = searchParams.get('status') || ''
+
+  const filters = Array.from(searchParams.entries())
+    .map(([key, value]) => {
+      if (key === 'query') {
+        return ['name', 'like', `%${value}%`]
+      }
+      if (!(key === 'page') && !(key === 'limit')) {
+        return [key, '=', value]
+      }
+    })
+    .filter((item) => item !== undefined)
+
+  const { data, isLoading } = useFrappeGetDocList('Inventory', {
+    fields: ['name'],
+  })
 
   const {
     data: inventoryData,
     isLoading: inventoryDataLoading,
     mutate: inventoryRefetch,
   } = useFrappeGetDocList('Inventory', {
-    fields: ['*'],
+    fields: ['name', 'creation', 'total_amount', 'status'],
+    filters: searchParams.size > 0 && filters,
+    limit_start: page * limit,
+    limit: limit,
   })
 
+  const { data: orderStatuses, isLoading: orderStatusesLoading } =
+    useFrappeGetDocList('Order Status', {
+      fields: ['name'],
+    })
+
   if (!inventoryDataLoading) console.log('Inventory Data:', inventoryData)
+
+  const { data: totalCount, isLoading: totalCountLoading } =
+    useFrappeGetDocCount('Inventory', searchParams.size > 0 && filters)
+
+  console.log('Count: ', totalCount)
 
   const tableData = React.useMemo(() => {
     if (!inventoryData) return []
@@ -167,11 +165,16 @@ export function InventoryTable() {
       accessorKey: 'amount',
       header: 'Order Amount',
       cell: ({ row }) => {
-        return (
-          <div className="capitalize text-center cursor-pointer">
-            &#8377; {row.original?.amount}
-          </div>
-        )
+        const amount = row.original?.amount
+        {
+          return amount ? (
+            <div className="capitalize text-center cursor-pointer">
+              &#8377;{amount}
+            </div>
+          ) : (
+            <div className="capitalize text-center cursor-pointer">-</div>
+          )
+        }
       },
     },
     {
@@ -205,25 +208,29 @@ export function InventoryTable() {
   const table = useReactTable({
     data: tableData,
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
-      columnFilters,
       columnVisibility,
       rowSelection,
-    },
-    initialState: {
+      columnFilters,
       pagination: {
-        pageSize: 5, // Set page size to 5
+        pageIndex: page,
+        pageSize: limit,
       },
     },
+    enableRowSelection: true,
+    manualPagination: true,
+    pageCount: Math.ceil(((!totalCountLoading && totalCount) || 0) / limit),
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
   })
 
   const downloadCSV = () => {
@@ -241,12 +248,13 @@ export function InventoryTable() {
     saveAs(blob, 'table-data.csv')
   }
 
-  if (!inventoryDataLoading && inventoryData.length === 0) {
+  if (!isLoading && data?.length === 0) {
     return (
       <Empty
         heading="No Orders Found."
         subHeading="You have no order history."
         buttonText="Create Order"
+        inventoryRefetch={inventoryRefetch}
       />
     )
   }
@@ -257,14 +265,49 @@ export function InventoryTable() {
       </CardHeader>
       <CardContent>
         <div className="w-full">
-          <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
-            <div className="w-full">
-              <DataTableToolbar
-                table={table}
-                inputFilter="order_id"
-                // status={status}
-                // card_nature={card_nature}
-              />
+          <div className="w-full flex gap-2 justify-between items-center max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
+            <div className="w-full flex gap-4">
+              <div className="w-[25%]">
+                <DataTableToolbar />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Select
+                  value={orderStatus ? orderStatus : 'All Statuses'}
+                  onValueChange={(value) => {
+                    setSearchParams((prev) => {
+                      const newParams = new URLSearchParams(prev) // ✅ Clone previous params
+
+                      if (value === 'All Statuses') {
+                        newParams.delete('status')
+                      } else {
+                        newParams.set('status', value)
+                        newParams.set('page', 0)
+                      }
+                      return newParams // ✅ Return a new object
+                    })
+                  }}
+                >
+                  <SelectTrigger className="w-[180px] h-8">
+                    <SelectValue placeholder="Select the status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Status</SelectLabel>
+                      <SelectItem value="All Statuses">All Statuses</SelectItem>
+                      {orderStatusesLoading ? (
+                        <SelectItem value="Loading" disabled></SelectItem>
+                      ) : (
+                        orderStatuses?.map((status) => (
+                          <SelectItem key={status.name} value={status.name}>
+                            {status.name}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="flex gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>
@@ -296,14 +339,25 @@ export function InventoryTable() {
                 ))}
               </TableHeader>
               <TableBody>
-                {table.getRowModel().rows?.length ? (
+                {inventoryDataLoading ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      <div className="w-full h-full flex justify-center items-center">
+                        <div className="spinner w-14 h-14 rounded-full border-4 border-gray-200 border-r-blue-500 animate-spin"></div>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row) => (
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && 'selected'}
                     >
                       {row.getVisibleCells().map((cell) => (
-                        <TableCell className="text-center" key={cell.id}>
+                        <TableCell key={cell.id} className="text-center">
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()

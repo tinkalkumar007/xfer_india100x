@@ -46,6 +46,7 @@ import {
   useFrappeGetDocList,
 } from 'frappe-react-sdk'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
+import Error404 from '../Error404/Error404'
 
 const ProgramDetails = () => {
   const { id } = useParams()
@@ -54,8 +55,15 @@ const ProgramDetails = () => {
 
   const { currentUser } = useFrappeAuth()
 
-  const { data: programDetails, isLoading: programDetailsLoading } =
-    useFrappeGetDoc('Program', id)
+  const {
+    data: programDetails,
+    isLoading: programDetailsLoading,
+    error: errorFetchingPrograms,
+  } = useFrappeGetDoc('Program', id)
+
+  if (errorFetchingPrograms) {
+    navigate('/error404')
+  }
 
   console.log('Program Details:', programDetails)
 

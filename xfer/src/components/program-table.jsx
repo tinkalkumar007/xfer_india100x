@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import MultipleSelector from '@/components/ui/multiple-selector'
 import axios from '@/api/axios'
+import { debounce } from 'lodash'
 import {
   flexRender,
   getCoreRowModel,
@@ -123,20 +124,6 @@ import {
 import { useToast } from '@/hooks/use-toast'
 import Empty from './Empty'
 
-const OPTIONS = [
-  { label: 'nextjs', value: 'Nextjs' },
-  { label: 'React', value: 'react' },
-  { label: 'Remix', value: 'remix' },
-  { label: 'Vite', value: 'vite' },
-  { label: 'Nuxt', value: 'nuxt' },
-  { label: 'Vue', value: 'vue' },
-  { label: 'Svelte', value: 'svelte' },
-  { label: 'Angular', value: 'angular' },
-  { label: 'Ember', value: 'ember' },
-  { label: 'Gatsby', value: 'gatsby' },
-  { label: 'Astro', value: 'astro' },
-]
-
 const productSchema = z.object({
   program_name: z.string().min(1, 'Program name is required'),
   description: z.string().optional(),
@@ -156,9 +143,13 @@ export function ProgramTableDemo() {
   const page = parseInt(searchParams.get('page') || '0')
   const limit = parseInt(searchParams.get('limit') || '1')
   const currentCategory = searchParams.get('category') || ''
+  const currentStatus = searchParams.get('status') || ''
 
   const filters = Array.from(searchParams.entries())
     .map(([key, value]) => {
+      if (key === 'query') {
+        return ['program_name', 'like', `%${value}%`]
+      }
       if (!(key === 'page') && !(key === 'limit')) {
         return [key, '=', value]
       }
@@ -434,33 +425,34 @@ export function ProgramTableDemo() {
     },
   ]
 
-  const { data: programData, isLoading: programDataLoading } =
-    useFrappeGetDocList('Program', {
-      fields: [
-        '_user_tags',
-        'name',
-        'program_name',
-        'category',
-        'description',
-        'status',
-        'creation',
-      ],
-      filters: searchParams.size > 0 && filters,
-      limit_start: page * limit,
-      limit: limit,
-    })
+  const {
+    data: programData,
+    isLoading: programDataLoading,
+    isValidating: programDataValidating,
+  } = useFrappeGetDocList('Program', {
+    fields: [
+      '_user_tags',
+      'name',
+      'program_name',
+      'category',
+      'description',
+      'status',
+      'creation',
+    ],
+    filters: searchParams.size > 0 && filters,
+    limit_start: page * limit,
+    limit: limit,
+  })
+
+  const { data, isLoading, isValidating } = useFrappeGetDocList('Program', {
+    fields: ['name'],
+  })
+
   const { data: totalCount, isLoading: totalCountLoading } =
     useFrappeGetDocCount('Program', searchParams.size > 0 && filters)
 
   console.log('Count: ', totalCount)
 
-  const handlePageChange = (newPage) => {
-    setSearchParams((prev) => {
-      const newParams = new URLSearchParams(prev) // ✅ Clone previous params
-      newParams.set('page', newPage)
-      return newParams
-    })
-  }
   if (!programDataLoading) {
     console.log('Program Data:', programData)
   }
@@ -473,7 +465,6 @@ export function ProgramTableDemo() {
       category: program.category,
       date: program.creation,
       status: program.status,
-
       tags: program._user_tags,
     }))
   }, [programData])
@@ -495,7 +486,6 @@ export function ProgramTableDemo() {
     manualPagination: true,
     pageCount: Math.ceil(((!totalCountLoading && totalCount) || 0) / limit),
     onRowSelectionChange: setRowSelection,
-    keepPreviousData: true,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
@@ -525,12 +515,6 @@ export function ProgramTableDemo() {
   const { createDoc } = useFrappeCreateDoc()
   const { updateDoc } = useFrappeUpdateDoc()
 
-  function handleBlock(id) {
-    updateDoc('Program', id, {
-      status: 'Blocked',
-    })
-  }
-
   const downloadCSV = () => {
     if (!tableData || tableData.length === 0) {
       toast({
@@ -546,7 +530,7 @@ export function ProgramTableDemo() {
     saveAs(blob, 'table-data.csv')
   }
 
-  if (!programDataLoading && programData?.length === 0) {
+  if (!isLoading && data?.length === 0) {
     return (
       <Empty
         heading="No Programs Found."
@@ -555,6 +539,15 @@ export function ProgramTableDemo() {
       />
     )
   }
+
+  // if (programDataLoading) {
+  //   return (
+  //     <div className="w-full h-full flex justify-center items-center">
+  //       <div className="spinner w-14 h-14 rounded-full border-4 border-gray-200 border-r-blue-500 animate-spin"></div>
+  //     </div>
+  //   )
+  // }
+
   return (
     <Card>
       <CardHeader>
@@ -563,51 +556,93 @@ export function ProgramTableDemo() {
       <CardContent>
         <div className="w-full flex flex-col gap-4">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
-            <div className="">
-              {/* <DataTableToolbar
+            <div className="w-full max-md:w-[100%] flex gap-2">
+              <div className="w-[25%]">
+                <DataTableToolbar />
+              </div>
+              <div className="flex items-center gap-2">
+                <Select
+                  value={currentCategory ? currentCategory : 'All Categories'}
+                  onValueChange={(value) => {
+                    setSearchParams((prev) => {
+                      const newParams = new URLSearchParams(prev) // ✅ Clone previous params
+
+                      if (value === 'All Categories') {
+                        newParams.delete('category')
+                      } else {
+                        newParams.set('category', value)
+                        newParams.set('page', 0)
+                      }
+                      return newParams // ✅ Return a new object
+                    })
+                  }}
+                >
+                  <SelectTrigger className="w-[180px] h-8">
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Category</SelectLabel>
+                      <SelectItem value="All Categories">
+                        All Categories
+                      </SelectItem>
+                      {programCategoryLoading ? (
+                        <SelectItem value="Loading" disabled></SelectItem>
+                      ) : (
+                        programCategory?.map((category) => (
+                          <SelectItem key={category.name} value={category.name}>
+                            {category.name}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <Select
+                  value={currentStatus ? currentStatus : 'All Statuses'}
+                  onValueChange={(value) => {
+                    setSearchParams((prev) => {
+                      const newParams = new URLSearchParams(prev) // ✅ Clone previous params
+
+                      if (value === 'All Statuses') {
+                        newParams.delete('status')
+                      } else {
+                        newParams.set('status', value)
+                        newParams.set('page', 0)
+                      }
+                      return newParams // ✅ Return a new object
+                    })
+                  }}
+                >
+                  <SelectTrigger className="w-[180px] h-8">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Status</SelectLabel>
+                      <SelectItem value="All Statuses">All Statuses</SelectItem>
+                      {programStatusLoading ? (
+                        <SelectItem value="Loading" disabled></SelectItem>
+                      ) : (
+                        programStatus?.map((status) => (
+                          <SelectItem key={status.name} value={status.name}>
+                            {status.name}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            {/* <DataTableToolbar
                   table={table}
                   inputFilter="program_name"
                   status={programStatus}
                   category={programCategory}
                 /> */}
-            </div>
 
             <div className="flex gap-2 items-center">
-              <Select
-                value={currentCategory}
-                onValueChange={(value) => {
-                  setSearchParams((prev) => {
-                    const newParams = new URLSearchParams(prev) // ✅ Clone previous params
-
-                    if (value === 'All') {
-                      newParams.delete('category')
-                    } else {
-                      newParams.set('category', value)
-                      newParams.set('page', 0)
-                    }
-                    return newParams // ✅ Return a new object
-                  })
-                }}
-              >
-                <SelectTrigger className="w-[180px] h-8">
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="All">All</SelectItem>
-                    {programCategoryLoading ? (
-                      <SelectItem value="Loading" disabled></SelectItem>
-                    ) : (
-                      programCategory?.map((category) => (
-                        <SelectItem key={category.name} value={category.name}>
-                          {category.name}
-                        </SelectItem>
-                      ))
-                    )}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-
               <Button variant="outline" className="h-8" onClick={downloadCSV}>
                 <FileDown />
               </Button>
@@ -615,7 +650,7 @@ export function ProgramTableDemo() {
               <DataTableViewOptions table={table} />
             </div>
           </div>
-          <div className="rounded-md border mt-3 grid grid-cols-1">
+          <div className="rounded-md border grid grid-cols-1">
             <Table>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
@@ -636,7 +671,18 @@ export function ProgramTableDemo() {
                 ))}
               </TableHeader>
               <TableBody>
-                {table.getRowModel().rows?.length ? (
+                {programDataLoading ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      <div className="w-full h-full flex justify-center items-center">
+                        <div className="spinner w-14 h-14 rounded-full border-4 border-gray-200 border-r-blue-500 animate-spin"></div>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row) => (
                     <TableRow
                       key={row.id}
@@ -665,11 +711,7 @@ export function ProgramTableDemo() {
               </TableBody>
             </Table>
           </div>
-          <DataTablePagination
-            table={table}
-            onPageChange={handlePageChange}
-            currentPage={page}
-          />
+          <DataTablePagination table={table} />
         </div>
       </CardContent>
     </Card>

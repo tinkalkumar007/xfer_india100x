@@ -15,8 +15,18 @@ import {
 } from '@/components/ui/select'
 import { useSearchParams } from 'react-router-dom'
 
-export function DataTablePagination({ table, onPageChange, currentPage }) {
+export function DataTablePagination({ table }) {
   const [searchParams, setSearchParams] = useSearchParams()
+  const currentPage = parseInt(searchParams.get('page') || '0')
+
+  const onPageChange = (newPage) => {
+    setSearchParams((prev) => {
+      const newParams = new URLSearchParams(prev) // ✅ Clone previous params
+      newParams.set('page', newPage)
+      return newParams
+    })
+  }
+
   const handleRowSizeChange = (value) => {
     // Update URL parameters for both limit and reset page to 0
     setSearchParams((prev) => {
@@ -56,8 +66,11 @@ export function DataTablePagination({ table, onPageChange, currentPage }) {
           </Select>
         </div>
         <div className="flex items-center justify-center text-sm font-medium">
-          Page {table.getState().pagination.pageIndex + 1} of{' '}
-          {table.getPageCount()}
+          Page{' '}
+          {table.getPageCount() === 0
+            ? 0
+            : table.getState().pagination.pageIndex + 1}{' '}
+          of {table.getPageCount()}
         </div>
         <div className="flex items-center gap-2">
           <Button
@@ -82,7 +95,7 @@ export function DataTablePagination({ table, onPageChange, currentPage }) {
             variant="outline"
             className="h-8 w-8 p-0"
             onClick={() => onPageChange(currentPage + 1)}
-            disabled={currentPage === table.getPageCount() - 1}
+            disabled={currentPage >= table.getPageCount() - 1}
           >
             <span className="sr-only">Go to next page</span>
             <ChevronRight />
@@ -91,7 +104,7 @@ export function DataTablePagination({ table, onPageChange, currentPage }) {
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
             onClick={() => onPageChange(table.getPageCount() - 1)}
-            disabled={currentPage === table.getPageCount() - 1}
+            disabled={currentPage >= table.getPageCount() - 1}
           >
             <span className="sr-only">Go to last page</span>
             <ChevronsRight />

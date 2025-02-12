@@ -17,7 +17,7 @@ const Error404 = () => {
         <Button
           variant="outline"
           onClick={() => {
-            navigate(-1)
+            navigate('/')
           }}
           className="select-none inline-flex h-10 items-center rounded-md shadow-sm px-8 text-sm font-medium transition-colors"
         >

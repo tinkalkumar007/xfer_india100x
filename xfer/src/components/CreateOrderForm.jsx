@@ -30,12 +30,12 @@ const formSchema = z.object({
   program_name: z.string().min(1, { message: 'Program name is required' }),
   physical_quantity: z
     .string()
-    .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
+    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
       message: 'Physical quantity must be a positive number',
     }),
   virtual_quantity: z
     .string()
-    .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
+    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
       message: 'Virtual quantity must be a positive number',
     }),
 })

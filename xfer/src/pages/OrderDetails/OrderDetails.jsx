@@ -31,7 +31,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { saveAs } from 'file-saver'
 import * as Papa from 'papaparse'
 import { Badge } from '@/components/ui/badge'
@@ -62,20 +62,10 @@ import {
 } from '@tanstack/react-table'
 import DataTableViewOptions from '../../components/DataTableViewOptions'
 import DataTableToolbar from '../../components/DataTableToolbar'
+import Error404 from '@/pages/Error404/Error404'
 import { status } from '@/data/program-manager-data'
 import { useFrappeGetDoc } from 'frappe-react-sdk'
 
-const data = [
-  {
-    product_name: 'Shopping',
-    product_img: OnoLogo,
-    product_category: 'Monthly Expense',
-    card_nature: 'Virtual',
-    price: 200,
-    quantity: 10,
-    total_amount: 2000,
-  },
-]
 const items = [
   {
     id: 1,
@@ -107,11 +97,20 @@ const items = [
 const OrderDetails = () => {
   const { id } = useParams()
 
-  const { data: orderDetails, isLoading: orderDetailsLoading } =
-    useFrappeGetDoc('Inventory', id)
+  const navigate = useNavigate()
 
-  if (!orderDetailsLoading) {
-    console.log('Order Details: ', orderDetails)
+  const {
+    data: orderDetails,
+    isLoading: orderDetailsLoading,
+    error: errorFetchingOrder,
+  } = useFrappeGetDoc('Inventory', id)
+
+  if (!orderDetailsLoading && errorFetchingOrder) {
+    console.log('Order Details: ', errorFetchingOrder.httpStatus)
+  }
+
+  if (errorFetchingOrder) {
+    navigate('/error404')
   }
 
   const downloadCSV = () => {

@@ -88,6 +88,10 @@ export function ActivityLogsTable() {
   const [rowSelection, setRowSelection] = React.useState({})
   const { toast } = useToast()
 
+  const { data, isLoading } = useFrappeGetDocList('Activity Log', {
+    fields: ['name'],
+  })
+
   const { data: activityLogsData, isLoading: activityLogsLoading } =
     useFrappeGetDocList('Activity Log', {
       fields: ['*'],
@@ -208,7 +212,7 @@ export function ActivityLogsTable() {
     saveAs(blob, 'table-data.csv')
   }
 
-  if (!activityLogsLoading && activityLogsData.length === 0) {
+  if (!isLoading && data?.length === 0) {
     return (
       <Empty
         heading="No logs found."

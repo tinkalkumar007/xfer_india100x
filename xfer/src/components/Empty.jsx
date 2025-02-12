@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from '@/components/ui/button'
 import CreateOrder from '../pages/CreateOrder/CreateOrder'
 
-const Empty = ({ heading, subHeading, buttonText }) => {
+const Empty = ({ heading, subHeading, buttonText, inventoryRefetch }) => {
   return (
     <div className="w-full flex flex-col justify-center items-center gap-4 h-full">
       <div className="w-full flex justify-center items-center">
@@ -11,7 +11,6 @@ const Empty = ({ heading, subHeading, buttonText }) => {
           width="250"
           height="250"
           viewBox="0 0 862.70323 644.78592"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
           role="img"
           artist="Katerina Limpitsouni"
           source="https://undraw.co/"
@@ -300,7 +299,7 @@ const Empty = ({ heading, subHeading, buttonText }) => {
         </p>
       </div>
       {buttonText === 'Create Order' ? (
-        <CreateOrder />
+        <CreateOrder inventoryRefetch={inventoryRefetch} />
       ) : (
         <Button variant="outline">{buttonText}</Button>
       )}
