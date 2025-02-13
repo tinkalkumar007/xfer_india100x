@@ -42,6 +42,7 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  X,
 } from 'lucide-react'
 import { saveAs } from 'file-saver'
 import * as Papa from 'papaparse'
@@ -151,8 +152,10 @@ export function ProgramTableDemo() {
   // console.log(new Date.toString())
 
   const [value, setValue] = React.useState({
-    start: parseDate(searchParams.get('start') || '2024-01-01'),
-    end: parseDate(searchParams.get('end') || today().toString()),
+    start: searchParams.get('start')
+      ? parseDate(searchParams.get('start'))
+      : null,
+    end: searchParams.get('end') ? parseDate(searchParams.get('end')) : null,
   })
 
   console.log('Value ', value)
@@ -538,6 +541,19 @@ export function ProgramTableDemo() {
     getFacetedUniqueValues: getFacetedUniqueValues(),
   })
 
+  const resetDateFilter = () => {
+    const updatedParams = new URLSearchParams(searchParams)
+    updatedParams.delete('start')
+    updatedParams.delete('end')
+    updatedParams.set('page', 0)
+    setValue((prev) => {
+      prev.start = null
+      prev.end = null
+      return prev
+    })
+    setSearchParams(updatedParams)
+  }
+
   const { toast } = useToast()
 
   const { data: programStatus, isLoading: programStatusLoading } =
@@ -676,16 +692,33 @@ export function ProgramTableDemo() {
                   </SelectContent>
                 </Select>
 
-                <DateRangePicker
-                  showMonthAndYearPickers
-                  className="max-w-[200px]"
-                  variant="faded"
-                  size="sm"
-                  radius="sm"
-                  color="default"
-                  onChange={handleDateRangeChange}
-                  value={value}
-                />
+                <div className="flex gap-2 items-center">
+                  <DateRangePicker
+                    showMonthAndYearPickers
+                    className=""
+                    variant="faded"
+                    size="sm"
+                    radius="sm"
+                    color="default"
+                    onChange={handleDateRangeChange}
+                    // formatOptions={{
+                    //   // This configures how dates are displayed in the input
+                    //   month: '2-digit',
+                    //   day: '2-digit',
+                    //   year: 'numeric',
+                    // }}
+                    locale="en-GB"
+                    value={value}
+                  />
+                  {value?.start && value?.end ? (
+                    <X
+                      className="cursor-pointer"
+                      onClick={() => {
+                        resetDateFilter()
+                      }}
+                    />
+                  ) : null}
+                </div>
               </div>
             </div>
             {/* <DataTableToolbar
