@@ -13,7 +13,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { DatePicker, InputGroup } from 'rsuite'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import DataTableToolbar from '@/components/DataTableToolbar'
@@ -124,9 +123,6 @@ import {
 } from 'frappe-react-sdk'
 import { useToast } from '@/hooks/use-toast'
 import Empty from './Empty'
-import { DateRangePicker } from '@heroui/date-picker'
-import { parseDate, getLocalTimeZone, today } from '@internationalized/date'
-import { useDateFormatter } from '@react-aria/i18n'
 
 const productSchema = z.object({
   program_name: z.string().min(1, 'Program name is required'),
@@ -159,8 +155,6 @@ export function ProgramTableDemo() {
   })
 
   console.log('Value ', value)
-
-  let formatter = useDateFormatter({ dateStyle: 'long' })
 
   const formatDate = (date) => {
     if (!date) return null
@@ -692,33 +686,7 @@ export function ProgramTableDemo() {
                   </SelectContent>
                 </Select>
 
-                <div className="flex gap-2 items-center">
-                  <DateRangePicker
-                    showMonthAndYearPickers
-                    className=""
-                    variant="faded"
-                    size="sm"
-                    radius="sm"
-                    color="default"
-                    onChange={handleDateRangeChange}
-                    // formatOptions={{
-                    //   // This configures how dates are displayed in the input
-                    //   month: '2-digit',
-                    //   day: '2-digit',
-                    //   year: 'numeric',
-                    // }}
-                    locale="en-GB"
-                    value={value}
-                  />
-                  {value?.start && value?.end ? (
-                    <X
-                      className="cursor-pointer"
-                      onClick={() => {
-                        resetDateFilter()
-                      }}
-                    />
-                  ) : null}
-                </div>
+                <div className="flex gap-2 items-center"></div>
               </div>
             </div>
             {/* <DataTableToolbar

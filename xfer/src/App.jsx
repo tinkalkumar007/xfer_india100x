@@ -35,8 +35,6 @@ import { PendingKycTable } from './components/PendingKyc-table'
 import { PoolAccountsTable } from './components/PoolAccount-table'
 import { FundingTransactionTable } from './components/FundingTransaction-table'
 import { ActivityLogsTable } from './components/user-activity-logs-table'
-import { HeroUIProvider } from '@heroui/react'
-
 
 function App() {
   const getSiteName = () => {
@@ -53,93 +51,88 @@ function App() {
   }
   return (
     <ThemeProvider storageKey="vite-ui-theme">
-      <HeroUIProvider>
-        <FrappeProvider
-          socketPort={import.meta.env.VITE_SOCKET_PORT}
-          siteName={getSiteName()}
-        >
-          <Toaster />
-          <Routes>
-            <Route element={<PublicRoute />}>
-              <Route path={`/`} element={<Login />} />
-            </Route>
-            <Route element={<ProtectedRoute />}>
-              <Route element={<Layout />}>
-                <Route
-                  path="/business-dashboard"
-                  element={<BusinessDashboard />}
-                />
-                <Route path="/test-doc" element={<TestDoc />} />
-                <Route path="/system-dashboard" element={<SystemDashboard />} />
-                <Route path="/programs" element={<ProgramTableDemo />} />
-                <Route path="/programs/:id" element={<ProgramDetails />} />
-                <Route path="/inventory" element={<InventoryTable />} />
-                <Route path="/inventory/:id" element={<OrderDetails />} />
-                <Route path="/issued-cards" element={<IssuedCardsTable />} />
-                <Route
-                  path="/issued-cards/:id"
-                  element={<IssuedCardsDetails />}
-                />
-                <Route path="/all-customers" element={<AllCustomerTable />} />
-                <Route path="/customers/:id" element={<CustomerDetails />} />
+      <FrappeProvider
+        socketPort={import.meta.env.VITE_SOCKET_PORT}
+        siteName={getSiteName()}
+      >
+        <Toaster />
+        <Routes>
+          <Route element={<PublicRoute />}>
+            <Route path={`/`} element={<Login />} />
+          </Route>
+          <Route element={<ProtectedRoute />}>
+            <Route element={<Layout />}>
+              <Route
+                path="/business-dashboard"
+                element={<BusinessDashboard />}
+              />
+              <Route path="/test-doc" element={<TestDoc />} />
+              <Route path="/system-dashboard" element={<SystemDashboard />} />
+              <Route path="/programs" element={<ProgramTableDemo />} />
+              <Route path="/programs/:id" element={<ProgramDetails />} />
+              <Route path="/inventory" element={<InventoryTable />} />
+              <Route path="/inventory/:id" element={<OrderDetails />} />
+              <Route path="/issued-cards" element={<IssuedCardsTable />} />
+              <Route
+                path="/issued-cards/:id"
+                element={<IssuedCardsDetails />}
+              />
+              <Route path="/all-customers" element={<AllCustomerTable />} />
+              <Route path="/customers/:id" element={<CustomerDetails />} />
 
-                <Route
-                  path="/flagged-customers"
-                  element={<FlaggedCustomerTable />}
-                />
-                <Route
-                  path="/pending-kyc-customers"
-                  element={<PendingKycTable />}
-                />
-                <Route path="/pool-accounts" element={<PoolAccountsTable />} />
-                <Route
-                  path="/funding-transactions"
-                  element={<FundingTransactionTable />}
-                />
-                {/* <Route path="/system-users" element={<SystemUsers />} /> */}
-                <Route
-                  path="/user-activity-logs"
-                  element={<ActivityLogsTable />}
-                />
-                {/* Nested Routes */}
-                <Route element={<UserProfileLayout />}>
-                  {/* Account Routes */}
-                  <Route path="/account">
-                    <Route index element={<Navigate to="profile" />} />{' '}
-                    {/* Default redirect */}
-                    <Route path="profile" element={<Profile />} />
-                    <Route path="security" element={<Security />} />
-                    <Route path="appearance" element={<Appearance />} />
-                    <Route path="notifications" element={<Notifications />} />
-                  </Route>
-                  {/* Developer Routes */}
-                  <Route path="/developer">
-                    <Route index element={<Navigate to="api-keys" />} />{' '}
-                    {/* Default redirect */}
-                    <Route path="api-keys" element={<ApiKeys />} />
-                    <Route path="api-logs" element={<ApiLogs />} />
-                    <Route path="webhooks" element={<Webhooks />} />
-                    <Route
-                      path="ip-whitelisting"
-                      element={<IpWhitelisting />}
-                    />
-                  </Route>
-                  {/* Team Routes */}
-                  <Route path="/team">
-                    <Route index element={<Navigate to="users" />} />{' '}
-                    {/* Default redirect */}
-                    <Route path="users" element={<Users />} />
-                    <Route path="logs" element={<Logs />} />
-                  </Route>
+              <Route
+                path="/flagged-customers"
+                element={<FlaggedCustomerTable />}
+              />
+              <Route
+                path="/pending-kyc-customers"
+                element={<PendingKycTable />}
+              />
+              <Route path="/pool-accounts" element={<PoolAccountsTable />} />
+              <Route
+                path="/funding-transactions"
+                element={<FundingTransactionTable />}
+              />
+              {/* <Route path="/system-users" element={<SystemUsers />} /> */}
+              <Route
+                path="/user-activity-logs"
+                element={<ActivityLogsTable />}
+              />
+              {/* Nested Routes */}
+              <Route element={<UserProfileLayout />}>
+                {/* Account Routes */}
+                <Route path="/account">
+                  <Route index element={<Navigate to="profile" />} />{' '}
+                  {/* Default redirect */}
+                  <Route path="profile" element={<Profile />} />
+                  <Route path="security" element={<Security />} />
+                  <Route path="appearance" element={<Appearance />} />
+                  <Route path="notifications" element={<Notifications />} />
+                </Route>
+                {/* Developer Routes */}
+                <Route path="/developer">
+                  <Route index element={<Navigate to="api-keys" />} />{' '}
+                  {/* Default redirect */}
+                  <Route path="api-keys" element={<ApiKeys />} />
+                  <Route path="api-logs" element={<ApiLogs />} />
+                  <Route path="webhooks" element={<Webhooks />} />
+                  <Route path="ip-whitelisting" element={<IpWhitelisting />} />
+                </Route>
+                {/* Team Routes */}
+                <Route path="/team">
+                  <Route index element={<Navigate to="users" />} />{' '}
+                  {/* Default redirect */}
+                  <Route path="users" element={<Users />} />
+                  <Route path="logs" element={<Logs />} />
                 </Route>
               </Route>
             </Route>
-            {/* Fallback Route */}
-            <Route path="*" element={<Navigate to="/404" />} />
-            <Route path="/404" element={<Error404 />} />
-          </Routes>
-        </FrappeProvider>
-      </HeroUIProvider>
+          </Route>
+          {/* Fallback Route */}
+          <Route path="*" element={<Navigate to="/404" />} />
+          <Route path="/404" element={<Error404 />} />
+        </Routes>
+      </FrappeProvider>
     </ThemeProvider>
   )
 }
