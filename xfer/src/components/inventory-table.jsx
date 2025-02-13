@@ -57,8 +57,6 @@ import {
 } from 'frappe-react-sdk'
 import { useToast } from '@/hooks/use-toast'
 import Empty from './Empty'
-import { DateTimePicker } from './ui/datetime-picker'
-import DatePickerAndTimeInput from './DatePickerAndTimeInput'
 
 export function InventoryTable() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)

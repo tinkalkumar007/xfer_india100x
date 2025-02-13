@@ -552,7 +552,7 @@
     "@react-types/datepicker" "3.9.0"
     "@react-types/shared" "3.26.0"
 
-"@heroui/date-picker@2.3.10":
+"@heroui/date-picker@^2.3.10", "@heroui/date-picker@2.3.10":
   version "2.3.10"
   resolved "https://registry.npmjs.org/@heroui/date-picker/-/date-picker-2.3.10.tgz"
   integrity sha512-6IKxmpORt/PdEI3C8WRhOjLPqQqOgDW6qosgRwJ7azaCHDb6zrTHdlJkAkejnfvoIG6xMB+W+V0CkdCq/hklyg==
@@ -1054,7 +1054,7 @@
     "@react-types/shared" "3.26.0"
     clsx "^1.2.1"
 
-"@heroui/system@>=2.4.0", "@heroui/system@2.4.7":
+"@heroui/system@^2.4.7", "@heroui/system@>=2.4.0", "@heroui/system@2.4.7":
   version "2.4.7"
   resolved "https://registry.npmjs.org/@heroui/system/-/system-2.4.7.tgz"
   integrity sha512-5gWQhHr9ch/amUTkjDb2lHdVHU0PnURqbq2sPasGngi+LJUGqbApOY8n0rp2/RYDhEeR6NmWrSixZTmznBnfxg==
@@ -1108,7 +1108,7 @@
     "@react-types/tabs" "3.3.11"
     scroll-into-view-if-needed "3.0.10"
 
-"@heroui/theme@>=2.4.0", "@heroui/theme@>=2.4.3", "@heroui/theme@2.4.6":
+"@heroui/theme@^2.4.6", "@heroui/theme@>=2.4.0", "@heroui/theme@>=2.4.3", "@heroui/theme@2.4.6":
   version "2.4.6"
   resolved "https://registry.npmjs.org/@heroui/theme/-/theme-2.4.6.tgz"
   integrity sha512-VcmeMRxL3wnKk1o6gzeQehEcXyoKyvqLYr+iRFIrMZZO1kG5bvuX+CWDVovfmLRLK1MuwuhYjm6aJvre9AZAfA==

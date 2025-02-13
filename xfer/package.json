@@ -11,7 +11,10 @@
     "copy-html-entry": "cp ../xfer_backend/public/xfer/index.html ../xfer_backend/www/xfer.html"
   },
   "dependencies": {
+    "@heroui/date-picker": "^2.3.10",
     "@heroui/react": "^2.6.14",
+    "@heroui/system": "^2.4.7",
+    "@heroui/theme": "^2.4.6",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-alert-dialog": "^1.1.2",
     "@radix-ui/react-avatar": "^1.1.1",

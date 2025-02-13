@@ -13,7 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { CalendarDateRangePicker } from './CalendarDateRangePicker'
+import { DatePicker, InputGroup } from 'rsuite'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import DataTableToolbar from '@/components/DataTableToolbar'
@@ -123,6 +123,9 @@ import {
 } from 'frappe-react-sdk'
 import { useToast } from '@/hooks/use-toast'
 import Empty from './Empty'
+import { DateRangePicker } from '@heroui/date-picker'
+import { parseDate, getLocalTimeZone, today } from '@internationalized/date'
+import { useDateFormatter } from '@react-aria/i18n'
 
 const productSchema = z.object({
   program_name: z.string().min(1, 'Program name is required'),
@@ -145,10 +148,48 @@ export function ProgramTableDemo() {
   const currentCategory = searchParams.get('category') || ''
   const currentStatus = searchParams.get('status') || ''
 
+  // console.log(new Date.toString())
+
+  const [value, setValue] = React.useState({
+    start: parseDate(searchParams.get('start') || '2024-01-01'),
+    end: parseDate(searchParams.get('end') || today().toString()),
+  })
+
+  console.log('Value ', value)
+
+  let formatter = useDateFormatter({ dateStyle: 'long' })
+
+  const formatDate = (date) => {
+    if (!date) return null
+    return date.toString()
+  }
+
+  const handleDateRangeChange = (newValue) => {
+    setValue(newValue)
+
+    // Only update URL if both start and end dates are selected
+    if (newValue.start && newValue.end) {
+      const formattedStart = formatDate(newValue.start)
+      const formattedEnd = formatDate(newValue.end)
+
+      // Update search params while preserving other filters
+      const updatedParams = new URLSearchParams(searchParams)
+      updatedParams.set('start', formattedStart)
+      updatedParams.set('end', formattedEnd)
+      setSearchParams(updatedParams)
+    }
+  }
+
   const filters = Array.from(searchParams.entries())
     .map(([key, value]) => {
       if (key === 'query') {
         return ['program_name', 'like', `%${value}%`]
+      }
+      if (key === 'start') {
+        return ['creation', '>=', value]
+      }
+      if (key === 'end') {
+        return ['creation', '<=', value]
       }
       if (!(key === 'page') && !(key === 'limit')) {
         return [key, '=', value]
@@ -439,7 +480,7 @@ export function ProgramTableDemo() {
       'status',
       'creation',
     ],
-    filters: searchParams.size > 0 && filters,
+    filters: searchParams.size > 0 ? filters : undefined,
     limit_start: page * limit,
     limit: limit,
   })
@@ -449,7 +490,7 @@ export function ProgramTableDemo() {
   })
 
   const { data: totalCount, isLoading: totalCountLoading } =
-    useFrappeGetDocCount('Program', searchParams.size > 0 && filters)
+    useFrappeGetDocCount('Program', searchParams.size > 0 ? filters : undefined)
 
   console.log('Count: ', totalCount)
 
@@ -556,7 +597,7 @@ export function ProgramTableDemo() {
       <CardContent>
         <div className="w-full flex flex-col gap-4">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
-            <div className="w-full max-md:w-[100%] flex gap-2">
+            <div className="w-full max-md:w-[100%] flex gap-2 flex-wrap">
               <div className="w-[25%]">
                 <DataTableToolbar />
               </div>
@@ -577,7 +618,7 @@ export function ProgramTableDemo() {
                     })
                   }}
                 >
-                  <SelectTrigger className="w-[180px] h-8">
+                  <SelectTrigger className="md:w-[180px] h-8">
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -598,6 +639,7 @@ export function ProgramTableDemo() {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
+
                 <Select
                   value={currentStatus ? currentStatus : 'All Statuses'}
                   onValueChange={(value) => {
@@ -633,6 +675,17 @@ export function ProgramTableDemo() {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
+
+                <DateRangePicker
+                  showMonthAndYearPickers
+                  className="max-w-[200px]"
+                  variant="faded"
+                  size="sm"
+                  radius="sm"
+                  color="default"
+                  onChange={handleDateRangeChange}
+                  value={value}
+                />
               </div>
             </div>
             {/* <DataTableToolbar
