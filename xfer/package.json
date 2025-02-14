@@ -11,10 +11,6 @@
     "copy-html-entry": "cp ../xfer_backend/public/xfer/index.html ../xfer_backend/www/xfer.html"
   },
   "dependencies": {
-    "@heroui/date-picker": "^2.3.10",
-    "@heroui/react": "^2.6.14",
-    "@heroui/system": "^2.4.7",
-    "@heroui/theme": "^2.4.6",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-alert-dialog": "^1.1.2",
     "@radix-ui/react-avatar": "^1.1.1",
@@ -42,7 +38,6 @@
     "embla-carousel-autoplay": "^8.5.1",
     "embla-carousel-react": "^8.5.1",
     "file-saver": "^2.0.5",
-    "framer-motion": "^11.18.2",
     "frappe-react-sdk": "^1.10.0",
     "input-otp": "^1.4.1",
     "js-cookie": "^3.0.5",
