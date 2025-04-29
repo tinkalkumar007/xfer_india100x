@@ -85,6 +85,7 @@ import DataTableViewOptions from './DataTableViewOptions'
 import { useFrappeGetDocCount, useFrappeGetDocList } from 'frappe-react-sdk'
 import { useToast } from '@/hooks/use-toast'
 import Empty from './Empty'
+import { DatePickerWithRange } from './ui/daterange-picker'
 
 export function IssuedCardsTable() {
   const [sorting, setSorting] = React.useState([])
@@ -97,16 +98,24 @@ export function IssuedCardsTable() {
   const limit = parseInt(searchParams.get('limit') || '1')
   const cardStatus = searchParams.get('card_status') || ''
 
-  const filters = Array.from(searchParams.entries())
-    .map(([key, value]) => {
-      if (key === 'query') {
-        return ['card_reference_id', 'like', `%${value}%`]
-      }
-      if (!(key === 'page') && !(key === 'limit')) {
-        return [key, '=', value]
-      }
-    })
-    .filter((item) => item !== undefined)
+  const filters = React.useMemo(() => {
+    return Array.from(searchParams.entries())
+      .map(([key, value]) => {
+        if (key === 'query') {
+          return ['card_number', 'like', `%${value}%`]
+        }
+        if (key === 'start') {
+          return ['creation', '>=', value]
+        }
+        if (key === 'end') {
+          return ['creation', '<=', value]
+        }
+        if (!(key === 'page') && !(key === 'limit')) {
+          return [key, '=', value]
+        }
+      })
+      .filter((item) => item !== undefined)
+  }, [searchParams])
 
   console.log('Search Params: ', filters)
 
@@ -119,8 +128,7 @@ export function IssuedCardsTable() {
       fields: [
         'card_reference_id',
         'card_number',
-        'modified',
-        'issue_date',
+        'creation',
         'card_status',
         'program_name',
         '_user_tags',
@@ -152,8 +160,7 @@ export function IssuedCardsTable() {
       id: card.card_reference_id,
       card_number: card.card_number,
       program_name: card.program_name,
-      last_active: card.modified,
-      issued_date: card.issue_date,
+      issued_date: card.creation,
       card_status: card.card_status,
       tags: card._user_tags,
     }))
@@ -227,7 +234,7 @@ export function IssuedCardsTable() {
       accessorKey: 'issued_date',
       header: 'Issued Date',
       cell: ({ row }) => {
-        const dateTime = row.original?.last_active?.split('.')[0]
+        const dateTime = row.original?.issued_date?.split('.')[0]
         console.log(dateTime)
         const date = dateTime?.split(' ')[0].split('-').reverse().join('-')
 
@@ -455,6 +462,9 @@ export function IssuedCardsTable() {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
+                <div className="flex gap-2 items-center">
+                  <DatePickerWithRange />
+                </div>
               </div>
             </div>
             <div className="flex gap-2 items-center">

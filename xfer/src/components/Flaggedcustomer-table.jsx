@@ -92,6 +92,7 @@ import DataTableViewOptions from './DataTableViewOptions'
 import DataTableToolbar from './DataTableToolbar'
 import { useToast } from '@/hooks/use-toast'
 import Empty from './Empty'
+import { DatePickerWithRange } from './ui/daterange-picker'
 
 export function FlaggedCustomerTable() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
@@ -105,16 +106,24 @@ export function FlaggedCustomerTable() {
   const limit = parseInt(searchParams.get('limit') || '1')
   const customerStatus = searchParams.get('status') || ''
 
-  const filters = Array.from(searchParams.entries())
-    .map(([key, value]) => {
-      if (key === 'query') {
-        return ['full_name', 'like', `%${value}%`]
-      }
-      if (!(key === 'page') && !(key === 'limit')) {
-        return [key, '=', value]
-      }
-    })
-    .filter((item) => item !== undefined)
+  const filters = React.useMemo(() => {
+    return Array.from(searchParams.entries())
+      .map(([key, value]) => {
+        if (key === 'query') {
+          return ['name', 'like', `%${value}%`]
+        }
+        if (key === 'start') {
+          return ['modified', '>=', value]
+        }
+        if (key === 'end') {
+          return ['modified', '<=', value]
+        }
+        if (!(key === 'page') && !(key === 'limit')) {
+          return [key, '=', value]
+        }
+      })
+      .filter((item) => item !== undefined)
+  }, [searchParams])
 
   const { data, isLoading } = useFrappeGetDocList('Customers', {
     fields: ['name'],
@@ -357,11 +366,11 @@ export function FlaggedCustomerTable() {
       <CardContent>
         <div className="w-full">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
-            <div className="w-full flex gap-4">
+            <div className="w-full flex gap-4 items-center">
               <div className="w-[25%]">
                 <DataTableToolbar />
               </div>
-              <div>
+              <div className="flex gap-4 items-center">
                 <Select
                   value={customerStatus ? customerStatus : 'All Statuses'}
                   onValueChange={(value) => {
@@ -397,6 +406,10 @@ export function FlaggedCustomerTable() {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
+
+                <div className="flex gap-2 items-center">
+                  <DatePickerWithRange />
+                </div>
               </div>
             </div>
             <div className="flex gap-2 items-center">

@@ -16,6 +16,7 @@ import {
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import DataTableToolbar from '@/components/DataTableToolbar'
+import { DateRangePickerDemo } from './ui/custom-date-filter'
 import {
   Form,
   FormControl,
@@ -123,6 +124,7 @@ import {
 } from 'frappe-react-sdk'
 import { useToast } from '@/hooks/use-toast'
 import Empty from './Empty'
+import { DatePickerWithRange } from './ui/daterange-picker'
 
 const productSchema = z.object({
   program_name: z.string().min(1, 'Program name is required'),
@@ -147,52 +149,24 @@ export function ProgramTableDemo() {
 
   // console.log(new Date.toString())
 
-  const [value, setValue] = React.useState({
-    start: searchParams.get('start')
-      ? parseDate(searchParams.get('start'))
-      : null,
-    end: searchParams.get('end') ? parseDate(searchParams.get('end')) : null,
-  })
-
-  console.log('Value ', value)
-
-  const formatDate = (date) => {
-    if (!date) return null
-    return date.toString()
-  }
-
-  const handleDateRangeChange = (newValue) => {
-    setValue(newValue)
-
-    // Only update URL if both start and end dates are selected
-    if (newValue.start && newValue.end) {
-      const formattedStart = formatDate(newValue.start)
-      const formattedEnd = formatDate(newValue.end)
-
-      // Update search params while preserving other filters
-      const updatedParams = new URLSearchParams(searchParams)
-      updatedParams.set('start', formattedStart)
-      updatedParams.set('end', formattedEnd)
-      setSearchParams(updatedParams)
-    }
-  }
-
-  const filters = Array.from(searchParams.entries())
-    .map(([key, value]) => {
-      if (key === 'query') {
-        return ['program_name', 'like', `%${value}%`]
-      }
-      if (key === 'start') {
-        return ['creation', '>=', value]
-      }
-      if (key === 'end') {
-        return ['creation', '<=', value]
-      }
-      if (!(key === 'page') && !(key === 'limit')) {
-        return [key, '=', value]
-      }
-    })
-    .filter((item) => item !== undefined)
+  const filters = React.useMemo(() => {
+    return Array.from(searchParams.entries())
+      .map(([key, value]) => {
+        if (key === 'query') {
+          return ['program_name', 'like', `%${value}%`]
+        }
+        if (key === 'start') {
+          return ['creation', '>=', value]
+        }
+        if (key === 'end') {
+          return ['creation', '<=', value]
+        }
+        if (!(key === 'page') && !(key === 'limit')) {
+          return [key, '=', value]
+        }
+      })
+      .filter((item) => item !== undefined)
+  }, [searchParams])
 
   console.log(filters)
 
@@ -474,7 +448,7 @@ export function ProgramTableDemo() {
       'program_name',
       'category',
       'description',
-      'status',
+      'status', 
       'creation',
     ],
     filters: searchParams.size > 0 ? filters : undefined,
@@ -534,19 +508,6 @@ export function ProgramTableDemo() {
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   })
-
-  const resetDateFilter = () => {
-    const updatedParams = new URLSearchParams(searchParams)
-    updatedParams.delete('start')
-    updatedParams.delete('end')
-    updatedParams.set('page', 0)
-    setValue((prev) => {
-      prev.start = null
-      prev.end = null
-      return prev
-    })
-    setSearchParams(updatedParams)
-  }
 
   const { toast } = useToast()
 
@@ -686,7 +647,9 @@ export function ProgramTableDemo() {
                   </SelectContent>
                 </Select>
 
-                <div className="flex gap-2 items-center"></div>
+                <div className="flex gap-2 items-center">
+                  <DatePickerWithRange />
+                </div>
               </div>
             </div>
             {/* <DataTableToolbar

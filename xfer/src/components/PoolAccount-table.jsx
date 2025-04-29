@@ -329,14 +329,24 @@ export function PoolAccountsTable() {
           case 'Active':
             return (
               <div className="flex justify-center">
-                <Badge variant="outline">{status}</Badge>
+                <Badge
+                  variant="outline"
+                  className="bg-[#E4F5E9] text-[#16794C] cursor-pointer"
+                >
+                  {status}
+                </Badge>
               </div>
             )
           case 'Inactive':
             return (
               <div className="flex justify-center">
                 {' '}
-                <Badge variant="outline">{status}</Badge>
+                <Badge
+                  variant="outline"
+                  className="bg-[#FFF0F0] text-[#B52A2A] cursor-pointer"
+                >
+                  {status}
+                </Badge>
               </div>
             )
           default:

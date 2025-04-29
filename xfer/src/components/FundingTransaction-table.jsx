@@ -444,7 +444,7 @@ export function FundingTransactionTable() {
             return <Badge className="bg-[#ffe6e6] text-[#d32f2f]">Failed</Badge>
 
           default:
-            return <Badge variant="outline"></Badge>
+            return <Badge variant="primary">{status}</Badge>
         }
       },
     },

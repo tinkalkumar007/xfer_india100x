@@ -57,6 +57,7 @@ import {
 } from 'frappe-react-sdk'
 import { useToast } from '@/hooks/use-toast'
 import Empty from './Empty'
+import { DatePickerWithRange } from './ui/daterange-picker'
 
 export function InventoryTable() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
@@ -73,16 +74,24 @@ export function InventoryTable() {
   const limit = parseInt(searchParams.get('limit') || '1')
   const orderStatus = searchParams.get('status') || ''
 
-  const filters = Array.from(searchParams.entries())
-    .map(([key, value]) => {
-      if (key === 'query') {
-        return ['name', 'like', `%${value}%`]
-      }
-      if (!(key === 'page') && !(key === 'limit')) {
-        return [key, '=', value]
-      }
-    })
-    .filter((item) => item !== undefined)
+  const filters = React.useMemo(() => {
+    return Array.from(searchParams.entries())
+      .map(([key, value]) => {
+        if (key === 'query') {
+          return ['name', 'like', `%${value}%`]
+        }
+        if (key === 'start') {
+          return ['creation', '>=', value]
+        }
+        if (key === 'end') {
+          return ['creation', '<=', value]
+        }
+        if (!(key === 'page') && !(key === 'limit')) {
+          return [key, '=', value]
+        }
+      })
+      .filter((item) => item !== undefined)
+  }, [searchParams])
 
   const { data, isLoading } = useFrappeGetDocList('Inventory', {
     fields: ['name'],
@@ -305,6 +314,9 @@ export function InventoryTable() {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
+                <div className="flex gap-2 items-center">
+                  <DatePickerWithRange />
+                </div>
               </div>
             </div>
             <div className="flex gap-2 items-center">

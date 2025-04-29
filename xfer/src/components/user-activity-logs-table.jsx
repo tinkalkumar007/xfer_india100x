@@ -1,11 +1,13 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   useReactTable,
 } from '@tanstack/react-table'
 import { DataTablePagination } from '@/components/DataTablePagination'
@@ -76,7 +78,7 @@ import {
 } from '@/components/ui/table'
 import DataTableViewOptions from './DataTableViewOptions'
 import DataTableToolbar from './DataTableToolbar'
-import { useFrappeGetDocList } from 'frappe-react-sdk'
+import { useFrappeGetDocCount, useFrappeGetDocList } from 'frappe-react-sdk'
 import { useToast } from '@/hooks/use-toast'
 import Empty from './Empty'
 
@@ -87,6 +89,9 @@ export function ActivityLogsTable() {
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
   const { toast } = useToast()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = parseInt(searchParams.get('page') || '0')
+  const limit = parseInt(searchParams.get('limit') || '1')
 
   const { data, isLoading } = useFrappeGetDocList('Activity Log', {
     fields: ['name'],
@@ -95,7 +100,12 @@ export function ActivityLogsTable() {
   const { data: activityLogsData, isLoading: activityLogsLoading } =
     useFrappeGetDocList('Activity Log', {
       fields: ['*'],
+      limit_start: page * limit,
+      limit: limit,
     })
+
+  const { data: totalCount, isLoading: totalCountLoading } =
+    useFrappeGetDocCount('Activity Log')
 
   const tableData = React.useMemo(() => {
     if (!activityLogsData) return []
@@ -103,7 +113,7 @@ export function ActivityLogsTable() {
       user: log.full_name,
       event: log.subject,
       ip_address: log.ip_address,
-      date: log.modified,
+      date: log.creation,
     }))
   }, [activityLogsData])
 
@@ -111,14 +121,18 @@ export function ActivityLogsTable() {
     {
       id: 'select',
       header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && 'indeterminate')
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
+        <div className="text-left">
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && 'indeterminate')
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
+          />
+        </div>
       ),
       cell: ({ row }) => (
         <Checkbox
@@ -133,38 +147,38 @@ export function ActivityLogsTable() {
 
     {
       accessorKey: 'user',
-      header: 'User',
+      header: () => <div className="">User</div>,
       cell: ({ row }) => (
-        <div className="capitalize cursor-pointer hover:underline">
-          {row.original.user}
+        <div className="capitalize text-center cursor-pointer hover:underline">
+          {row.original?.user}
         </div>
       ),
     },
 
     {
       accessorKey: 'event',
-      header: 'Event',
+      header: () => <div className="text-left">Event</div>,
       cell: ({ row }) => (
-        <div className="capitalize pl-4">{row.original.event}</div>
+        <div className="capitalize">{row.original?.event}</div>
       ),
     },
 
     {
       accessorKey: 'ip_address',
-      header: 'IP Address',
+      header: () => <div className="text-left">IP Address</div>,
       cell: ({ row }) => (
-        <div className="lowercase">{row.original.ip_address}</div>
+        <div className="lowercase">{row.original?.ip_address}</div>
       ),
     },
     {
       accessorKey: 'date',
-      header: 'Date',
+      header: () => <div className="text-left">Date</div>,
       cell: ({ row }) => {
         const date_time = row.original?.date?.split('.')[0]
         const date = date_time?.split(' ')[0].split('-').reverse().join('-')
         const time = date_time?.split(' ')[1]
         return (
-          <div className="lowercase pl-4 flex flex-col justify-center">
+          <div className="lowercase flex flex-col justify-center">
             <span>{date}</span>
             <span>{time}</span>
           </div>
@@ -176,25 +190,29 @@ export function ActivityLogsTable() {
   const table = useReactTable({
     data: tableData,
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
-      columnFilters,
       columnVisibility,
       rowSelection,
-    },
-    initialState: {
+      columnFilters,
       pagination: {
-        pageSize: 5, // Set page size to 5
+        pageIndex: page,
+        pageSize: limit,
       },
     },
+    enableRowSelection: true,
+    manualPagination: true,
+    pageCount: Math.ceil(((!totalCountLoading && totalCount) || 0) / limit),
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
   })
 
   const downloadCSV = () => {
@@ -262,14 +280,25 @@ export function ActivityLogsTable() {
                 ))}
               </TableHeader>
               <TableBody>
-                {table.getRowModel().rows?.length ? (
+                {activityLogsLoading ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      <div className="w-full h-full flex justify-center items-center">
+                        <div className="spinner w-14 h-14 rounded-full border-4 border-gray-200 border-r-blue-500 animate-spin"></div>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row) => (
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && 'selected'}
                     >
                       {row.getVisibleCells().map((cell) => (
-                        <TableCell className="text-center" key={cell.id}>
+                        <TableCell key={cell.id}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()
