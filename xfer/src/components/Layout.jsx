@@ -4,6 +4,8 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar'
 
+import React from 'react'
+
 import { Button } from '@/components/ui/button'
 
 import { Separator } from '@/components/ui/separator'
@@ -17,7 +19,7 @@ import {
 import { ArrowUp } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
-import { Outlet, useLocation } from 'react-router-dom'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 
 import { AppSidebar } from './app-sidebar'
 import { ModeToggle } from './mode-toggle'
@@ -66,46 +68,17 @@ const sidebarData = [
     ],
   },
 ]
-const flattenSidebarData = (data) => {
-  const flattened = []
-  data.forEach((group) => {
-    group.items.forEach((item) => {
-      flattened.push(item)
-    })
-  })
-  return flattened
-}
-
-const toPascalCaseWithSpaces = (str) => {
-  return str
-    .replace(/([^\w-])/g, ' ') // Replace non-alphanumeric characters with spaces
-    .split('-') // Split by dash
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
-    .join(' ') // Join words with spaces
-}
-
-// Generate breadcrumbs
 
 const Layout = () => {
-  const location = useLocation()
-  const flattenedSidebarData = flattenSidebarData(sidebarData)
-
-  // Generate breadcrumbs
-  const breadcrumbs = location.pathname
-    .split('/')
-    .filter(Boolean) // Remove empty strings
-    .map((segment, index, arr) => {
-      const url = '/' + arr.slice(0, index + 1).join('/')
-      const matchedItem = flattenedSidebarData.find((item) => item.url === url)
-      if (matchedItem) {
-        return {
-          title: toPascalCaseWithSpaces(matchedItem.url.split('/').pop()),
-        } // Convert to Pascal case with spaces
-      }
-      return { title: toPascalCaseWithSpaces(segment) } // Convert to Pascal case with spaces
-    })
-
   const [isVisible, setIsVisible] = useState(false)
+
+  const location = useLocation()
+
+  const breadcrumbs = React.useMemo(() => {
+    return location.pathname.split('/').filter((path) => path)
+  }, [location.pathname])
+
+  console.log('Breadcrumbs:', breadcrumbs)
 
   // Function to handle scroll behavior
   const handleScroll = () => {
@@ -133,16 +106,24 @@ const Layout = () => {
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
-            {/* <Breadcrumb>
+            <Breadcrumb>
               <BreadcrumbList>
                 {breadcrumbs.map((crumb, index) => (
-                  <BreadcrumbItem key={index}>
-                    {crumb.title}
+                  <BreadcrumbItem key={index} className="select-none">
+                    <Link
+                      to={`/${breadcrumbs.slice(0, index + 1).join('/')}`}
+                      className="hover:underline"
+                    >
+                      {crumb
+                        .replaceAll('-', ' ')
+                        .replaceAll('%20', ' ')
+                        .toUpperCase()}
+                    </Link>
                     {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
                   </BreadcrumbItem>
                 ))}
               </BreadcrumbList>
-            </Breadcrumb> */}
+            </Breadcrumb>
           </div>
           <div className="mr-4">
             <ModeToggle />

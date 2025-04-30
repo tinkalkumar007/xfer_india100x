@@ -1,12 +1,12 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronDown } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod'
+import { ChevronDown } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
-import { cn } from "@/lib/utils";
-import { toast } from "@/hooks/use-toast";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { useTheme } from "@/components/theme-provider";
+import { cn } from '@/lib/utils'
+import { toast } from '@/hooks/use-toast'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { useTheme } from '@/components/theme-provider'
 import {
   Form,
   FormControl,
@@ -15,31 +15,31 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+} from '@/components/ui/form'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 const appearanceFormSchema = z.object({
-  theme: z.enum(["light", "dark", "system"], {
-    required_error: "Please select a theme.",
+  theme: z.enum(['light', 'dark', 'system'], {
+    required_error: 'Please select a theme.',
   }),
-});
+})
 
 // This can come from your database or API.
 
 export default function AppearanceForm() {
-  const { theme } = useTheme();
+  const { theme } = useTheme()
   const form = useForm({
     resolver: zodResolver(appearanceFormSchema),
     defaultValues: {
       theme,
     },
-  });
+  })
 
-  const { setTheme } = useTheme();
+  const { setTheme } = useTheme()
 
   function onSubmit(data) {
     // console.log(data)
-    setTheme(data.theme);
+    setTheme(data.theme)
   }
 
   return (
@@ -86,7 +86,7 @@ export default function AppearanceForm() {
               <FormMessage />
               <RadioGroup
                 onValueChange={field.onChange}
-                defaultValue={field.defaultValue}
+                defaultValue={theme}
                 className="grid max-w-[45rem] grid-cols-3 gap-8 pt-2"
               >
                 <FormItem>
@@ -175,5 +175,5 @@ export default function AppearanceForm() {
         <Button type="submit">Update preferences</Button>
       </form>
     </Form>
-  );
+  )
 }

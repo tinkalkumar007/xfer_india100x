@@ -31,48 +31,15 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
-import { Link, useLocation, useSearchParams, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { saveAs } from 'file-saver'
 import * as Papa from 'papaparse'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 
-import { DataTablePagination } from '@/components/DataTablePagination'
 import {
-  ArrowUpDown,
-  ChevronDown,
-  ArrowLeft,
-  ArrowRight,
-  CirclePlus,
-  MoreHorizontal,
-  Check,
-  Pencil,
-  Trash2,
-  CircleX,
-  FileDown,
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
   Phone,
-  Layers,
   CreditCard,
-  Users,
-  Activity,
-  DollarSign,
-  Grid,
-  User,
-  IndianRupee,
   Download,
   Mail,
   LocateIcon,
@@ -95,19 +62,10 @@ import {
 } from '@tanstack/react-table'
 import DataTableViewOptions from '../../components/DataTableViewOptions'
 import DataTableToolbar from '../../components/DataTableToolbar'
+import Error404 from '@/pages/Error404/Error404'
 import { status } from '@/data/program-manager-data'
+import { useFrappeGetDoc } from 'frappe-react-sdk'
 
-const data = [
-  {
-    product_name: 'Shopping',
-    product_img: OnoLogo,
-    product_category: 'Monthly Expense',
-    card_nature: 'Virtual',
-    price: 200,
-    quantity: 10,
-    total_amount: 2000,
-  },
-]
 const items = [
   {
     id: 1,
@@ -137,6 +95,24 @@ const items = [
 ]
 
 const OrderDetails = () => {
+  const { id } = useParams()
+
+  const navigate = useNavigate()
+
+  const {
+    data: orderDetails,
+    isLoading: orderDetailsLoading,
+    error: errorFetchingOrder,
+  } = useFrappeGetDoc('Inventory', id)
+
+  if (!orderDetailsLoading && errorFetchingOrder) {
+    console.log('Order Details: ', errorFetchingOrder.httpStatus)
+  }
+
+  if (errorFetchingOrder) {
+    navigate('/error404')
+  }
+
   const downloadCSV = () => {
     // Convert table data to CSV
     const csv = Papa.unparse(data)
@@ -146,17 +122,17 @@ const OrderDetails = () => {
     saveAs(blob, 'table-data.csv')
   }
 
-  const { id } = useParams()
-
   return (
     <div className="relative w-full flex flex-col md:flex-row gap-2">
       <div className="w-full xl:flex-row gap-2 flex flex-col mt-2">
         <div className="xl:w-[70%] w-full flex flex-col gap-4">
           <div className="h-16 bg-muted/50 rounded-md border shadow-sm flex items-center justify-between px-4 text-md font-medium">
             <div className="flex flex-col">
-              <h2>Order ID : 125467</h2>
+              <h2>Order ID : {orderDetails?.order_id}</h2>
               <div className="flex gap-2">
-                <p className="text-muted-foreground text-sm">Manager : ONO</p>
+                <p className="text-muted-foreground text-sm">
+                  Manager : {orderDetails?.owner}
+                </p>
               </div>
             </div>
             <div className="flex gap-2">
@@ -180,37 +156,34 @@ const OrderDetails = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {data.map((product) => (
-                      <TableRow key={product.product_name}>
+                    {orderDetails?.table_ccph?.map((item) => (
+                      <TableRow key={item.program_name}>
                         <TableCell className="min-w-[350px]">
                           <div className="flex items-center gap-3 justify-start">
                             <div className="bg-muted/50 rounded-md min-w-20 flex items-center justify-center">
                               <img
-                                src={product.product_img}
+                                src={''}
                                 className="h-20 min-w-20"
                                 alt="Image"
                               />
                             </div>
                             <div className="space-y-1">
                               <p className="text-sm font-medium">
-                                {product.product_name}
+                                {item.program_name}
                               </p>
                               <div className="space-y-1">
                                 <p className="text-xs font-medium">
-                                  Category : {product.product_category}
-                                </p>
-                                <p className="text-xs font-medium">
-                                  Card Nature : {product.card_nature}
+                                  Category : {item.program_category}
                                 </p>
                               </div>
                             </div>
                           </div>
                         </TableCell>
 
-                        <TableCell>&#8377;{product.price}</TableCell>
-                        <TableCell>{product.quantity}</TableCell>
+                        <TableCell>&#8377;{item?.price}</TableCell>
+                        <TableCell>{item?.number_of_cards}</TableCell>
                         <TableCell className="text-right">
-                          &#8377;{product.total_amount}
+                          &#8377;{item?.number_of_cards * item?.price}
                         </TableCell>
                       </TableRow>
                     ))}
@@ -222,7 +195,12 @@ const OrderDetails = () => {
                         Total
                       </TableCell>
                       <TableCell className="text-right text-xl font-semibold">
-                        &#8377;2,000.00
+                        &#8377;{' '}
+                        {orderDetails?.table_ccph?.reduce(
+                          (acc, item) =>
+                            acc + item?.number_of_cards * item?.price,
+                          0
+                        )}
                       </TableCell>
                     </TableRow>
                   </TableFooter>
@@ -256,9 +234,11 @@ const OrderDetails = () => {
                   />
                 </div>
                 <div className="flex flex-col justify-center items-center mt-[-20px]">
-                  <p className="text-lg font-semibold">ID : 12635</p>
+                  <p className="text-lg font-semibold">
+                    ID : {orderDetails?.order_id}
+                  </p>
                   <div className="text-sm font-semibold">
-                    Payment mode : Online
+                    Payment mode : {orderDetails?.mode?.toUpperCase()}
                   </div>
                 </div>
               </div>
@@ -271,7 +251,7 @@ const OrderDetails = () => {
                   <Timeline>
                     {items.map((item, index) => {
                       return (
-                        <>
+                        <div key={index}>
                           <TimelineItem>
                             {index === items.length - 1 ? null : (
                               <TimelineConnector />
@@ -291,7 +271,7 @@ const OrderDetails = () => {
                               </TimelineDescription>
                             </TimelineContent>
                           </TimelineItem>
-                        </>
+                        </div>
                       )
                     })}
                   </Timeline>
@@ -337,21 +317,23 @@ const OrderDetails = () => {
                     src="https://github.com/shadcn.png"
                     alt="@shadcn"
                   />
-                  <AvatarFallback>CN</AvatarFallback>
+                  <AvatarFallback>
+                    {orderDetails?.owner?.charAt(0)}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
-                  <p className="text-sm font-medium">Joseph Parker</p>
-                  <p className="text-xs font-medium">Customer</p>
+                  <p className="text-sm font-medium">{orderDetails?.owner}</p>
+                  <p className="text-xs font-medium">Created By</p>
                 </div>
               </div>
               <div className="flex flex-col px-4 gap-4">
                 <div className="text-sm font-medium flex items-center gap-1">
                   <Mail size={18} strokeWidth={1.5} />
-                  Joseph@gmail.com
+                  <p>dummy@gmail.com</p>
                 </div>
                 <div className="text-sm font-medium flex items-center gap-1">
                   <Phone size={18} strokeWidth={1.5} />
-                  +914858659874
+                  <p>+dummy</p>
                 </div>
               </div>
             </div>
@@ -365,13 +347,13 @@ const OrderDetails = () => {
             </div>
             <Separator className="mt-[-20px]" />
             <div className="px-4 flex flex-col gap-2">
-              <p className="text-md font-medium">Joseph Parker</p>
-              <p className="text-sm font-medium">+919876787898</p>
-              <p className="text-sm font-medium">Laxmi Nagar, New Delhi</p>
-              <p className="text-sm font-medium">India</p>
+              <p className="text-md font-medium">{orderDetails?.owner}</p>
+              <p className="text-sm font-medium">+dummy</p>
+              <p className="text-sm font-medium">{`${orderDetails?.address_line_1}, ${orderDetails?.address_line_2}, ${orderDetails?.city}, ${orderDetails?.pin_code}`}</p>
+              <p className="text-sm font-medium">{orderDetails?.country}</p>
             </div>
           </div>
-          <div className="w-full flex rounded-md flex-col bg-muted/50 gap-4 pb-8 border">
+          {/* <div className="w-full flex rounded-md flex-col bg-muted/50 gap-4 pb-8 border">
             <div className="h-16 flex items-center gap-2 px-4 text-md font-medium">
               <MapPinIcon size={18} strokeWidth={1.5} />
               <p className="hover:underline cursor-pointer text-md">
@@ -385,7 +367,7 @@ const OrderDetails = () => {
               <p className="text-sm font-medium">Laxmi Nagar, New Delhi</p>
               <p className="text-sm font-medium">India</p>
             </div>
-          </div>
+          </div> */}
           <div className="w-full flex rounded-md flex-col bg-muted/50 gap-4 pb-8 border">
             <div className="h-16 flex items-center gap-2 px-4 text-md font-medium">
               <CreditCard size={18} strokeWidth={1.5} />
@@ -395,14 +377,14 @@ const OrderDetails = () => {
             </div>
             <Separator className="mt-[-20px]" />
             <div className="px-4 flex flex-col gap-2">
-              <p className="text-md font-medium">Transaction : #123223</p>
-              <p className="text-sm font-medium">Payment Method : Debit Card</p>
-              <p className="text-sm font-medium">
-                Card Holder Name : Joseph Parker
+              <p className="text-md font-medium">
+                Transaction : #{orderDetails?.transaction_id}
               </p>
               <p className="text-sm font-medium">
-                Card Number : xxxx xxxx xxxx 3245
+                Payment Method : {orderDetails?.mode?.toUpperCase()}{' '}
               </p>
+              <p className="text-sm font-medium">Card Holder Name : Dummy</p>
+              <p className="text-sm font-medium">Card Number : xxxx Dummy</p>
             </div>
           </div>
         </div>

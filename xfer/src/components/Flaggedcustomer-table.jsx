@@ -1,8 +1,10 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import {
   flexRender,
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
@@ -29,7 +31,9 @@ import {
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
@@ -73,6 +77,7 @@ import {
   useFrappeCreateDoc,
   useFrappeUpdateDoc,
   useFrappeGetDoc,
+  useFrappeGetDocCount,
 } from 'frappe-react-sdk'
 
 import {
@@ -85,6 +90,9 @@ import {
 } from '@/components/ui/table'
 import DataTableViewOptions from './DataTableViewOptions'
 import DataTableToolbar from './DataTableToolbar'
+import { useToast } from '@/hooks/use-toast'
+import Empty from './Empty'
+import { DatePickerWithRange } from './ui/daterange-picker'
 
 export function FlaggedCustomerTable() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
@@ -92,18 +100,61 @@ export function FlaggedCustomerTable() {
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const { toast } = useToast()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = parseInt(searchParams.get('page') || '0')
+  const limit = parseInt(searchParams.get('limit') || '1')
+  const customerStatus = searchParams.get('status') || ''
+
+  const filters = React.useMemo(() => {
+    return Array.from(searchParams.entries())
+      .map(([key, value]) => {
+        if (key === 'query') {
+          return ['name', 'like', `%${value}%`]
+        }
+        if (key === 'start') {
+          return ['modified', '>=', value]
+        }
+        if (key === 'end') {
+          return ['modified', '<=', value]
+        }
+        if (!(key === 'page') && !(key === 'limit')) {
+          return [key, '=', value]
+        }
+      })
+      .filter((item) => item !== undefined)
+  }, [searchParams])
+
+  const { data, isLoading } = useFrappeGetDocList('Customers', {
+    fields: ['name'],
+  })
 
   const { data: flaggedCustomersData, isLoading: flaggedCustomersLoading } =
     useFrappeGetDocList('Customers', {
       fields: ['*'],
-      filters: [['risk_category', 'not in', [null, undefined, '']]],
+      filters: [
+        ['risk_category', 'not in', [null, undefined, '']],
+        ...(searchParams.size > 0 ? [...filters] : []),
+      ],
+      limit_start: page * limit,
+      limit: limit,
     })
+
+  const { data: customerStatuses, isLoading: customerStatusesLoading } =
+    useFrappeGetDocList('Customer Status', {
+      fields: ['name'],
+    })
+
+  const { data: totalCount, isLoading: totalCountLoading } =
+    useFrappeGetDocCount('Customers', searchParams.size > 0 && filters)
+
   const tableData = React.useMemo(() => {
     if (!flaggedCustomersData) return []
     return flaggedCustomersData?.map((customer) => ({
       id: customer.name,
       first_name: customer.first_name,
       last_name: customer.last_name,
+      customer_name: `${customer.first_name} ${customer.last_name}`,
       risk_priority: customer.risk_category,
       last_active: customer.modified,
       remark: customer.remark,
@@ -155,7 +206,7 @@ export function FlaggedCustomerTable() {
       accessorKey: 'id',
       header: 'Customer ID',
       cell: ({ row }) => (
-        <Link to={`/customers/customer/${row.original.id}`}>
+        <Link to={`/customers/${row.original.id}`}>
           <div className="capitalize text-center hover:underline">
             {row.original?.id}
           </div>
@@ -163,7 +214,7 @@ export function FlaggedCustomerTable() {
       ),
     },
     {
-      accessorKey: 'name',
+      accessorKey: 'customer_name',
       header: 'Name',
       cell: ({ row }) => (
         <div className="capitalize text-center">
@@ -210,20 +261,16 @@ export function FlaggedCustomerTable() {
       header: 'Priority',
       cell: ({ row }) => {
         const priority = row.original?.risk_priority
-        return (
-          <div className="text-center">
-            {priority === '' && '-'}
-            {priority === 'High' && (
-              <Badge className="bg-[#fff0f0] text-[#b52a2a]">High</Badge>
-            )}
-            {priority === 'Low' && (
-              <Badge className="bg-[#fff7d3] text-[#ab6e05]">Low</Badge>
-            )}
-            {priority === 'Medium' && (
-              <Badge className="bg-[#e3f2fd] text-[#1976d2]">Medium</Badge>
-            )}
-          </div>
-        )
+        switch (priority) {
+          case 'Low':
+            return <Badge variant="outline">{priority}</Badge>
+          case 'High':
+            return <Badge variant="outline">{priority}</Badge>
+          case 'Medium':
+            return <Badge variant="outline">{priority}</Badge>
+          default:
+            return <Badge variant="outline">{priority}</Badge>
+        }
       },
     },
     // {
@@ -262,59 +309,108 @@ export function FlaggedCustomerTable() {
   const table = useReactTable({
     data: tableData,
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
-      columnFilters,
       columnVisibility,
       rowSelection,
-    },
-    initialState: {
+      columnFilters,
       pagination: {
-        pageSize: 5, // Set page size to 5
+        pageIndex: page,
+        pageSize: limit,
       },
     },
+    enableRowSelection: true,
+    manualPagination: true,
+    pageCount: Math.ceil(((!totalCountLoading && totalCount) || 0) / limit),
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
   })
 
-  const openDialog = (rowData) => {
-    setIsDialogOpen(true)
-  }
-
-  const closeDialog = () => {
-    setIsDialogOpen(false)
-    // Clear any row data when canceled
-  }
   const downloadCSV = () => {
+    if (!tableData || tableData.length === 0) {
+      toast({
+        title: 'No data available to download',
+      })
+      return
+    }
     // Convert table data to CSV
-    const csv = Papa.unparse(data)
+    const csv = Papa.unparse(tableData)
     // Create a Blob object for the CSV
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
     // Use FileSaver to trigger a download
     saveAs(blob, 'table-data.csv')
   }
+  if (!isLoading && data?.length === 0) {
+    return (
+      <Empty
+        heading="No Customers Found."
+        subHeading="No suspicious activity detected."
+        buttonText="Contact Us"
+      />
+    )
+  }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Flagged Customer List</CardTitle>
+        <CardTitle>FLAGGED CUSTOMERS LIST</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="w-full">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
-            <div className="w-full">
-              {/* <DataTableToolbar
-                table={table}
-                inputFilter="product_name"
-                program_manager={program_manager}
-                priority={priority}
-              /> */}
+            <div className="w-full flex gap-4 items-center">
+              <div className="w-[25%]">
+                <DataTableToolbar />
+              </div>
+              <div className="flex gap-4 items-center">
+                <Select
+                  value={customerStatus ? customerStatus : 'All Statuses'}
+                  onValueChange={(value) => {
+                    setSearchParams((prev) => {
+                      const newParams = new URLSearchParams(prev) // ✅ Clone previous params
+
+                      if (value === 'All Statuses') {
+                        newParams.delete('status')
+                      } else {
+                        newParams.set('status', value)
+                        newParams.set('page', 0)
+                      }
+                      return newParams // ✅ Return a new object
+                    })
+                  }}
+                >
+                  <SelectTrigger className="w-[180px] h-8">
+                    <SelectValue placeholder="Select the status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Status</SelectLabel>
+                      <SelectItem value="All Statuses">All Statuses</SelectItem>
+                      {customerStatusesLoading ? (
+                        <SelectItem value="Loading" disabled></SelectItem>
+                      ) : (
+                        customerStatuses?.map((status) => (
+                          <SelectItem key={status.name} value={status.name}>
+                            {status.name}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+
+                <div className="flex gap-2 items-center">
+                  <DatePickerWithRange />
+                </div>
+              </div>
             </div>
             <div className="flex gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>
@@ -345,46 +441,31 @@ export function FlaggedCustomerTable() {
                 ))}
               </TableHeader>
               <TableBody>
-                {table.getRowModel().rows?.length ? (
+                {flaggedCustomersLoading ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      <div className="w-full h-full flex justify-center items-center">
+                        <div className="spinner w-14 h-14 rounded-full border-4 border-gray-200 border-r-blue-500 animate-spin"></div>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row) => (
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && 'selected'}
                     >
-                      {row.getVisibleCells().map((cell) => {
-                        // Define which columns should be clickable
-                        const clickableColumns = [
-                          'customerId',
-                          'ProgramManager',
-                        ] // List of clickable column keys
-
-                        return (
-                          <TableCell className="text-center" key={cell.id}>
-                            {clickableColumns.includes(cell.column.id) ? (
-                              // If the column is in the clickable list, render a clickable element (e.g., link or button)
-                              <button
-                                onClick={() => handleClick(cell.row.original)}
-                                style={{
-                                  background: 'transparent',
-                                  border: 'none',
-                                  cursor: 'pointer',
-                                }}
-                              >
-                                {flexRender(
-                                  cell.column.columnDef.cell,
-                                  cell.getContext()
-                                )}
-                              </button>
-                            ) : (
-                              // Otherwise, render the regular cell content
-                              flexRender(
-                                cell.column.columnDef.cell,
-                                cell.getContext()
-                              )
-                            )}
-                          </TableCell>
-                        )
-                      })}
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id} className="text-center">
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
                     </TableRow>
                   ))
                 ) : (

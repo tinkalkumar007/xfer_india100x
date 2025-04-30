@@ -1,5 +1,6 @@
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Layers } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
 
 import { NavUser } from '@/components/nav-user'
 import {
@@ -64,103 +65,8 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
-
-const sidebarData = {
-  overview: [
-    {
-      title: 'Business Dashboard',
-      url: '/business-dashboard',
-      icon: LayoutDashboard, // Dashboard layout icon for business overview
-    },
-    {
-      title: 'System Dashboard',
-      url: '/system-dashboard',
-      icon: Monitor, // Monitor icon for system overview
-    },
-  ],
-  program_management: [
-    {
-      title: 'Programs',
-      url: '/programs',
-      icon: ClipboardList, // Represents a list of programs
-    },
-    // {
-    //   title: "Program Managers",
-    //   url: "/program-managers",
-    //   icon: Users,
-    // },
-  ],
-  card_management: [
-    {
-      title: 'Inventory',
-      url: '/inventory',
-      icon: Box, // Box icon for inventory
-    },
-    {
-      title: 'Issued Cards',
-      url: '/issued-cards',
-      icon: CreditCard, // Card icon for issued cards
-    },
-  ],
-  customers: [
-    {
-      title: 'All Customers',
-      url: '/all-customers',
-      icon: UserCheck, // User check icon for all verified customers
-    },
-    {
-      title: 'Flagged Customers',
-      url: '/flagged-customers',
-      icon: Flag, // Flag icon for flagged customers
-    },
-    {
-      title: 'Pending for KYC',
-      url: '/pending-for-kyc',
-      icon: FileText, // Document icon for pending KYC
-    },
-  ],
-  fund_management: [
-    {
-      title: 'Pool Accounts',
-      url: '/pool-accounts',
-      icon: Landmark, // Landmark icon for pool accounts
-    },
-    {
-      title: 'Funding Transactions',
-      url: '/funding-transactions',
-      icon: DollarSign, // Dollar icon for funding transactions
-    },
-  ],
-  user_management: [
-    // {
-    //   title: 'System Users',
-    //   url: '/system-users',
-    //   icon: UserCog,
-    // },
-    {
-      title: 'User Activity Logs',
-      url: '/user-activity-logs',
-      icon: Activity, // Activity icon for logs
-    },
-  ],
-  settings: [
-    {
-      title: 'Security Settings',
-      url: '/security-settings',
-      icon: ShieldAlert, // Shield icon for security
-    },
-    {
-      title: 'API Settings',
-      url: '/api-settings',
-      icon: Key, // Key icon for API settings
-    },
-    {
-      title: 'Default Configs',
-      url: '/default-configs',
-      icon: Settings, // General settings icon for default configurations
-    },
-  ],
-}
+import { useFrappeGetDocList, useFrappeGetDocCount } from 'frappe-react-sdk'
+import { useMemo } from 'react'
 
 export function AppSidebar({ ...props }) {
   const location = useLocation()
@@ -172,6 +78,113 @@ export function AppSidebar({ ...props }) {
       toggle()
     }
   }
+
+  const { data: programCount, isLoading: programCountLoading } =
+    useFrappeGetDocCount('Program')
+
+  const { data: inventoryCount, isLoading: inventoryCountLoading } =
+    useFrappeGetDocCount('Inventory')
+
+  const { data: cardCount, isLoading: cardCountLoading } =
+    useFrappeGetDocCount('Cards')
+
+  const { data: customerCount, isLoading: customerCountLoading } =
+    useFrappeGetDocCount('Customers')
+
+  const { data: poolAccountCount, isLoading: poolAccountCountLoading } =
+    useFrappeGetDocCount('Pool Account')
+
+  const {
+    data: fundingTransactionCount,
+    isLoading: fundingTransactionCountLoading,
+  } = useFrappeGetDocCount('Funding Transactions')
+
+  const { data: activityLogCount, isLoading: activityLogCountLoading } =
+    useFrappeGetDocCount('Activity Log')
+
+  const sidebarData = {
+    overview: [
+      {
+        title: 'BUSINESS DASHBOARD',
+        url: '/business-dashboard',
+        icon: LayoutDashboard,
+        count: null,
+      },
+      {
+        title: 'SYSTEM DASHBOARD',
+        url: '/system-dashboard',
+        icon: Monitor,
+        count: null,
+      },
+    ],
+    program_management: [
+      {
+        title: 'PROGRAMS',
+        url: '/programs',
+        icon: ClipboardList,
+        count: programCountLoading ? null : programCount || 0,
+      },
+    ],
+    card_management: [
+      {
+        title: 'INVENTORY',
+        url: '/inventory',
+        icon: Box,
+        count: inventoryCountLoading ? null : inventoryCount || 0,
+      },
+      {
+        title: 'ISSUED CARDS',
+        url: '/issued-cards',
+        icon: CreditCard,
+        count: cardCountLoading ? null : cardCount || 0,
+      },
+    ],
+    customers: [
+      {
+        title: 'ALL CUSTOMERS',
+        url: '/all-customers',
+        icon: UserCheck,
+        count: customerCount,
+      },
+      {
+        title: 'FLAGGED CUSTOMERS',
+        url: '/flagged-customers',
+        icon: Flag,
+        count: customerCount,
+      },
+      {
+        title: 'PENDING KYC CUSTOMERS',
+        url: '/pending-kyc-customers',
+        icon: FileText,
+        count: customerCount,
+      },
+    ],
+    fund_management: [
+      {
+        title: 'POOL ACCOUNTS',
+        url: '/pool-accounts',
+        icon: Landmark,
+        count: poolAccountCountLoading ? null : poolAccountCount || 0,
+      },
+      {
+        title: 'FUNDING TRANSACTIONS',
+        url: '/funding-transactions',
+        icon: DollarSign,
+        count: fundingTransactionCountLoading
+          ? null
+          : fundingTransactionCount || 0,
+      },
+    ],
+    user_management: [
+      {
+        title: 'User Activity Logs',
+        url: '/user-activity-logs',
+        icon: Activity,
+        count: activityLogCountLoading ? null : activityLogCount || 0,
+      },
+    ],
+  }
+
   return (
     <Sidebar collapsible="icon" variant="inset" {...props}>
       <SidebarHeader>
@@ -195,20 +208,33 @@ export function AppSidebar({ ...props }) {
         <SidebarGroup>
           <SidebarGroupLabel>Overview</SidebarGroupLabel>
           <SidebarMenu>
-            {sidebarData?.overview.map((item) => (
+            {sidebarData?.overview?.map((item) => (
               <Collapsible key={item.title} asChild>
                 <SidebarMenuItem>
-                  <SidebarMenuButton
-                    asChild
-                    tooltip={item.title}
-                    isActive={location.pathname === item.url}
-                    onClick={handleItemClick}
-                  >
-                    <NavLink to={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </NavLink>
-                  </SidebarMenuButton>
+                  <div className="relative">
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={item.title}
+                      isActive={location.pathname === item.url}
+                      onClick={handleItemClick}
+                    >
+                      <NavLink to={item.url}>
+                        <item.icon />
+                        <div className="relative">
+                          <span>{item.title}</span>
+                          {item.count && (
+                            <Badge
+                              className="absolute -top-0 -right-7 bg-muted/50 rounded-full px-2 py-0.5 text-xs font-medium"
+                              variant="primary"
+                            >
+                              {item.count}
+                            </Badge>
+                          )}
+                        </div>
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </div>
+
                   {item.items?.length ? (
                     <>
                       <CollapsibleTrigger asChild>
@@ -242,7 +268,7 @@ export function AppSidebar({ ...props }) {
           <SidebarMenu>
             {sidebarData?.program_management
               // Filter logic
-              .map((item) => (
+              ?.map((item) => (
                 <Collapsible key={item.title} asChild>
                   <SidebarMenuItem>
                     <SidebarMenuButton
@@ -252,8 +278,17 @@ export function AppSidebar({ ...props }) {
                       onClick={handleItemClick}
                     >
                       <NavLink to={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
+                        <div className="relative">
+                          <span>{item.title}</span>
+                          {item.count ? (
+                            <Badge
+                              className="absolute -top-0 -right-7 bg-muted/50 rounded-full px-2 py-0.5 text-xs font-medium"
+                              variant="primary"
+                            >
+                              {item.count}
+                            </Badge>
+                          ) : null}
+                        </div>
                       </NavLink>
                     </SidebarMenuButton>
                     {item.items?.length ? (
@@ -287,7 +322,7 @@ export function AppSidebar({ ...props }) {
         <SidebarGroup>
           <SidebarGroupLabel>Card Management</SidebarGroupLabel>
           <SidebarMenu>
-            {sidebarData?.card_management.map((item) => (
+            {sidebarData?.card_management?.map((item) => (
               <Collapsible key={item.title} asChild>
                 <SidebarMenuItem>
                   <SidebarMenuButton
@@ -332,7 +367,7 @@ export function AppSidebar({ ...props }) {
         <SidebarGroup>
           <SidebarGroupLabel>Customers</SidebarGroupLabel>
           <SidebarMenu>
-            {sidebarData?.customers.map((item) => (
+            {sidebarData?.customers?.map((item) => (
               <Collapsible key={item.title} asChild>
                 <SidebarMenuItem>
                   <SidebarMenuButton
@@ -377,7 +412,7 @@ export function AppSidebar({ ...props }) {
         <SidebarGroup>
           <SidebarGroupLabel>Fund Management</SidebarGroupLabel>
           <SidebarMenu>
-            {sidebarData?.fund_management.map((item) => (
+            {sidebarData?.fund_management?.map((item) => (
               <Collapsible key={item.title} asChild>
                 <SidebarMenuItem>
                   <SidebarMenuButton
@@ -422,7 +457,7 @@ export function AppSidebar({ ...props }) {
         <SidebarGroup>
           <SidebarGroupLabel>User Management</SidebarGroupLabel>
           <SidebarMenu>
-            {sidebarData?.user_management.map((item) => (
+            {sidebarData?.user_management?.map((item) => (
               <Collapsible key={item.title} asChild>
                 <SidebarMenuItem>
                   <SidebarMenuButton

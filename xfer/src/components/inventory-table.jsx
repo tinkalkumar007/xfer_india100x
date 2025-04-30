@@ -1,64 +1,9 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
-import DataTableFacetedFilter from '@/components/DataTableFacetedFilter'
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet'
+import { Link, useSearchParams } from 'react-router-dom'
+
 import DataTableViewOptions from '@/components/DataTableViewOptions'
 
-import {
-  ArrowUpDown,
-  ChevronDown,
-  ArrowLeft,
-  ArrowRight,
-  CirclePlus,
-  MoreHorizontal,
-  Check,
-  Pencil,
-  Trash2,
-  CircleX,
-  FileDown,
-  ChevronLeft,
-  ChevronsLeft,
-  ChevronRight,
-  ChevronsRight,
-  X,
-  Plus,
-} from 'lucide-react'
-
-import {
-  AlertDialog,
-  AlertDialogTitle,
-  AlertDialogContent,
-  AlertDialogTrigger,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogDescription,
-} from '@/components/ui/alert-dialog'
-import { status, card_nature } from '../data/inventory-data'
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { FileDown } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -69,19 +14,31 @@ import {
   CardTitle,
   CardDescription,
 } from '@/components/ui/card'
-import { DataTablePagination } from '@/components/DataTablePagination'
 import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { DataTablePagination } from '@/components/DataTablePagination'
+
 import { saveAs } from 'file-saver'
 import * as Papa from 'papaparse'
-import { Input } from '@/components/ui/input'
+
+import {
+  flexRender,
+  getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
+
 import {
   Table,
   TableBody,
@@ -93,149 +50,84 @@ import {
 import { Badge } from '@/components/ui/badge'
 import DataTableToolbar from './DataTableToolbar'
 import CreateOrder from '../pages/CreateOrder/CreateOrder'
-import { useFrappeGetDocList } from 'frappe-react-sdk'
-
-const fieldIconMap = {
-  approved: {
-    icon: <Badge className="bg-[#e4f5e9] text-[#16794c]">Approved</Badge>,
-    label: 'Approved',
-  },
-  rejected: {
-    icon: <Badge className="bg-[#fff0f0] text-[#b52a2a]">Rejected</Badge>,
-    label: 'Rejected',
-  },
-
-  progress: {
-    icon: <Badge className="bg-[#F5FBFC] text-[#267A94]">Progress</Badge>,
-    label: 'Progress',
-  },
-}
-const data = [
-  {
-    product_id: 1,
-    product_name: 'Smartphone',
-    product_category: 'Example',
-    card_nature: 'virtual',
-    ordered_cards: 10,
-    status: 'approved',
-    approved: true,
-    created_date: '12-01-2024',
-  },
-  {
-    product_id: 2,
-    product_name: 'Tablet',
-    product_category: 'Example',
-    card_nature: 'physical',
-    ordered_cards: 5,
-    status: 'progress',
-    progress: true,
-    created_date: '11-05-2023',
-  },
-  {
-    product_id: 3,
-    product_name: 'Headphones',
-    product_category: 'Example',
-    card_nature: 'physical',
-    ordered_cards: 2,
-    status: 'rejected',
-    rejected: true,
-    created_date: '10-03-2012',
-  },
-  {
-    product_id: 4,
-    product_name: 'Smartwatch',
-    product_category: 'Example',
-    card_nature: 'physical',
-    ordered_cards: 3,
-    status: 'progress',
-    progress: true,
-    created_date: '09-10-2023',
-  },
-  {
-    product_id: 5,
-    product_name: 'Keyboard',
-    product_category: 'Example',
-    card_nature: 'physical',
-    ordered_cards: 1,
-    status: 'approved',
-    approved: true,
-    created_date: '08-03-2023',
-  },
-  {
-    product_id: 6,
-    product_name: 'Mouse',
-    product_category: 'Example',
-    card_nature: 'physical',
-    ordered_cards: 4,
-    status: 'approved',
-    approved: true,
-    created_date: '07-05-2022',
-  },
-  {
-    product_id: 7,
-    product_name: 'Monitor',
-    product_category: 'Example',
-    card_nature: 'physical',
-    ordered_cards: 2,
-    status: 'rejected',
-    rejected: true,
-    created_date: '06-03-2021',
-  },
-  {
-    product_id: 8,
-    product_name: 'Mousepad',
-    product_category: 'Example',
-    card_nature: 'physical',
-    ordered_cards: 1,
-    status: 'progress',
-    progress: true,
-    created_date: '05-05-2005',
-  },
-  {
-    product_id: 9,
-    product_name: 'Mousepad',
-    product_category: 'Example',
-    card_nature: 'physical',
-    ordered_cards: 1,
-    status: 'progress',
-    progress: true,
-    created_date: '04-03-2024',
-  },
-  {
-    product_id: 10,
-    product_name: 'Mousepad',
-    product_category: 'Example',
-    card_nature: 'physical',
-    ordered_cards: 1,
-    status: 'progress',
-    progress: true,
-    created_date: '03-05-2023',
-  },
-]
+import {
+  useFrappeGetDocCount,
+  useFrappeGetDocList,
+  useSearch,
+} from 'frappe-react-sdk'
+import { useToast } from '@/hooks/use-toast'
+import Empty from './Empty'
+import { DatePickerWithRange } from './ui/daterange-picker'
 
 export function InventoryTable() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
+  const [date, setDate] = React.useState(undefined)
+  const [time, setTime] = React.useState(undefined)
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const [selectedFilter, setSelectedFilter] = React.useState('Today')
+  const { toast } = useToast()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = parseInt(searchParams.get('page') || '0')
+  const limit = parseInt(searchParams.get('limit') || '1')
+  const orderStatus = searchParams.get('status') || ''
 
-  const { data: inventoryData, isLoading: inventoryDataLoading } =
-    useFrappeGetDocList('Inventory', {
-      fields: ['*'],
+  const filters = React.useMemo(() => {
+    return Array.from(searchParams.entries())
+      .map(([key, value]) => {
+        if (key === 'query') {
+          return ['name', 'like', `%${value}%`]
+        }
+        if (key === 'start') {
+          return ['creation', '>=', value]
+        }
+        if (key === 'end') {
+          return ['creation', '<=', value]
+        }
+        if (!(key === 'page') && !(key === 'limit')) {
+          return [key, '=', value]
+        }
+      })
+      .filter((item) => item !== undefined)
+  }, [searchParams])
+
+  const { data, isLoading } = useFrappeGetDocList('Inventory', {
+    fields: ['name'],
+  })
+
+  const {
+    data: inventoryData,
+    isLoading: inventoryDataLoading,
+    mutate: inventoryRefetch,
+  } = useFrappeGetDocList('Inventory', {
+    fields: ['name', 'creation', 'total_amount', 'status'],
+    filters: searchParams.size > 0 && filters,
+    limit_start: page * limit,
+    limit: limit,
+  })
+
+  const { data: orderStatuses, isLoading: orderStatusesLoading } =
+    useFrappeGetDocList('Order Status', {
+      fields: ['name'],
     })
 
-  console.log(inventoryData)
+  if (!inventoryDataLoading) console.log('Inventory Data:', inventoryData)
+
+  const { data: totalCount, isLoading: totalCountLoading } =
+    useFrappeGetDocCount('Inventory', searchParams.size > 0 && filters)
+
+  console.log('Count: ', totalCount)
 
   const tableData = React.useMemo(() => {
     if (!inventoryData) return []
-    return inventoryData?.map((program) => ({
-      id: program.name, // Frappe's unique identifier
-      program_name: program.program_name,
-      category: program.category,
-      description: program.description,
-      status: inventoryData.status,
-      date: inventoryData.creation,
+    return inventoryData?.map((order) => ({
+      id: order.name,
+      order_id: order.name,
+      status: order.status,
+      amount: order.amount,
+      date: order.creation,
     }))
   }, [inventoryData])
 
@@ -263,176 +155,169 @@ export function InventoryTable() {
       enableHiding: false,
     },
     {
-      accessorKey: 'product_name',
-      header: 'Product Name',
+      accessorKey: 'order_id',
+      header: 'Order ID',
       cell: ({ row }) => {
-        const id = row.original.product_id
+        const id = row.original.order_id
         return (
-          <Link to={`/inventory/order-details/${id}`}>
+          <Link to={`/inventory/${id}`}>
             <div className="capitalize text-center cursor-pointer hover:underline">
-              {row.getValue('product_name')}
+              #{row.original?.order_id}
             </div>
           </Link>
         )
       },
     },
     {
-      accessorKey: 'product_category',
-      header: 'Product Category',
-      cell: ({ row }) => (
-        <div className="capitalize text-center">
-          {row.getValue('product_category')}
-        </div>
-      ),
-    },
-    {
-      accessorKey: 'card_nature',
-      header: 'Card Nature',
-      cell: ({ row }) => (
-        <div className="capitalize text-center">
-          {row.getValue('card_nature')}
-        </div>
-      ),
-    },
-    {
-      accessorKey: 'ordered_cards',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Ordered Cards
-            <ArrowUpDown />
-          </Button>
-        )
+      accessorKey: 'amount',
+      header: 'Order Amount',
+      cell: ({ row }) => {
+        const amount = row.original?.amount
+        {
+          return amount ? (
+            <div className="capitalize text-center cursor-pointer">
+              &#8377;{amount}
+            </div>
+          ) : (
+            <div className="capitalize text-center cursor-pointer">-</div>
+          )
+        }
       },
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue('ordered_cards')}</div>
-      ),
     },
-
     {
-      accessorKey: 'created_date',
-      header: 'Created Date',
+      accessorKey: 'date',
+      header: 'Order Date',
       cell: ({ row }) => (
-        <div className="lowercase text-center">
-          {row.getValue('created_date')}
+        <div className="capitalize text-center">
+          {row.original?.date
+            ?.split('.')[0]
+            .split(' ')[0]
+            .split('-')
+            .reverse()
+            .join('-')}
         </div>
       ),
     },
     {
       accessorKey: 'status',
       header: 'Status',
-      cell: ({ row }) => (
-        <div className="flex items-center justify-center gap-2">
-          {Object.keys(fieldIconMap).map((field) => {
-            if (row.original[field]) {
-              return (
-                <span
-                  key={field}
-                  className="flex items-center gap-1"
-                  title={fieldIconMap[field].label}
-                >
-                  {fieldIconMap[field].icon}
-                </span>
-              )
-            }
-            return null
-          })}
-        </div>
-      ),
+      cell: ({ row }) => {
+        const status = row.original?.status
+        if (!status) return <div>-</div>
+        switch (status) {
+          default:
+            return <Badge variant="primary">{status}</Badge>
+        }
+      },
     },
-    // {
-    //   accessorKey: 'actions',
-    //   header: '',
-    //   cell: ({ row }) => {
-    //     const rowData = row.original // Get the entire row's data for actions
-    //     return (
-    //       <DropdownMenu>
-    //         <DropdownMenuTrigger asChild>
-    //           <Button variant="ghost" className="h-8 w-8 p-0">
-    //             <span className="sr-only">Open menu</span>
-    //             <MoreHorizontal />
-    //           </Button>
-    //         </DropdownMenuTrigger>
-    //         <DropdownMenuContent align="end">
-    //           <DropdownMenuItem
-    //             className="cursor-pointer"
-    //             onClick={() => navigator.clipboard.writeText(payment.id)}
-    //           >
-    //             Approve
-    //           </DropdownMenuItem>
-    //           <DropdownMenuItem
-    //             className="cursor-pointer"
-    //             onClick={() => navigator.clipboard.writeText(payment.id)}
-    //           >
-    //             Reject
-    //           </DropdownMenuItem>
-    //         </DropdownMenuContent>
-    //       </DropdownMenu>
-    //     )
-    //   },
-    // },
   ]
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
-      columnFilters,
       columnVisibility,
       rowSelection,
-    },
-    initialState: {
+      columnFilters,
       pagination: {
-        pageSize: 5, // Set page size to 5
+        pageIndex: page,
+        pageSize: limit,
       },
     },
+    enableRowSelection: true,
+    manualPagination: true,
+    pageCount: Math.ceil(((!totalCountLoading && totalCount) || 0) / limit),
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
   })
 
-  const openDialog = (rowData) => {
-    setIsDialogOpen(true)
-  }
-
-  const closeDialog = () => {
-    setIsDialogOpen(false)
-    // Clear any row data when canceled
-  }
   const downloadCSV = () => {
+    if (!tableData || tableData.length === 0) {
+      toast({
+        title: 'No data available to download',
+      })
+      return
+    }
     // Convert table data to CSV
-    const csv = Papa.unparse(data)
+    const csv = Papa.unparse(tableData)
     // Create a Blob object for the CSV
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
     // Use FileSaver to trigger a download
     saveAs(blob, 'table-data.csv')
   }
 
-  const isFiltered = table.getState().columnFilters.length > 0
+  if (!isLoading && data?.length === 0) {
+    return (
+      <Empty
+        heading="No Orders Found."
+        subHeading="You have no order history."
+        buttonText="Create Order"
+        inventoryRefetch={inventoryRefetch}
+      />
+    )
+  }
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Inventory</CardTitle>
+        <CardTitle>INVENTORY</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="w-full">
-          <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
-            <div className="w-full">
-              <DataTableToolbar
-                table={table}
-                inputFilter="product_name"
-                status={status}
-                card_nature={card_nature}
-              />
+          <div className="w-full flex gap-2 justify-between items-center max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
+            <div className="w-full flex gap-4">
+              <div className="w-[25%]">
+                <DataTableToolbar />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Select
+                  value={orderStatus ? orderStatus : 'All Statuses'}
+                  onValueChange={(value) => {
+                    setSearchParams((prev) => {
+                      const newParams = new URLSearchParams(prev) // ✅ Clone previous params
+
+                      if (value === 'All Statuses') {
+                        newParams.delete('status')
+                      } else {
+                        newParams.set('status', value)
+                        newParams.set('page', 0)
+                      }
+                      return newParams // ✅ Return a new object
+                    })
+                  }}
+                >
+                  <SelectTrigger className="w-[180px] h-8">
+                    <SelectValue placeholder="Select the status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Status</SelectLabel>
+                      <SelectItem value="All Statuses">All Statuses</SelectItem>
+                      {orderStatusesLoading ? (
+                        <SelectItem value="Loading" disabled></SelectItem>
+                      ) : (
+                        orderStatuses?.map((status) => (
+                          <SelectItem key={status.name} value={status.name}>
+                            {status.name}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <div className="flex gap-2 items-center">
+                  <DatePickerWithRange />
+                </div>
+              </div>
             </div>
             <div className="flex gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>
@@ -440,7 +325,7 @@ export function InventoryTable() {
               </Button>
 
               <DataTableViewOptions table={table} />
-              <CreateOrder />
+              <CreateOrder inventoryRefetch={inventoryRefetch} />
             </div>
           </div>
           <div className="rounded-md border mt-3">
@@ -464,14 +349,25 @@ export function InventoryTable() {
                 ))}
               </TableHeader>
               <TableBody>
-                {table.getRowModel().rows?.length ? (
+                {inventoryDataLoading ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      <div className="w-full h-full flex justify-center items-center">
+                        <div className="spinner w-14 h-14 rounded-full border-4 border-gray-200 border-r-blue-500 animate-spin"></div>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row) => (
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && 'selected'}
                     >
                       {row.getVisibleCells().map((cell) => (
-                        <TableCell className="text-center" key={cell.id}>
+                        <TableCell key={cell.id} className="text-center">
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()

@@ -1,9 +1,11 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import axios from '@/api/axios'
 import {
   flexRender,
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
@@ -32,7 +34,9 @@ import {
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
@@ -79,102 +83,9 @@ import { Badge } from '@/components/ui/badge'
 import { status, program_manager } from '@/data/pending-kyc-data'
 import DataTableViewOptions from './DataTableViewOptions'
 import DataTableToolbar from './DataTableToolbar'
-import { useFrappeGetDocList } from 'frappe-react-sdk'
-
-const data = [
-  {
-    product_id: '1',
-    customerId: '123654789',
-    Name: 'Mona',
-    ProgramManager: 'Sales Card',
-    status: 'pending',
-    verificationRemarks: 'Resubmission Required',
-    submissionDate: '2022-10-05',
-  },
-  {
-    product_id: '2',
-    customerId: '123664789',
-    Name: 'John Doe',
-    ProgramManager: 'Platinum Card',
-    status: 'pending',
-    verificationRemarks: 'Address proof missing',
-    submissionDate: '2023-09-15',
-  },
-  {
-    product_id: '3',
-    customerId: '123654782',
-    Name: 'Sophia Smith',
-    ProgramManager: 'Business Loan',
-    status: 'under review',
-    verificationRemarks: 'Verification in progress',
-    submissionDate: '2023-11-01',
-  },
-  {
-    product_id: '4',
-    customerId: '123684789',
-    Name: 'Ethan Brown',
-    ProgramManager: 'Travel Card',
-    status: 'rejected',
-    verificationRemarks: 'ID proof mismatch',
-    submissionDate: '2023-08-20',
-  },
-  {
-    product_id: '5',
-    customerId: '123656554',
-    Name: 'Liam Wilson',
-    ProgramManager: 'Premium Savings',
-    status: 'pending',
-    verificationRemarks: 'Photo unclear, resubmit',
-    submissionDate: '2023-10-10',
-  },
-  {
-    product_id: '6',
-    customerId: '123654779',
-    Name: 'Emma Davis',
-    ProgramManager: 'Retail Finance',
-    status: 'under review',
-    verificationRemarks: 'Cross-verifying documents',
-    submissionDate: '2023-09-25',
-  },
-  {
-    product_id: '7',
-    customerId: '123654798',
-    Name: 'Oliver Martinez',
-    ProgramManager: 'Gold Card',
-    status: 'pending',
-    verificationRemarks: 'Bank statement not submitted',
-    submissionDate: '2023-10-02',
-  },
-  {
-    product_id: '8',
-    customerId: '189654789',
-    Name: 'Ava Taylor',
-    ProgramManager: 'Student Plan',
-    status: 'pending',
-    verificationRemarks: 'Document not signed',
-    submissionDate: '2023-11-15',
-  },
-  {
-    product_id: '9',
-    customerId: '123654756',
-    Name: 'Michael Johnson',
-    ProgramManager: 'Cashback Offers',
-    status: 'rejected',
-    verificationRemarks: 'Document not legible',
-    submissionDate: '2023-07-30',
-  },
-  {
-    product_id: '10',
-    customerId: '123654723',
-    Name: 'Emily Clark',
-    ProgramManager: 'Merchant Services',
-    status: 'under review',
-    verificationRemarks: 'Final verification stage',
-    submissionDate: '2023-11-10',
-  },
-]
-
-//console.log(data)
+import { useFrappeGetDocCount, useFrappeGetDocList } from 'frappe-react-sdk'
+import { useToast } from '@/hooks/use-toast'
+import Empty from './Empty'
 
 export function PendingKycTable() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
@@ -182,12 +93,51 @@ export function PendingKycTable() {
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const { toast } = useToast()
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const page = parseInt(searchParams.get('page') || '0')
+  const limit = parseInt(searchParams.get('limit') || '1')
+  const customerStatus = searchParams.get('kyc_level') || ''
+
+  const filters = Array.from(searchParams.entries())
+    .map(([key, value]) => {
+      if (key === 'query') {
+        return ['full_name', 'like', `%${value}%`]
+      }
+      if (!(key === 'page') && !(key === 'limit')) {
+        return [key, '=', value]
+      }
+    })
+    .filter((item) => item !== undefined)
+
+  const { data, isLoading } = useFrappeGetDocList('Customers', {
+    fields: ['name'],
+  })
 
   const { data: pendingCustomersData, isLoading: pendingCustomersDataLoading } =
     useFrappeGetDocList('Customers', {
       fields: ['*'],
-      filters: [['kyc_status', '!=', 'Active']],
+      filters: [
+        ['kyc_level', '=', 'Pending'],
+        ...(searchParams.size > 0 ? [...filters] : []),
+      ],
+      limit_start: page * limit,
+      limit: limit,
     })
+
+  const { data: kycLevel, isLoading: kycLevelLoading } = useFrappeGetDocList(
+    'KYC Level',
+    {
+      fields: ['name'],
+    }
+  )
+
+  const { data: totalCount, isLoading: totalCountLoading } =
+    useFrappeGetDocCount('Customers', [
+      ['kyc_level', '=', 'Pending'],
+      ...(searchParams.size > 0 ? [...filters] : []),
+    ])
 
   if (!pendingCustomersDataLoading) {
     console.log('Pending Customers Data:', pendingCustomersData)
@@ -199,8 +149,9 @@ export function PendingKycTable() {
       id: customer.name,
       first_name: customer.first_name,
       last_name: customer.last_name,
+      customer_name: `${customer.first_name} ${customer.last_name}`,
       last_active: customer.creation,
-      kyc_level: customer.kyc_status,
+      kyc_level: customer.kyc_level,
     }))
   }, [pendingCustomersData])
 
@@ -214,25 +165,6 @@ export function PendingKycTable() {
   }
 
   const columns = [
-    // {
-    //   accessorKey: 'product_id',
-    //   header: ({ column }) => {
-    //     return (
-    //       <Button
-    //         variant="ghost"
-    //         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-    //       >
-    //         Sr No
-    //         <ArrowUpDown />
-    //       </Button>
-    //     )
-    //   },
-    //   cell: ({ row }) => (
-    //     <div className="capitalize text-center">
-    //       {row.getValue('product_id')}
-    //     </div>
-    //   ),
-    // },
     {
       id: 'select',
       header: ({ table }) => (
@@ -259,7 +191,7 @@ export function PendingKycTable() {
       accessorKey: 'id',
       header: 'Customer ID',
       cell: ({ row }) => (
-        <Link to={`/customers/customer/${row.original.id}`}>
+        <Link to={`/customers/${row.original.id}`}>
           <div className="capitalize text-center hover:underline">
             {row.original.id}
           </div>
@@ -267,7 +199,7 @@ export function PendingKycTable() {
       ),
     },
     {
-      accessorKey: 'name',
+      accessorKey: 'customer_name',
       header: 'Name',
       cell: ({ row }) => (
         <div className="capitalize text-center">
@@ -299,119 +231,170 @@ export function PendingKycTable() {
       },
     },
     {
-      accessorKey: 'status',
-      header: 'Status',
+      accessorKey: 'kyc_level',
+      header: 'KYC Level',
       cell: ({ row }) => {
-        const kyc_level = row.original.kyc_level
+        const kyc_level = row.original?.kyc_level
 
         switch (kyc_level) {
-          case 'Pending':
+          case 'Basic':
             return (
-              <Badge className="bg-[#fff7d3] text-[#ab6e05]">{kyc_level}</Badge>
-            )
-          case 'Under Review':
-            return (
-              <Badge className="bg-[#e3f2fd] text-[#1976d2]">
-                Under Review
+              <Badge className="bg-[#fff7d3] text-[#ab6e05]" variant="outline">
+                {kyc_level}
               </Badge>
             )
-          case 'Rejected':
+          case 'Completed':
             return (
-              <Badge className="bg-[#ffe6e6] text-[#d32f2f]">Rejected</Badge>
+              <Badge className="bg-[#fff7d3] text-[#ab6e05]" variant="outline">
+                {kyc_level}
+              </Badge>
+            )
+          default:
+            return (
+              <Badge className="" variant="primary">
+                {kyc_level}
+              </Badge>
             )
         }
       },
     },
-    {
-      accessorKey: 'actions',
-      header: '',
-      cell: ({ row }) => {
-        const id = row.original.product_id
-        const rowData = row.original // Get the entire row's data for actions
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem className="cursor-pointer">
-                <Link to={`/programs/program/${id}`}>View Details</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => {
-                  handleCopy(rowData)
-                }}
-              >
-                Copy
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )
-      },
-    },
+    // {
+    //   accessorKey: 'actions',
+    //   header: '',
+    //   cell: ({ row }) => {
+    //     const id = row.original.product_id
+    //     const rowData = row.original // Get the entire row's data for actions
+    //     return (
+    //       <DropdownMenu>
+    //         <DropdownMenuTrigger asChild>
+    //           <Button variant="ghost" className="h-8 w-8 p-0">
+    //             <span className="sr-only">Open menu</span>
+    //             <MoreHorizontal />
+    //           </Button>
+    //         </DropdownMenuTrigger>
+    //         <DropdownMenuContent align="end">
+    //           <DropdownMenuItem className="cursor-pointer">
+    //             <Link to={`/programs/program/${id}`}>View Details</Link>
+    //           </DropdownMenuItem>
+    //           <DropdownMenuItem
+    //             className="cursor-pointer"
+    //             onClick={() => {
+    //               handleCopy(rowData)
+    //             }}
+    //           >
+    //             Copy
+    //           </DropdownMenuItem>
+    //         </DropdownMenuContent>
+    //       </DropdownMenu>
+    //     )
+    //   },
+    // },
   ]
 
   const table = useReactTable({
     data: tableData,
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
-      columnFilters,
       columnVisibility,
       rowSelection,
-    },
-    initialState: {
+      columnFilters,
       pagination: {
-        pageSize: 5, // Set page size to 5
+        pageIndex: page,
+        pageSize: limit,
       },
     },
+    enableRowSelection: true,
+    manualPagination: true,
+    pageCount: Math.ceil(((!totalCountLoading && totalCount) || 0) / limit),
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
   })
 
-  const openDialog = (rowData) => {
-    setIsDialogOpen(true)
-  }
-
-  const closeDialog = () => {
-    setIsDialogOpen(false)
-    // Clear any row data when canceled
-  }
-
   const downloadCSV = () => {
+    if (!tableData || tableData.length === 0) {
+      toast({
+        title: 'No data available to download',
+      })
+      return
+    }
     // Convert table data to CSV
-    const csv = Papa.unparse(data)
+    const csv = Papa.unparse(tableData)
     // Create a Blob object for the CSV
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
     // Use FileSaver to trigger a download
     saveAs(blob, 'table-data.csv')
   }
 
+  if (!isLoading && data?.length === 0) {
+    return (
+      <Empty
+        heading="No Customers Found!"
+        subHeading="No suspicious activity detected."
+        buttonText="Contact Us"
+      />
+    )
+  }
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Pending KYC List</CardTitle>
+        <CardTitle>PENDING KYC CUSTOMERS</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="w-full">
           <div className="w-full flex gap-2 justify-between max-md:flex-col max-md:gap-2 max-md:items-start max-md:w-[70%]">
-            <div className="w-full">
-              {/* <DataTableToolbar
-                table={table}
-                inputFilter="product_name"
-                program_manager={program_manager}
-                status={status}
-              /> */}
+            <div className="w-full flex gap-4">
+              <div className="w-[25%]">
+                <DataTableToolbar />
+              </div>
+              <div>
+                <Select
+                  value={customerStatus ? customerStatus : 'All Statuses'}
+                  onValueChange={(value) => {
+                    setSearchParams((prev) => {
+                      const newParams = new URLSearchParams(prev) // ✅ Clone previous params
+
+                      if (value === 'All Statuses') {
+                        newParams.delete('kyc_level')
+                      } else {
+                        newParams.set('kyc_level', value)
+                        newParams.set('page', 0)
+                      }
+                      return newParams // ✅ Return a new object
+                    })
+                  }}
+                >
+                  <SelectTrigger className="w-[180px] h-8">
+                    <SelectValue placeholder="Select the status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>KYC Level</SelectLabel>
+                      <SelectItem value="All Statuses">
+                        All KYC Levels
+                      </SelectItem>
+                      {kycLevelLoading ? (
+                        <SelectItem value="Loading" disabled></SelectItem>
+                      ) : (
+                        kycLevel?.map((level) => (
+                          <SelectItem key={level.name} value={level.name}>
+                            {level.name}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="flex gap-2 items-center">
               <Button variant="outline" className="h-8" onClick={downloadCSV}>
@@ -442,45 +425,31 @@ export function PendingKycTable() {
                 ))}
               </TableHeader>
               <TableBody>
-                {table.getRowModel().rows?.length ? (
+                {pendingCustomersDataLoading ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      <div className="w-full h-full flex justify-center items-center">
+                        <div className="spinner w-14 h-14 rounded-full border-4 border-gray-200 border-r-blue-500 animate-spin"></div>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row) => (
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && 'selected'}
                     >
-                      {row.getVisibleCells().map((cell) => {
-                        const clickableColumns = [
-                          'customerId',
-                          'ProgramManager',
-                        ] // List of clickable column keys
-
-                        return (
-                          <TableCell className="text-center" key={cell.id}>
-                            {clickableColumns.includes(cell.column.id) ? (
-                              // If the column is in the clickable list, render a clickable element (e.g., link or button)
-                              <button
-                                onClick={() => handleClick(cell.row.original)}
-                                style={{
-                                  background: 'transparent',
-                                  border: 'none',
-                                  cursor: 'pointer',
-                                }}
-                              >
-                                {flexRender(
-                                  cell.column.columnDef.cell,
-                                  cell.getContext()
-                                )}
-                              </button>
-                            ) : (
-                              // Otherwise, render the regular cell content
-                              flexRender(
-                                cell.column.columnDef.cell,
-                                cell.getContext()
-                              )
-                            )}
-                          </TableCell>
-                        )
-                      })}
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id} className="text-center">
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
                     </TableRow>
                   ))
                 ) : (

@@ -72,18 +72,18 @@ const WhitelistBIN = ({ bins, programDetailsLoading }) => {
               }
             })}
             {bins?.length > 4 && (
-              <div className="flex">
+              <div className="flex flex-wrap">
                 <HoverCard>
                   <HoverCardTrigger asChild>
                     <Button
-                      variant=""
-                      className="cursor-pointer tracking-wider h-6"
+                      variant="outline"
+                      className="cursor-pointer tracking-wider h-6 text-xs"
                     >
                       +{bins.length - 4} more
                     </Button>
                   </HoverCardTrigger>
                   <HoverCardContent className="w-80">
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 flex-wrap">
                       {bins?.map((code, _i) => {
                         if (_i > 3) {
                           return (

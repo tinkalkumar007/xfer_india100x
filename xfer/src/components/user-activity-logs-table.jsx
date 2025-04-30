@@ -1,11 +1,13 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   useReactTable,
 } from '@tanstack/react-table'
 import { DataTablePagination } from '@/components/DataTablePagination'
@@ -76,55 +78,9 @@ import {
 } from '@/components/ui/table'
 import DataTableViewOptions from './DataTableViewOptions'
 import DataTableToolbar from './DataTableToolbar'
-import { useFrappeGetDocList } from 'frappe-react-sdk'
-
-const data = [
-  {
-    product_id: '1',
-    team_member: 'Alice Johnson',
-    date: '01-12-2024',
-    event: 'Product Launch',
-    team: 'Marketing',
-    product: 'EduPal App',
-    ip_address: '192.168.1.1',
-  },
-  {
-    product_id: '2',
-    team_member: 'Bob Smith',
-    date: '02-12-2024',
-    event: 'Client Meeting',
-    team: 'Sales',
-    product: 'Golzo Platform',
-    ip_address: '192.168.1.2',
-  },
-  {
-    product_id: '3',
-    team_member: 'Charlie Brown',
-    date: '03-12-2024',
-    event: 'Bug Fix',
-    team: 'Development',
-    product: 'Call Recorder App',
-    ip_address: '192.168.1.3',
-  },
-  {
-    product_id: '4',
-    team_member: 'Diana Prince',
-    date: '04-12-2024',
-    event: 'Team Workshop',
-    team: 'Human Resources',
-    product: 'Employee Handbook',
-    ip_address: '192.168.1.4',
-  },
-  {
-    product_id: '5',
-    team_member: 'Evan Williams',
-    date: '05-12-2024',
-    event: 'Server Maintenance',
-    team: 'IT Support',
-    product: 'Internal Systems',
-    ip_address: '192.168.1.5',
-  },
-]
+import { useFrappeGetDocCount, useFrappeGetDocList } from 'frappe-react-sdk'
+import { useToast } from '@/hooks/use-toast'
+import Empty from './Empty'
 
 export function ActivityLogsTable() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
@@ -132,10 +88,24 @@ export function ActivityLogsTable() {
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const { toast } = useToast()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = parseInt(searchParams.get('page') || '0')
+  const limit = parseInt(searchParams.get('limit') || '1')
+
+  const { data, isLoading } = useFrappeGetDocList('Activity Log', {
+    fields: ['name'],
+  })
+
   const { data: activityLogsData, isLoading: activityLogsLoading } =
     useFrappeGetDocList('Activity Log', {
       fields: ['*'],
+      limit_start: page * limit,
+      limit: limit,
     })
+
+  const { data: totalCount, isLoading: totalCountLoading } =
+    useFrappeGetDocCount('Activity Log')
 
   const tableData = React.useMemo(() => {
     if (!activityLogsData) return []
@@ -143,7 +113,7 @@ export function ActivityLogsTable() {
       user: log.full_name,
       event: log.subject,
       ip_address: log.ip_address,
-      date: log.modified,
+      date: log.creation,
     }))
   }, [activityLogsData])
 
@@ -151,14 +121,18 @@ export function ActivityLogsTable() {
     {
       id: 'select',
       header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && 'indeterminate')
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
+        <div className="text-left">
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && 'indeterminate')
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
+          />
+        </div>
       ),
       cell: ({ row }) => (
         <Checkbox
@@ -170,177 +144,106 @@ export function ActivityLogsTable() {
       enableSorting: false,
       enableHiding: false,
     },
-    // {
-    //   accessorKey: 'product_id',
-    //   header: ({ column }) => {
-    //     return (
-    //       <Button
-    //         variant="ghost"
-    //         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-    //       >
-    //         Sr No
-    //       </Button>
 
-    //     )
-    //   },
-    //   cell: ({ row }) => (
-    //     <div className="capitalize text-center">
-    //       {row.getValue('product_id')}
-    //     </div>
-    //   ),
-    // },
     {
       accessorKey: 'user',
-      header: 'User',
+      header: () => <div className="">User</div>,
       cell: ({ row }) => (
-        <div className="capitalize cursor-pointer hover:underline">
-          {row.original.user}
+        <div className="capitalize text-center cursor-pointer hover:underline">
+          {row.original?.user}
         </div>
       ),
     },
 
     {
       accessorKey: 'event',
-      header: 'Event',
+      header: () => <div className="text-left">Event</div>,
       cell: ({ row }) => (
-        <div className="capitalize pl-4">{row.original.event}</div>
+        <div className="capitalize">{row.original?.event}</div>
       ),
     },
-    // {
-    //   accessorKey: 'team',
-    //   header: 'Team',
-    //   cell: ({ row }) => (
-    //     <div className="capitalize">{row.getValue('team')}</div>
-    //   ),
-    // },
+
     {
       accessorKey: 'ip_address',
-      header: 'IP Address',
+      header: () => <div className="text-left">IP Address</div>,
       cell: ({ row }) => (
-        <div className="lowercase">{row.original.ip_address}</div>
+        <div className="lowercase">{row.original?.ip_address}</div>
       ),
     },
     {
       accessorKey: 'date',
-      header: 'Date',
+      header: () => <div className="text-left">Date</div>,
       cell: ({ row }) => {
         const date_time = row.original?.date?.split('.')[0]
         const date = date_time?.split(' ')[0].split('-').reverse().join('-')
         const time = date_time?.split(' ')[1]
         return (
-          <div className="lowercase pl-4 flex flex-col justify-center">
+          <div className="lowercase flex flex-col justify-center">
             <span>{date}</span>
             <span>{time}</span>
           </div>
         )
       },
     },
-    // {
-    //   accessorKey: 'actions',
-    //   header: '',
-    //   cell: ({ row }) => {
-    //     const rowData = row.original // Get the entire row's data for actions
-    //     return (
-    //       <DropdownMenu>
-    //         <DropdownMenuTrigger asChild>
-    //           <Button variant="ghost" className="h-8 w-8 p-0">
-    //             <span className="sr-only">Open menu</span>
-    //             <MoreHorizontal />
-    //           </Button>
-    //         </DropdownMenuTrigger>
-    //         <DropdownMenuContent align="end">
-    //           <DropdownMenuItem className='cursor-pointer'
-    //             onClick={() => navigator.clipboard.writeText(payment.id)}
-    //           >
-    //             Edit
-    //           </DropdownMenuItem>
-    //           <DropdownMenuItem className='cursor-pointer'
-    //             onClick={() => navigator.clipboard.writeText(payment.id)}
-    //           >
-    //             Delete
-    //           </DropdownMenuItem>
-    //         </DropdownMenuContent>
-    //       </DropdownMenu>
-    //     )
-    //   },
-    // },
-    // {
-    //   id: 'actions',
-    //   enableHiding: false,
-    //   cell: ({ row }) => {
-    //     const payment = row.original;
-
-    //     return (
-    //       <DropdownMenu>
-    //         <DropdownMenuTrigger asChild>
-    //           <Button variant="ghost" className="h-8 w-8 p-0">
-    //             <span className="sr-only">Open menu</span>
-    //             <MoreHorizontal />
-    //           </Button>
-    //         </DropdownMenuTrigger>
-    //         <DropdownMenuContent align="end">
-    //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-    //           <DropdownMenuItem
-    //             onClick={() => navigator.clipboard.writeText(payment.id)}
-    //           >
-    //             Copy payment ID
-    //           </DropdownMenuItem>
-    //           <DropdownMenuSeparator />
-    //           <DropdownMenuItem>View customer</DropdownMenuItem>
-    //           <DropdownMenuItem>View payment details</DropdownMenuItem>
-    //         </DropdownMenuContent>
-    //       </DropdownMenu>
-    //     );
-    //   },
-    // },
   ]
 
   const table = useReactTable({
     data: tableData,
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
-      columnFilters,
       columnVisibility,
       rowSelection,
-    },
-    initialState: {
+      columnFilters,
       pagination: {
-        pageSize: 5, // Set page size to 5
+        pageIndex: page,
+        pageSize: limit,
       },
     },
+    enableRowSelection: true,
+    manualPagination: true,
+    pageCount: Math.ceil(((!totalCountLoading && totalCount) || 0) / limit),
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
   })
 
-  const openDialog = (rowData) => {
-    setIsDialogOpen(true)
-  }
-
-  const closeDialog = () => {
-    setIsDialogOpen(false)
-    // Clear any row data when canceled
-  }
-
   const downloadCSV = () => {
+    if (!tableData || tableData.length === 0) {
+      toast({
+        title: 'No data available to download',
+      })
+      return
+    }
     // Convert table data to CSV
-    const csv = Papa.unparse(data)
+    const csv = Papa.unparse(tableData)
     // Create a Blob object for the CSV
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
     // Use FileSaver to trigger a download
     saveAs(blob, 'table-data.csv')
   }
 
+  if (!isLoading && data?.length === 0) {
+    return (
+      <Empty
+        heading="No logs found."
+        subHeading="No activities found."
+        buttonText="Contact Us"
+      />
+    )
+  }
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Activity Logs</CardTitle>
+        <CardTitle>ACTIVITY LOGS</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="w-full">
@@ -377,14 +280,25 @@ export function ActivityLogsTable() {
                 ))}
               </TableHeader>
               <TableBody>
-                {table.getRowModel().rows?.length ? (
+                {activityLogsLoading ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      <div className="w-full h-full flex justify-center items-center">
+                        <div className="spinner w-14 h-14 rounded-full border-4 border-gray-200 border-r-blue-500 animate-spin"></div>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row) => (
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && 'selected'}
                     >
                       {row.getVisibleCells().map((cell) => (
-                        <TableCell className="text-center" key={cell.id}>
+                        <TableCell key={cell.id}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()

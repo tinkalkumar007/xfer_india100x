@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:order_id",
+ "autoname": "format:ORDER-{MM}-{YY}-{####}",
  "creation": "2025-01-29 11:12:31.625661",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -175,11 +175,11 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-30 12:16:18.219262",
+ "modified": "2025-02-04 17:45:53.423652",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Inventory",
- "naming_rule": "By fieldname",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
