@@ -39,7 +39,9 @@
   "manager_email",
   "kyc_status_section",
   "table_ylxb",
-  "kyc_level"
+  "column_break_tmqa",
+  "kyc_level",
+  "kyc_status"
  ],
  "fields": [
   {
@@ -217,7 +219,7 @@
   {
    "fieldname": "kyc_status_section",
    "fieldtype": "Section Break",
-   "label": "KYC Status"
+   "label": "KYC"
   },
   {
    "fieldname": "table_ylxb",
@@ -229,6 +231,16 @@
    "fieldtype": "Link",
    "label": "KYC Level",
    "options": "KYC Level"
+  },
+  {
+   "fieldname": "column_break_tmqa",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "kyc_status",
+   "fieldtype": "Link",
+   "label": "KYC Status",
+   "options": "KYC Status"
   }
  ],
  "image_field": "selfie",
@@ -239,7 +251,7 @@
    "link_fieldname": "mobile_number"
   }
  ],
- "modified": "2025-01-30 14:01:01.599724",
+ "modified": "2025-02-01 12:50:55.734306",
  "modified_by": "Administrator",
  "module": "Xfer Backend",
  "name": "Customers",
