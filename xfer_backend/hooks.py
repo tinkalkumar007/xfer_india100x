@@ -40,7 +40,7 @@ def get_doctypes_for_fixtures():
     return fixtures_list
 
 # Set fixtures dynamically
-fixtures = get_doctypes_for_fixtures()
+# fixtures = get_doctypes_for_fixtures()
 
 # fixtures = [
 #     "Program Category", "Program Status"

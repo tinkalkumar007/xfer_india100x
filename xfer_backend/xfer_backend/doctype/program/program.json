@@ -1,365 +1,365 @@
 {
- "actions": [],
- "allow_rename": 1,
- "autoname": "format:{program_manager}-{####}",
- "creation": "2025-01-15 18:20:22.195594",
- "doctype": "DocType",
- "engine": "InnoDB",
- "field_order": [
-  "program_details_section",
-  "program_manager",
-  "description",
-  "column_break_uwui",
-  "program_name",
-  "category",
-  "terms_conditions",
-  "card_type",
-  "column_break_trnb",
-  "status",
-  "risk_score",
-  "policy_url",
-  "available_stock",
-  "rewards_section",
-  "insurance_card",
-  "column_break_bcye",
-  "insurance__travel",
-  "column_break_rjhp",
-  "lounge_access",
-  "column_break_hcat",
-  "reward_points",
-  "controls_section",
-  "allow_kit_to_kit",
-  "allow_reload",
-  "column_break_duua",
-  "allow_jit",
-  "allow_add_on",
-  "add_on_value",
-  "column_break_yzdp",
-  "notifications_section",
-  "table_zcnq",
-  "whitelist_mcc_section",
-  "mcc_code",
-  "bins",
-  "column_break_iwuw",
-  "tids",
-  "mids",
-  "kyc_requirements_section",
-  "table_knkp",
-  "compliance_tab",
-  "compliance_section",
-  "compliance_level",
-  "column_break_hzwu",
-  "remark",
-  "column_break_wacm",
-  "score",
-  "limits_and_fees_tab",
-  "transaction_limits_section",
-  "table_eosn",
-  "section_break_ommz",
-  "table_ujtz"
- ],
- "fields": [
-  {
-   "fieldname": "program_details_section",
-   "fieldtype": "Section Break",
-   "label": "Program Details"
-  },
-  {
-   "fieldname": "program_name",
-   "fieldtype": "Data",
-   "label": "Program Name"
-  },
-  {
-   "fieldname": "category",
-   "fieldtype": "Link",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Category",
-   "options": "Program Category"
-  },
-  {
-   "fieldname": "column_break_uwui",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "status",
-   "fieldtype": "Link",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Status",
-   "options": "Program Status"
-  },
-  {
-   "fieldname": "description",
-   "fieldtype": "Small Text",
-   "label": "Description"
-  },
-  {
-   "fieldname": "column_break_trnb",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "terms_conditions",
-   "fieldtype": "Attach",
-   "label": "T&C Document"
-  },
-  {
-   "fieldname": "policy_url",
-   "fieldtype": "Data",
-   "label": "Policy URL",
-   "options": "URL"
-  },
-  {
-   "default": "0",
-   "fieldname": "risk_score",
-   "fieldtype": "Int",
-   "in_filter": 1,
-   "label": "Risk Score"
-  },
-  {
-   "fieldname": "compliance_section",
-   "fieldtype": "Section Break",
-   "label": "Compliance"
-  },
-  {
-   "fieldname": "compliance_level",
-   "fieldtype": "Link",
-   "label": "Compliance Level",
-   "options": "Compliance Checklist"
-  },
-  {
-   "fieldname": "column_break_hzwu",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fetch_from": "compliance_level.remark",
-   "fieldname": "remark",
-   "fieldtype": "Read Only",
-   "label": "Remark"
-  },
-  {
-   "fieldname": "column_break_wacm",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fetch_from": "compliance_level.score",
-   "fieldname": "score",
-   "fieldtype": "Read Only",
-   "label": "Score"
-  },
-  {
-   "fieldname": "transaction_limits_section",
-   "fieldtype": "Section Break",
-   "label": "Transaction Limits"
-  },
-  {
-   "fieldname": "table_eosn",
-   "fieldtype": "Table",
-   "options": "Transaction Limit"
-  },
-  {
-   "description": "Number of columns for a field in a List View or a Grid (Total Columns should be less than 11)\n",
-   "fieldname": "section_break_ommz",
-   "fieldtype": "Section Break",
-   "label": "Program Fees"
-  },
-  {
-   "fieldname": "table_ujtz",
-   "fieldtype": "Table",
-   "options": "Program Fees Structure"
-  },
-  {
-   "fieldname": "compliance_tab",
-   "fieldtype": "Tab Break",
-   "label": "Compliance"
-  },
-  {
-   "fieldname": "limits_and_fees_tab",
-   "fieldtype": "Tab Break",
-   "label": "Limits and Fees"
-  },
-  {
-   "fieldname": "program_manager",
-   "fieldtype": "Link",
-   "label": "Program Manager",
-   "options": "Program Manager",
-   "reqd": 1
-  },
-  {
-   "fieldname": "rewards_section",
-   "fieldtype": "Section Break",
-   "label": "Rewards"
-  },
-  {
-   "default": "0",
-   "fieldname": "insurance_card",
-   "fieldtype": "Check",
-   "label": "Insurance Card"
-  },
-  {
-   "fieldname": "column_break_bcye",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "0",
-   "fieldname": "insurance__travel",
-   "fieldtype": "Check",
-   "label": "Insurance  Travel"
-  },
-  {
-   "fieldname": "column_break_rjhp",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "0",
-   "fieldname": "lounge_access",
-   "fieldtype": "Check",
-   "label": "Lounge Access"
-  },
-  {
-   "fieldname": "column_break_hcat",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "notifications_section",
-   "fieldtype": "Section Break",
-   "label": "Notifications"
-  },
-  {
-   "fieldname": "table_zcnq",
-   "fieldtype": "Table",
-   "options": "Notification Template"
-  },
-  {
-   "fieldname": "whitelist_mcc_section",
-   "fieldtype": "Section Break",
-   "label": "Whitelisting"
-  },
-  {
-   "fieldname": "mcc_code",
-   "fieldtype": "Table",
-   "label": "MCC Code",
-   "options": "MCC Whitelisting"
-  },
-  {
-   "fieldname": "column_break_iwuw",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "0",
-   "fieldname": "reward_points",
-   "fieldtype": "Check",
-   "label": "Reward Points"
-  },
-  {
-   "fieldname": "kyc_requirements_section",
-   "fieldtype": "Section Break",
-   "label": "KYC Requirements"
-  },
-  {
-   "fieldname": "tids",
-   "fieldtype": "Table",
-   "label": "TIDs",
-   "options": "TIDs"
-  },
-  {
-   "fieldname": "mids",
-   "fieldtype": "Table",
-   "label": "MIDs",
-   "options": "MIDs"
-  },
-  {
-   "fieldname": "controls_section",
-   "fieldtype": "Section Break",
-   "label": "Controls"
-  },
-  {
-   "default": "0",
-   "fieldname": "allow_kit_to_kit",
-   "fieldtype": "Check",
-   "label": "Allow KIT to KIT"
-  },
-  {
-   "default": "0",
-   "fieldname": "allow_add_on",
-   "fieldtype": "Check",
-   "label": "Allow ADD ON"
-  },
-  {
-   "fieldname": "column_break_duua",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "bins",
-   "fieldtype": "Table",
-   "label": "BINs",
-   "options": "BINs"
-  },
-  {
-   "fieldname": "table_knkp",
-   "fieldtype": "Table",
-   "options": "Program KYC Table"
-  },
-  {
-   "fieldname": "column_break_yzdp",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "0",
-   "fieldname": "allow_reload",
-   "fieldtype": "Check",
-   "label": "Allow Reload"
-  },
-  {
-   "default": "0",
-   "fieldname": "allow_jit",
-   "fieldtype": "Check",
-   "label": "Allow JIT"
-  },
-  {
-   "depends_on": "eval:doc.allow_add_on == 1",
-   "fieldname": "add_on_value",
-   "fieldtype": "Int",
-   "label": "ADD On Value"
-  },
-  {
-   "default": "Virtual",
-   "fieldname": "card_type",
-   "fieldtype": "Select",
-   "label": "Card Type",
-   "options": "Virtual\nPhysical\nVirtual and Physical"
-  },
-  {
-   "fieldname": "available_stock",
-   "fieldtype": "Data",
-   "label": "Available Stock"
-  }
- ],
- "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2025-02-05 18:18:39.944293",
- "modified_by": "Administrator",
- "module": "Xfer Backend",
- "name": "Program",
- "naming_rule": "Expression",
- "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  }
- ],
- "sort_field": "modified",
- "sort_order": "DESC",
- "states": []
+  "actions": [],
+  "allow_rename": 1,
+  "autoname": "format:{program_manager}-{####}",
+  "creation": "2025-01-15 18:20:22.195594",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "program_details_section",
+    "program_manager",
+    "description",
+    "column_break_uwui",
+    "program_name",
+    "category",
+    "terms_conditions",
+    "card_type",
+    "column_break_trnb",
+    "status",
+    "risk_score",
+    "policy_url",
+    "available_stock",
+    "rewards_section",
+    "insurance_card",
+    "column_break_bcye",
+    "insurance__travel",
+    "column_break_rjhp",
+    "lounge_access",
+    "column_break_hcat",
+    "reward_points",
+    "controls_section",
+    "allow_kit_to_kit",
+    "allow_reload",
+    "column_break_duua",
+    "allow_jit",
+    "allow_add_on",
+    "add_on_value",
+    "column_break_yzdp",
+    "notifications_section",
+    "table_zcnq",
+    "whitelist_mcc_section",
+    "mcc_code",
+    "bins",
+    "column_break_iwuw",
+    "tids",
+    "mids",
+    "kyc_requirements_section",
+    "table_knkp",
+    "compliance_tab",
+    "compliance_section",
+    "compliance_level",
+    "column_break_hzwu",
+    "remark",
+    "column_break_wacm",
+    "score",
+    "limits_and_fees_tab",
+    "transaction_limits_section",
+    "table_eosn",
+    "section_break_ommz",
+    "table_ujtz"
+  ],
+  "fields": [
+    {
+      "fieldname": "program_details_section",
+      "fieldtype": "Section Break",
+      "label": "Program Details"
+    },
+    {
+      "fieldname": "program_name",
+      "fieldtype": "Data",
+      "label": "Program Name"
+    },
+    {
+      "fieldname": "category",
+      "fieldtype": "Link",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "label": "Category",
+      "options": "Program Category"
+    },
+    {
+      "fieldname": "column_break_uwui",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "status",
+      "fieldtype": "Link",
+      "in_filter": 1,
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "label": "Status",
+      "options": "Program Status"
+    },
+    {
+      "fieldname": "description",
+      "fieldtype": "Small Text",
+      "label": "Description"
+    },
+    {
+      "fieldname": "column_break_trnb",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "terms_conditions",
+      "fieldtype": "Attach",
+      "label": "T&C Document"
+    },
+    {
+      "fieldname": "policy_url",
+      "fieldtype": "Data",
+      "label": "Policy URL",
+      "options": "URL"
+    },
+    {
+      "default": "0",
+      "fieldname": "risk_score",
+      "fieldtype": "Int",
+      "in_filter": 1,
+      "label": "Risk Score"
+    },
+    {
+      "fieldname": "compliance_section",
+      "fieldtype": "Section Break",
+      "label": "Compliance"
+    },
+    {
+      "fieldname": "compliance_level",
+      "fieldtype": "Link",
+      "label": "Compliance Level",
+      "options": "Compliance Checklist"
+    },
+    {
+      "fieldname": "column_break_hzwu",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fetch_from": "compliance_level.remark",
+      "fieldname": "remark",
+      "fieldtype": "Read Only",
+      "label": "Remark"
+    },
+    {
+      "fieldname": "column_break_wacm",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fetch_from": "compliance_level.score",
+      "fieldname": "score",
+      "fieldtype": "Read Only",
+      "label": "Score"
+    },
+    {
+      "fieldname": "transaction_limits_section",
+      "fieldtype": "Section Break",
+      "label": "Transaction Limits"
+    },
+    {
+      "fieldname": "table_eosn",
+      "fieldtype": "Table",
+      "options": "Transaction Limit"
+    },
+    {
+      "description": "Number of columns for a field in a List View or a Grid (Total Columns should be less than 11)\n",
+      "fieldname": "section_break_ommz",
+      "fieldtype": "Section Break",
+      "label": "Program Fees"
+    },
+    {
+      "fieldname": "table_ujtz",
+      "fieldtype": "Table",
+      "options": "Program Fees Structure"
+    },
+    {
+      "fieldname": "compliance_tab",
+      "fieldtype": "Tab Break",
+      "label": "Compliance"
+    },
+    {
+      "fieldname": "limits_and_fees_tab",
+      "fieldtype": "Tab Break",
+      "label": "Limits and Fees"
+    },
+    {
+      "fieldname": "program_manager",
+      "fieldtype": "Link",
+      "label": "Program Manager",
+      "options": "Program Manager",
+      "reqd": 1
+    },
+    {
+      "fieldname": "rewards_section",
+      "fieldtype": "Section Break",
+      "label": "Rewards"
+    },
+    {
+      "default": "0",
+      "fieldname": "insurance_card",
+      "fieldtype": "Check",
+      "label": "Insurance Card"
+    },
+    {
+      "fieldname": "column_break_bcye",
+      "fieldtype": "Column Break"
+    },
+    {
+      "default": "0",
+      "fieldname": "insurance__travel",
+      "fieldtype": "Check",
+      "label": "Insurance  Travel"
+    },
+    {
+      "fieldname": "column_break_rjhp",
+      "fieldtype": "Column Break"
+    },
+    {
+      "default": "0",
+      "fieldname": "lounge_access",
+      "fieldtype": "Check",
+      "label": "Lounge Access"
+    },
+    {
+      "fieldname": "column_break_hcat",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "notifications_section",
+      "fieldtype": "Section Break",
+      "label": "Notifications"
+    },
+    {
+      "fieldname": "table_zcnq",
+      "fieldtype": "Table",
+      "options": "Notification Template"
+    },
+    {
+      "fieldname": "whitelist_mcc_section",
+      "fieldtype": "Section Break",
+      "label": "Whitelisting"
+    },
+    {
+      "fieldname": "mcc_code",
+      "fieldtype": "Table",
+      "label": "MCC Code",
+      "options": "MCC Whitelisting"
+    },
+    {
+      "fieldname": "column_break_iwuw",
+      "fieldtype": "Column Break"
+    },
+    {
+      "default": "0",
+      "fieldname": "reward_points",
+      "fieldtype": "Check",
+      "label": "Reward Points"
+    },
+    {
+      "fieldname": "kyc_requirements_section",
+      "fieldtype": "Section Break",
+      "label": "KYC Requirements"
+    },
+    {
+      "fieldname": "tids",
+      "fieldtype": "Table",
+      "label": "TIDs",
+      "options": "TIDs"
+    },
+    {
+      "fieldname": "mids",
+      "fieldtype": "Table",
+      "label": "MIDs",
+      "options": "MIDs"
+    },
+    {
+      "fieldname": "controls_section",
+      "fieldtype": "Section Break",
+      "label": "Controls"
+    },
+    {
+      "default": "0",
+      "fieldname": "allow_kit_to_kit",
+      "fieldtype": "Check",
+      "label": "Allow KIT to KIT"
+    },
+    {
+      "default": "0",
+      "fieldname": "allow_add_on",
+      "fieldtype": "Check",
+      "label": "Allow ADD ON"
+    },
+    {
+      "fieldname": "column_break_duua",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "bins",
+      "fieldtype": "Table",
+      "label": "BINs",
+      "options": "BINs"
+    },
+    {
+      "fieldname": "table_knkp",
+      "fieldtype": "Table",
+      "options": "Program KYC Table"
+    },
+    {
+      "fieldname": "column_break_yzdp",
+      "fieldtype": "Column Break"
+    },
+    {
+      "default": "0",
+      "fieldname": "allow_reload",
+      "fieldtype": "Check",
+      "label": "Allow Reload"
+    },
+    {
+      "default": "0",
+      "fieldname": "allow_jit",
+      "fieldtype": "Check",
+      "label": "Allow JIT"
+    },
+    {
+      "depends_on": "eval:doc.allow_add_on == 1",
+      "fieldname": "add_on_value",
+      "fieldtype": "Int",
+      "label": "ADD On Value"
+    },
+    {
+      "default": "Virtual",
+      "fieldname": "card_type",
+      "fieldtype": "Select",
+      "label": "Card Type",
+      "options": "Virtual\nPhysical\nVirtual and Physical"
+    },
+    {
+      "fieldname": "available_stock",
+      "fieldtype": "Data",
+      "label": "Available Stock"
+    }
+  ],
+  "index_web_pages_for_search": 1,
+  "links": [],
+  "modified": "2025-02-05 18:18:39.944293",
+  "modified_by": "Administrator",
+  "module": "Xfer Backend",
+  "name": "Program",
+  "naming_rule": "Expression",
+  "owner": "Administrator",
+  "permissions": [
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "System Manager",
+      "share": 1,
+      "write": 1
+    }
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "states": []
 }
